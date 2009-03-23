@@ -19,14 +19,14 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '0.9.6',
+		'version'          => '0.9.7',
 		'desc'             => 'Textbox with ajax url validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/version.xml'
 	);
 	
 	var $requires = array(
-		'ff'        => '0.9.2',
+		'ff'        => '0.9.5',
 		'cp_jquery' => '1.1',
 	);
     
@@ -97,10 +97,10 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 * @param  string  $field_name		The field's name
 	 * @param  array  $field_settings	The field settings
 	 */
-	function save_field($field_name, $field_settings)
+	function save_field($field_data, $field_settings)
 	{
 		// Remove http:// if it's the only thing in the field
-		$_POST[$field_name] = ($_POST[$field_name] ==  'http://') ? '' : $_POST[$field_name];
+		return ($field_data ==  'http://') ? '' : $field_data;
 	}
 
 }
