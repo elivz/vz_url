@@ -19,14 +19,14 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '0.9.8',
+		'version'          => '0.9.9',
 		'desc'             => 'Textbox with ajax url validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/version.xml'
 	);
 	
 	var $requires = array(
-		'ff'        => '0.9.6',
+		'ff'        => '0.9.7',
 		'cp_jquery' => '1.1',
 	);
     
@@ -68,8 +68,30 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		// Fill in http:// if the field is empty
 		$val = ($field_data) ? $field_data : 'http://';
 		
-		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => '50%'))
+		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => '66%'))
 			.'<span class="highlight" style="display:none;">'.$this->site_settings['vz_url_error_text'].'</span>';
+		
+	}
+	
+    
+	/**
+	 * Display Cell
+	 * 
+	 * @param  string  $cell_name      The cell's name
+	 * @param  mixed   $cell_data      The cell's current value
+	 * @param  array   $cell_settings  The cell's settings
+	 * @return string  The field's HTML
+	 */
+	function display_cell($cell_name, $cell_data, $cell_settings)
+	{
+		$this->include_js('ff_vz_url.js');
+
+		$SD = new Fieldframe_SettingsDisplay();
+		
+		// Fill in http:// if the field is empty
+		$val = ($cell_data) ? $cell_data : 'http://';
+		
+		return $SD->text($cell_name, $val, array('style' => 'vz_url_field', 'width' => '99%'));
 		
 	}
 
@@ -84,6 +106,19 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	{
 		// Remove http:// if it's the only thing in the field
 		return ($field_data ==  'http://') ? '' : $field_data;
+	}
+
+
+	/**
+	 * Save Cell
+	 * 
+	 * @param  string  $cell_data		The field's post data
+	 * @param  array  $fcell_settings	The field settings
+	 */
+	function save_cell($cell_data, $cell_settings)
+	{
+		// Remove http:// if it's the only thing in the cell
+		return ($cell_data ==  'http://') ? '' : $cell_data;
 	}
 
 }

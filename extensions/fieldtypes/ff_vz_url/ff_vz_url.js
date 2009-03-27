@@ -37,9 +37,9 @@ jQuery(document).ready(function() {
 		$field = $(field);
 	
 		if ( result ) { 
-			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next().fadeOut(500);
+			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next('.highlight').fadeOut(500);
 		} else { 
-			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next().fadeIn(800);
+			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next('.highlight').fadeIn(800);
 		}
 	};
 
