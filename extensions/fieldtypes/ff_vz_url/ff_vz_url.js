@@ -4,7 +4,7 @@
  */
 
 jQuery(document).ready(function() {
-	jQuery('.vz_url_field').vzCheckUrl();
+	jQuery('.vz_url_field').vzCheckUrl().blur(function() { $(this).vzCheckUrl() });
 });
 
 
@@ -14,33 +14,28 @@ jQuery(document).ready(function() {
 	$.fn.vzCheckUrl = function (field) {
 		return this.each(function() {
 			var $this = $(this);
+			var urlToCheck = $this.val();
+			 alert(urlToCheck);
+			// Don't bother checking the default value of http://
+			if (urlToCheck == 'http://') {
+				$this.css('background-image', 'none').next('.highlight').fadeOut(500);
+				return;
+			}
 			
-			displayResult($this, checkIt($this.val()));
-			$this.blur(function() { displayResult($this, checkIt($this.val())) });
+			// Ajax call to proxy.php to check the url
+			jQuery.get( 
+				FT_URL+'ff_vz_url/proxy.php', 
+				{ path: urlToCheck }, 
+				function (response) {
+					// Show or hide the error message, as needed
+					if ( response ) { 
+						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next('.highlight').fadeOut(500);
+					} else { 
+						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next('.highlight').fadeIn(800);
+					}
+				}
+			);
 		});
-		
-	};
-	
-	// Ajax call to proxy.php to check the url
-	function checkIt (urlToCheck) {
-		if (urlToCheck == 'http://') return true;
-		
-		jQuery.get( 
-			FT_URL+'ff_vz_url/proxy.php', 
-			{ path: urlToCheck }, 
-			function(response) { return response; }
-		);
-	};
-	
-	// Modify the field to show the validity of the url
-	function displayResult (field, result) {
-		$field = $(field);
-	
-		if ( result ) { 
-			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next('.highlight').fadeOut(500);
-		} else { 
-			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next('.highlight').fadeIn(800);
-		}
 	};
 
 })(jQuery);
