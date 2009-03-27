@@ -68,9 +68,8 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		// Fill in http:// if the field is empty
 		$val = ($field_data) ? $field_data : 'http://';
 		
-		return $SD->text($field_name, $val, array('style' => 'vz_url_field'))
-			.'<img src="" alt="" />'
-			.'<p class="highlight" style="display:none">'.$this->site_settings['vz_url_error_text'].'</p>';
+		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => '50%'))
+			.'<span class="highlight" style="display:none;">'.$this->site_settings['vz_url_error_text'].'</span>';
 		
 	}
 

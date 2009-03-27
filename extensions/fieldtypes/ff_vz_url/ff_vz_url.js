@@ -14,23 +14,33 @@ jQuery(document).ready(function() {
 	$.fn.vzCheckUrl = function (field) {
 		return this.each(function() {
 			var $this = $(this);
-			$this.blur(function() {
-				if ( checkIt($this.val()) ) { 
-					$this.next().slideUp();
-				} else { 
-					$this.next().slideDown();
-				}
-			});
+			
+			displayResult($this, checkIt($this.val()));
+			$this.blur(function() { displayResult($this, checkIt($this.val())) });
 		});
 		
-	}
-
+	};
+	
+	// Ajax call to proxy.php to check the url
 	function checkIt (urlToCheck) {
+		if (urlToCheck == 'http://') return true;
+		
 		jQuery.get( 
 			FT_URL+'ff_vz_url/proxy.php', 
 			{ path: urlToCheck }, 
 			function(response) { return response; }
 		);
+	};
+	
+	// Modify the field to show the validity of the url
+	function displayResult (field, result) {
+		$field = $(field);
+	
+		if ( result ) { 
+			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next().fadeOut(500);
+		} else { 
+			$field.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next().fadeIn(800);
+		}
 	};
 
 })(jQuery);
