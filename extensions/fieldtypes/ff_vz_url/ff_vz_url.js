@@ -14,7 +14,6 @@ jQuery(document).ready(function() {
 	$.fn.vzCheckUrl = function (field) {
 		return this.each(function() {
 			var $this = $(this);
-			alert($this.val());
 			$this.blur(function() {
 				if ( checkIt($this.val()) ) { 
 					$this.next().slideUp();
