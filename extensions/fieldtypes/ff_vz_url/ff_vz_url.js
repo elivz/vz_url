@@ -1,18 +1,37 @@
-// Ajax link validator for VZ URL fieldtype
-// by Eli Van Zoeren (http://elivz.com)
+/*
+ * Ajax link validator for VZ URL fieldtype
+ * by Eli Van Zoeren (http://elivz.com)
+ */
+
 jQuery(document).ready(function() {
-	jQuery('.vz_url_field').blur(function() {
-		field = $(this);
+	jQuery('.vz_url_field').vzCheckUrl();
+});
+
+
+// jQuery plugin to check the url and display the result
+(function($) {
+
+	$.fn.vzCheckUrl = function (field) {
+		return this.each(function() {
+			var $this = $(this);
+			alert($this.val());
+			$this.blur(function() {
+				if ( checkIt($this.val()) ) { 
+					$this.next().slideUp();
+				} else { 
+					$this.next().slideDown();
+				}
+			});
+		});
+		
+	}
+
+	function checkIt (urlToCheck) {
 		jQuery.get( 
 			FT_URL+'ff_vz_url/proxy.php', 
-			{ path: field.val() }, 
-			function(response) { 
-				if (response) { 
-					field.next().slideUp();
-				} else { 
-					field.next().slideDown();
-				}
-			}
+			{ path: urlToCheck }, 
+			function(response) { return response; }
 		);
-	});
-});
+	};
+
+})(jQuery);
