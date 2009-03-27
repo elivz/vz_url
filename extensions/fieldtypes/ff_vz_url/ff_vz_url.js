@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
 		return this.each(function() {
 			var $this = $(this);
 			var urlToCheck = $this.val();
-			 alert(urlToCheck);
+			
 			// Don't bother checking the default value of http://
 			if (urlToCheck == 'http://') {
 				$this.css('background-image', 'none').next('.highlight').fadeOut(500);
