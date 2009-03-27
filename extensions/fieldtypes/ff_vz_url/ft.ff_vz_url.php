@@ -61,12 +61,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_field($field_name, $field_data, $field_settings)
 	{
-		$this->insert_js("$(document).ready(function() {
-	$('.vz_url_field').blur(function() {
-		field = $(this);
-		$.get( FT_URL+'ff_vz_url/proxy.php', {path: field.val()}, function(response) { if (response) { field.next().slideUp(); } else { field.next().slideDown(); } });
-	});
-});");
+		$this->include_js('ff_vz_url.js');
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
