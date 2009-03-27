@@ -5,6 +5,11 @@
 
 jQuery(document).ready(function() {
 	jQuery('.vz_url_field').vzCheckUrl().blur(function() { $(this).vzCheckUrl() });
+	
+	// Hook into the FF Matrix onDisplayCell event
+	$.fn.ffMatrix.onDisplayCell['ff_vz_url'] = function($td) { 
+		$td.children(':input').vzCheckUrl().blur(function() { $(this).vzCheckUrl() });
+	};
 });
 
 
@@ -37,5 +42,6 @@ jQuery(document).ready(function() {
 			);
 		});
 	};
+
 
 })(jQuery);

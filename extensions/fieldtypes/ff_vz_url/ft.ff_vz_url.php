@@ -91,7 +91,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		// Fill in http:// if the field is empty
 		$val = ($cell_data) ? $cell_data : 'http://';
 		
-		return $SD->text($cell_name, $val, array('style' => 'vz_url_field', 'width' => '99%'));
+		return $SD->text($cell_name, $val, array('style' => 'vz_url_cell', 'width' => '99%'));
 	}
 
 
