@@ -4,11 +4,11 @@
  */
 
 jQuery(document).ready(function() {
-	jQuery('.vz_url_field').vzCheckUrl().blur(function() { $(this).vzCheckUrl() });
+	jQuery('.vz_url_field').vzCheckUrl();
 	
 	// Hook into the FF Matrix onDisplayCell event
 	$.fn.ffMatrix.onDisplayCell['ff_vz_url'] = function($td) { 
-		$td.children(':input').vzCheckUrl().blur(function() { $(this).vzCheckUrl() });
+		$td.children(':input').vzCheckUrl();
 	};
 });
 
@@ -18,15 +18,26 @@ jQuery(document).ready(function() {
 
 	$.fn.vzCheckUrl = function (field) {
 		return this.each(function() {
-			var $this = $(this);
-			var urlToCheck = $this.val();
-			
-			// Don't bother checking the default value of http://
-			if (urlToCheck == 'http://') {
-				$this.css('background-image', 'none').next('.highlight').fadeOut(500);
-				return;
-			}
-			
+			// Bind to the check function
+			$(this).keyup(function() { vzCheck(this); });
+		});
+	};
+
+	vzCheck = function(field) {
+		var $this = $(field);
+		var urlToCheck = $this.val();
+		
+		// Don't bother checking the default value of http://
+		if (urlToCheck == 'http://') {
+			$this.css('background-image', 'none').next('.highlight').fadeOut(500);
+			return;
+		}
+		
+		// Clear the timer
+		if (this.timer) clearTimeout(this.timer);
+		
+		// Set a timer so we don't check after every keypress
+		this.timer = setTimeout(function () {
 			// Ajax call to proxy.php to check the url
 			jQuery.get( 
 				FT_URL+'ff_vz_url/proxy.php', 
@@ -40,8 +51,7 @@ jQuery(document).ready(function() {
 					}
 				}
 			);
-		});
+		}, 200);
 	};
-
 
 })(jQuery);
