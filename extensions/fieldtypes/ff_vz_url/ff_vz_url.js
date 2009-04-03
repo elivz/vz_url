@@ -35,7 +35,7 @@ jQuery(document).ready(function() {
 		
 		// Don't bother checking the default value of http://
 		if (urlToCheck == 'http://') {
-			$this.css({'background-image': 'none', 'color': '#888888'}).next('.highlight').fadeOut(500);
+			$this.css({'background-image': 'none', 'color': '#888888'}).next('.highlight').fadeOut(800);
 			return;
 		} else {
 			$this.css('color', '#000000');
@@ -50,9 +50,9 @@ jQuery(document).ready(function() {
 				function (response) {
 					// Show or hide the error message, as needed
 					if ( response ) { 
-						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next('.highlight').fadeOut(500);
+						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next('.highlight').fadeOut(800);
 					} else { 
-						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next('.highlight').fadeIn(800);
+						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next('.highlight').fadeIn(500);
 					}
 				}
 			);

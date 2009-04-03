@@ -30,7 +30,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		'cp_jquery' => '1.1',
 	);
     
-	var $default_site_settings = array('vz_url_error_text' => "Please check your url, as it seems to be invalid.");
+	var $default_site_settings = array('vz_url_error_text' => "That url seems to be invalid.");
 
 
 	/**
