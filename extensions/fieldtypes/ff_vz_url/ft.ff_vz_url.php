@@ -19,14 +19,14 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '0.9.9',
+		'version'          => '1.0',
 		'desc'             => 'Textbox with ajax url validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/version.xml'
 	);
 	
 	var $requires = array(
-		'ff'        => '0.9.7',
+		'ff'        => '1.0.0',
 		'cp_jquery' => '1.1',
 	);
     
