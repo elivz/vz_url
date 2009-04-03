@@ -69,7 +69,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		$val = ($field_data) ? $field_data : 'http://';
 		
 		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => '66%'))
-			.'<span class="highlight" style="display:none;">'.$this->site_settings['vz_url_error_text'].'</span>';
+			.'&nbsp;<span class="highlight" style="display:none;">'.$this->site_settings['vz_url_error_text'].'</span>';
 		
 	}
 	
