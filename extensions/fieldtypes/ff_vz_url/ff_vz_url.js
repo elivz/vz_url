@@ -30,20 +30,22 @@ jQuery(document).ready(function() {
 		var $this = $(field);
 		var urlToCheck = $this.val();
 		
-		// Don't bother checking the default value of http://
-		if (urlToCheck == 'http://') {
-			$this.css('background-image', 'none').next('.highlight').fadeOut(500);
-			return;
-		}
-		
 		// Clear the timer
 		if (this.timer) clearTimeout(this.timer);
+		
+		// Don't bother checking the default value of http://
+		if (urlToCheck == 'http://') {
+			$this.css({'background-image': 'none', 'color': '#888888'}).next('.highlight').fadeOut(500);
+			return;
+		} else {
+			$this.css('color', '#000000');
+		}
 		
 		// Set a timer so we don't check after every keypress
 		this.timer = setTimeout(function () {
 			// Ajax call to proxy.php to check the url
 			jQuery.get( 
-				FT_URL+'ff_vz_url/proxy.php', 
+				FT_URL+'ff_vz_url/ff_vz_url_proxy.php', 
 				{ path: urlToCheck }, 
 				function (response) {
 					// Show or hide the error message, as needed
