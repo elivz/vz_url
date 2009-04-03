@@ -20,6 +20,9 @@ jQuery(document).ready(function() {
 		return this.each(function() {
 			// Bind to the check function
 			$(this).keyup(function() { vzCheck(this); });
+			
+			// Initial check
+			vzCheck(this);
 		});
 	};
 
