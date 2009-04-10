@@ -85,8 +85,8 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	function display_cell($cell_name, $cell_data, $cell_settings)
 	{
 		$this->include_js('ff_vz_url.js');
-		$this->insuert_js("jQuery.fn.ffMatrix.onDisplayCell['ff_vz_url'] = function($td) { 
-		$td.children(':input').vzCheckUrl();
+		$this->insert_js("jQuery.fn.ffMatrix.onDisplayCell['ff_vz_url'] = function(td) { 
+		td.children(':input').vzCheckUrl();
 	};");
 
 		$SD = new Fieldframe_SettingsDisplay();
