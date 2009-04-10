@@ -19,7 +19,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '1.0',
+		'version'          => '1.0.1',
 		'desc'             => 'Textbox with ajax url validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/version.xml'
@@ -85,6 +85,9 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	function display_cell($cell_name, $cell_data, $cell_settings)
 	{
 		$this->include_js('ff_vz_url.js');
+		$this->insuert_js("jQuery.fn.ffMatrix.onDisplayCell['ff_vz_url'] = function($td) { 
+		$td.children(':input').vzCheckUrl();
+	};");
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
