@@ -3,14 +3,9 @@
  * by Eli Van Zoeren (http://elivz.com)
  */
 
-jQuery(document).ready(function() {
-	jQuery('.vz_url_field').vzCheckUrl();
-});
-
-
-// jQuery plugin to check the url and display the result
 (function($) {
 
+	// jQuery plugin to check the url and display the result
 	$.fn.vzCheckUrl = function (field) {
 		return this.each(function() {
 			// Bind to the check function
@@ -52,6 +47,14 @@ jQuery(document).ready(function() {
 				}
 			);
 		}, 300);
+	};
+
+	$(document).ready(function() {
+		$('.vz_url_field').vzCheckUrl();
+	});
+
+	$.fn.ffMatrix.onDisplayCell.ff_vz_url = function(td) { 
+		$(td).children(':input').vzCheckUrl();
 	};
 
 })(jQuery);
