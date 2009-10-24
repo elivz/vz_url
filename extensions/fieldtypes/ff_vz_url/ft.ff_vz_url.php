@@ -63,14 +63,14 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	{
 		$this->include_css('styles/ff_vz_url.css');
 		$this->include_js('ff_vz_url.js');
-		$this->insert_js('var vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
+		$this->insert_js('vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
 		// Fill in http:// if the field is empty
 		$val = ($field_data) ? $field_data : 'http://';
 		
-		return $SD->text($field_name, $val, array('style' => 'vz_url_field'));
+		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => '99%'));
 		
 	}
 	
@@ -87,7 +87,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	{
 		$this->include_css('styles/ff_vz_url.css');
 		$this->include_js('ff_vz_url.js');
-		$this->insert_js('var vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
+		$this->insert_js('vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
 
 		$SD = new Fieldframe_SettingsDisplay();
 		

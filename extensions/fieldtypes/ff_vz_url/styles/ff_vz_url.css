@@ -16,3 +16,27 @@
   color: #000;
   background: #fff url(valid.png) no-repeat right center;
   }
+
+.vz_url_wrapper {
+  position: relative;
+  }
+  
+.vz_url_msg {
+  position: absolute;
+  right: 16px;
+  bottom: 18px;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #aaa;
+  -webkit-border-radius: 7px;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
+  -moz-box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
+  box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
+  }
+
+.vz_url_msg p {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
+  }
