@@ -3,58 +3,72 @@
  * by Eli Van Zoeren (http://elivz.com)
  */
 
-(function($) {
+// jQuery plugin to check the url and display the result
+var vzUrl = {
+  'init' : function() {
+    jQuery('.vz_url_field')
+      .after('<div class="vz_url_field_msg" />')
+      .keyup(function(){ vzUrl.check_field(this) })
+      .each(function(){ vzUrl.check_field(this) });
+  },
+  
+  'check_field' : function(field) {
+    // Cache the field
+    vzUrl.$currentField = jQuery(field)
+      		  .removeClass('empty invalid valid')
+      		  .addClass('checking');
+    
+    // Don't bother checking the default value of http://
+  	if (vzUrl.$currentField.val() == 'http://') {
+  		vzUrl.$currentField
+  		  .removeClass('valid invalid checking')
+  		  .addClass('empty')
+  		  .next('.vz_url_field_msg').fadeOut(500);
+  		return;
+  	} else {
+  		vzUrl.$currentField.removeClass('empty');
+  	}
 
-	// jQuery plugin to check the url and display the result
-	$.fn.vzCheckUrl = function (field) {
-		return this.each(function() {
-			// Bind to the check function
-			$(this).keyup(function() { vzCheck(this); });
-			
-			// Initial check
-			vzCheck(this);
-		});
-	};
-
-	vzCheck = function(field) {
-		// Clear the timer
-		if (this.timer) clearTimeout(this.timer);
-		
-		var $this = $(field);
-		var urlToCheck = $this.val();
-		
-		// Don't bother checking the default value of http://
-		if (urlToCheck == 'http://') {
-			$this.css({'background-image': 'none', 'color': '#888888'}).next('.highlight').fadeOut(500);
-			return;
-		} else {
-			$this.css('color', '#000000');
-		}
-		
-		// Set a timer so we don't check after every keypress
-		this.timer = setTimeout(function () {
-			// Ajax call to proxy.php to check the url
-			jQuery.get( 
-				FT_URL+'ff_vz_url/proxy.php', 
-				{ path: urlToCheck }, 
-				function (response) {
-					// Show or hide the error message, as needed
-					if ( response ) { 
-						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/valid.png) no-repeat right').next('.highlight').fadeOut(500);
-					} else { 
-						$this.css('background', '#fff url('+FT_URL+'ff_vz_url/invalid.png) no-repeat right').next('.highlight').fadeIn(800);
-					}
+    // Use a timeout to prevent an ajax call on every keystroke
+    if (vzUrl.$timer) clearTimeout(vzUrl.$timer);
+    vzUrl.$timer = setTimeout('vzUrl.ajax_call(vzUrl.$currentField)', 350);
+    
+    //
+  },
+  
+  'ajax_call' : function($field) {
+    var urlToCheck = $field.val();
+    
+		// Ajax call to proxy.php to check the url
+		jQuery.get( 
+			FT_URL+'ff_vz_url/proxy.php', 
+			{ path: urlToCheck }, 
+			function (response) {
+				// Show or hide the error message, as needed
+				if ( response ) {
+					$field
+      		  .removeClass('empty invalid checking')
+      		  .addClass('valid')
+					  .next('.vz_url_field_msg').fadeOut(500);
+				} else {
+					$field
+      		  .removeClass('empty valid checking')
+      		  .addClass('invalid')
+					  .next('.vz_url_field_msg').fadeIn(800);
 				}
-			);
-		}, 300);
-	};
+			}
+		);
 
-	$(document).ready(function() {
-		$('.vz_url_field').vzCheckUrl();
-	});
+  }
+};
 
-	$.fn.ffMatrix.onDisplayCell.ff_vz_url = function(td) { 
-		$(td).children(':input').vzCheckUrl();
-	};
-
-})(jQuery);
+jQuery(document).ready(function() {
+  vzUrl.init();
+  
+  // Re-initialize every time a row is added
+  if ($.isFunction($.fn.ffMatrix)) {
+  	$.fn.ffMatrix.onDisplayCell.ff_vz_url = function(td) { 
+  		vzUrl.init();
+  	};
+  }
+})

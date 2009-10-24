@@ -1,0 +1,18 @@
+.vz_url_field.empty {
+  color: #888;
+  }
+
+.vz_url_field.checking {
+  color: #000;
+  background: #fff url(spinner.gif) no-repeat right center;
+  }
+
+.vz_url_field.invalid {
+  color: #600;
+  background: #fff url(invalid.png) no-repeat right center;
+  }
+
+.vz_url_field.valid {
+  color: #000;
+  background: #fff url(valid.png) no-repeat right center;
+  }

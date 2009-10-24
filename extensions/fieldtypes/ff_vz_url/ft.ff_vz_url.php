@@ -19,7 +19,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '1.0.2',
+		'version'          => '1.0.5',
 		'desc'             => 'Textbox with ajax url validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/version.xml'
@@ -61,15 +61,16 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_field($field_name, $field_data, $field_settings)
 	{
+		$this->include_css('styles/ff_vz_url.css');
 		$this->include_js('ff_vz_url.js');
+		$this->insert_js('var vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
 		// Fill in http:// if the field is empty
 		$val = ($field_data) ? $field_data : 'http://';
 		
-		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => '66%'))
-			.'&nbsp;<span class="highlight" style="display:none;">'.$this->site_settings['vz_url_error_text'].'</span>';
+		return $SD->text($field_name, $val, array('style' => 'vz_url_field'));
 		
 	}
 	
@@ -84,14 +85,16 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_cell($cell_name, $cell_data, $cell_settings)
 	{
+		$this->include_css('styles/ff_vz_url.css');
 		$this->include_js('ff_vz_url.js');
+		$this->insert_js('var vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
 		// Fill in http:// if the field is empty
 		$val = ($cell_data) ? $cell_data : 'http://';
 		
-		return $SD->text($cell_name, $val, array('style' => 'vz_url_cell', 'width' => '99%'));
+		return $SD->text($cell_name, $val, array('style' => 'vz_url_field', 'width' => '99%'));
 	}
 
 
