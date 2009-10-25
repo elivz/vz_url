@@ -1,6 +1,8 @@
 <?php
-// Proxy for checking if a remote page exists
-// Used by the VZ URL extension
+/*
+ * Proxy for checking if a remote page exists
+ * Used by the VZ URL extension
+ */ 
 
 $url = urldecode($_GET['path']);
 

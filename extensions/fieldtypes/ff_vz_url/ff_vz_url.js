@@ -1,6 +1,6 @@
 /*
- * Ajax link validator for VZ URL fieldtype
- * by Eli Van Zoeren (http://elivz.com)
+ * Ajax link validator for VZ Url fieldtype
+ * by Eli Van Zoeren - http://elivz.com
  */
 
 // jQuery plugin to check the url and display the result
@@ -15,7 +15,7 @@ var vzUrl = {
       
       $field
         .wrap('<div class="vz_url_wrapper" />')
-        .after('<div class="vz_url_msg"><p>'+vzUrl.errorText+'</p></div>');
+        .after('<div class="vz_url_msg"><p></p></div>');
       $field.next('.vz_url_msg')
         .hide()
         .click(function() {
@@ -67,20 +67,20 @@ var vzUrl = {
 		    if (data.original != $field.val()) return;
 		    
 				// Show or hide the error message, as needed
-				if (data.original == data.final) {
+				if ((data.original == data.final) && (data.http_code >= 200) && (data.http_code < 300)) {
 				  // The url is valid
 					$field
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
 					  .next('.vz_url_msg').fadeOut(200);
-				} else if (data) {
+				} else if (data.original != data.final) {
 				  // The url is a redirect
 					$field
       		  .removeClass('empty valid checking')
       		  .addClass('invalid')
 					  .next('.vz_url_msg')
 				      .children('p')
-				        .html('The url '+data.original+' forwards to '+data.final+'. <a href="#">Update your url</a>.')
+				        .html('The url '+data.original+' forwards to '+data.final+'.<br/><a href="#">Update to the new url</a>')
 				          .children('a').click(function() { 
 				            $field
 				              .val(data.final)
@@ -96,7 +96,11 @@ var vzUrl = {
 					$field
       		  .removeClass('empty valid checking')
       		  .addClass('invalid')
-					  .next('.vz_url_msg').fadeIn(800);
+					  .next('.vz_url_msg')
+				      .children('p')
+				        .html(vzUrl.errorText)
+				      .parent()
+				        .fadeIn(800);
 				}
 			}
 		);
