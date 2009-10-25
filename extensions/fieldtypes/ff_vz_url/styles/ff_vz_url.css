@@ -3,17 +3,14 @@
   }
 
 .vz_url_field.checking {
-  color: #000;
   background: #fff url(spinner.gif) no-repeat right center;
   }
 
 .vz_url_field.invalid {
-  color: #600;
   background: #fff url(invalid.png) no-repeat right center;
   }
 
 .vz_url_field.valid {
-  color: #000;
   background: #fff url(valid.png) no-repeat right center;
   }
 
@@ -28,6 +25,7 @@
   padding: 10px 16px;
   background: #fff;
   border: 1px solid #aaa;
+  opacity: 0.8;
   -webkit-border-radius: 7px;
   -webkit-border-bottom-right-radius: 0;
   -webkit-box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
@@ -39,4 +37,5 @@
   font-size: 12px;
   font-weight: bold;
   margin: 0;
+  color: #444;
   }

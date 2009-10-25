@@ -2,19 +2,28 @@
 // Proxy for checking if a remote page exists
 // Used by the VZ URL extension
 
-$session = curl_init($_GET['path']);
+$url = urldecode($_GET['path']);
 
+// Create the CURL session and set options
+$session = curl_init(urldecode(trim($url)));
 curl_setopt($session, CURLOPT_HEADER, true);
 curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 curl_setopt ($session, CURLOPT_VERBOSE, false);
 curl_setopt($session, CURLOPT_TIMEOUT, 15);
+curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($session, CURLOPT_MAXREDIRS, 5);
 
 // Request the file
-$response = curl_exec($session);
-$httpcode = curl_getinfo($session, CURLINFO_HTTP_CODE);
-
+$content = curl_exec($session);
+$info = curl_getinfo($session);
 curl_close($session);
 
-// If the response code is in the 200s the page was valid
-echo ($httpcode >= 200 && $httpcode < 300);
+$return = array(
+  'original' => $url,
+  'final' => $info['url'],
+  'http_code' => $info['http_code']
+);
+
+echo json_encode($return);
+
 ?>

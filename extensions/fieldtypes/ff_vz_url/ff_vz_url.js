@@ -31,44 +31,68 @@ var vzUrl = {
   },
   
   'check_field' : function(field) {
+    // Clear the timeout
+    if (vzUrl.$timer) clearTimeout(vzUrl.$timer);
+    
     // Cache the field
     var $field = jQuery(field)
-      		  .removeClass('empty invalid valid')
-      		  .addClass('checking');
+  	  .removeClass('empty invalid valid')
+  	  .addClass('checking');
+  	  
+    // Hide the message box
+    $field.next('.vz_url_msg').fadeOut(200);
     
     // Don't bother checking the default value of http://
   	if ($field.val() == 'http://') {
   		$field
   		  .removeClass('valid invalid checking')
   		  .addClass('empty')
-  		  .next('.vz_url_msg').fadeOut(500);
+  		  .next('.vz_url_msg').fadeOut(200);
   		return;
   	} else {
   		$field.removeClass('empty');
   	}
 
     // Use a timeout to prevent an ajax call on every keystroke
-    if (vzUrl.$timer) clearTimeout(vzUrl.$timer);
-    vzUrl.$timer = setTimeout('vzUrl.ajax_call("'+$field.attr('id')+'")', 350);
+    vzUrl.$timer = setTimeout(function(){ vzUrl.ajax_call($field) }, 350);
   },
   
-  'ajax_call' : function(field) {
-    // Cache the field and the url
-    var $field = jQuery('#'+field);
-    var urlToCheck = $field.val();
-    
+  'ajax_call' : function($field) {
 		// Ajax call to proxy.php to check the url
-		jQuery.get( 
+		jQuery.getJSON( 
 			FT_URL+'ff_vz_url/proxy.php', 
-			{ path: urlToCheck }, 
-			function (response) {
+			{ path: $field.val() }, 
+			function (data) {
+		    // Make sure the url we are checking is still there
+		    if (data.original != $field.val()) return;
+		    
 				// Show or hide the error message, as needed
-				if ( response ) {
+				if (data.original == data.final) {
+				  // The url is valid
 					$field
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
-					  .next('.vz_url_msg').fadeOut(500);
+					  .next('.vz_url_msg').fadeOut(200);
+				} else if (data) {
+				  // The url is a redirect
+					$field
+      		  .removeClass('empty valid checking')
+      		  .addClass('invalid')
+					  .next('.vz_url_msg')
+				      .children('p')
+				        .html('The url '+data.original+' forwards to '+data.final+'. <a href="#">Update your url</a>.')
+				          .children('a').click(function() { 
+				            $field
+				              .val(data.final)
+				              .next('.vz_url_msg').fadeOut(200);
+				            vzUrl.ajax_call($field);
+				            return false;
+				          })
+				        .parent()
+				      .parent()
+				        .fadeIn(800);
 				} else {
+				  // Invalid
 					$field
       		  .removeClass('empty valid checking')
       		  .addClass('invalid')
@@ -76,7 +100,6 @@ var vzUrl = {
 				}
 			}
 		);
-
   }
 };
 
