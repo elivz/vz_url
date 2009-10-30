@@ -58,6 +58,19 @@ var vzUrl = {
   },
   
   'ajax_call' : function($field) {
+    // Make sure it's even a valid url
+    if (!$field.val().match(/^(https?|ftp):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$/gi)) {
+		  $field
+  		  .removeClass('empty valid checking')
+  		  .addClass('invalid')
+			  .next('.vz_url_msg')
+		      .children('p')
+		        .html(vzUrl.errorText)
+		      .parent()
+		        .fadeIn(800);
+		    return false;
+		}
+		
 		// Ajax call to proxy.php to check the url
 		jQuery.getJSON( 
 			FT_URL+'ff_vz_url/proxy.php', 
