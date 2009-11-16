@@ -3,6 +3,10 @@
  * by Eli Van Zoeren - http://elivz.com
  */
 
+.vz_url_field {
+  width: 99%;
+  }
+
 .vz_url_field.empty {
   color: #888;
   }
