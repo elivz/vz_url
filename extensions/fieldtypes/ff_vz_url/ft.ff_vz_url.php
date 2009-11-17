@@ -20,7 +20,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ Url',
-		'version'          => '1.1.1',
+		'version'          => '1.1.2',
 		'desc'             => 'Textbox with ajax url validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/version.xml'
@@ -71,7 +71,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		// Fill in http:// if the field is empty
 		$val = ($field_data) ? $field_data : 'http://';
 		
-		return $SD->text($field_name, $val, array('style' => 'vz_url_field'));
+		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => ''));
 		
 	}
 	
@@ -95,7 +95,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		// Fill in http:// if the field is empty
 		$val = ($cell_data) ? $cell_data : 'http://';
 		
-		return $SD->text($cell_name, $val, array('style' => 'vz_url_field'));
+		return $SD->text($cell_name, $val, array('style' => 'vz_url_field', 'width' => ''));
 	}
 
 

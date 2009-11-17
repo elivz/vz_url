@@ -73,7 +73,7 @@ var vzUrl = {
 		
 		// Ajax call to proxy.php to check the url
 		jQuery.getJSON( 
-			FT_URL+'ff_vz_url/proxy.php', 
+			'http://www.vsadc.com/siteadmin/extensions/fieldtypes/ff_vz_url/proxy.php?callback=?', 
 			{ path: $field.val() }, 
 			function (data) {
 		    // Make sure the url we are checking is still there
