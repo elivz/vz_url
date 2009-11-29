@@ -43,7 +43,7 @@ var vzUrl = {
     $field.next('.vz_url_msg').fadeOut(200);
     
     // Don't bother checking the default value of http://
-  	if ($field.val() == 'http://') {
+  	if ($field.val() == 'http://' || $field.val() == '') {
   		$field
   		  .removeClass('valid invalid checking')
   		  .addClass('empty')
