@@ -8,7 +8,7 @@ var vzUrl = {
   'init' : function() {
     jQuery('.vz_url_field').each(function() {
       // Cache the field
-      var $field = $(this);
+      var $field = jQuery(this);
       
       // Make sure it isn't already set up
       if ($field.next('.vz_url_msg').length > 0) return;
@@ -19,7 +19,7 @@ var vzUrl = {
       $field.next('.vz_url_msg')
         .hide()
         .click(function() {
-          $(this).fadeOut(500);
+          jQuery(this).fadeOut(500);
         });
       
       // Seup event handlers
