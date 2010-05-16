@@ -23,16 +23,16 @@ var vzUrl = {
         });
       
       // Seup event handlers
-      $field.keyup(function(){ vzUrl.check_field(this) })
+      $field.keyup(function(){ vzUrl.check_field(this,true) })
       
       // Check it
       vzUrl.check_field($field);
     });
   },
   
-  'check_field' : function(field) {
+  'check_field' : function(field,delay) {
     // Clear the timeout
-    if (vzUrl.$timer) clearTimeout(vzUrl.$timer);
+    if (vzUrl.$timer && delay) clearTimeout(vzUrl.$timer);
     
     // Cache the field
     var $field = jQuery(field)
@@ -53,8 +53,12 @@ var vzUrl = {
   		$field.removeClass('empty');
   	}
 
-    // Use a timeout to prevent an ajax call on every keystroke
-    vzUrl.$timer = setTimeout(function(){ vzUrl.ajax_call($field) }, 350);
+    if (delay) {
+      // Use a timeout to prevent an ajax call on every keystroke
+      vzUrl.$timer = setTimeout(function(){ vzUrl.ajax_call($field) }, 350);
+    } else {
+      vzUrl.ajax_call($field)
+    }
   },
   
   'ajax_call' : function($field) {
@@ -68,6 +72,7 @@ var vzUrl = {
 		        .html(vzUrl.errorText)
 		      .parent()
 		        .fadeIn(800);
+		        alert('regex');
 		    return false;
 		}
 		
@@ -75,7 +80,7 @@ var vzUrl = {
 		jQuery.getJSON( 
 			FT_URL + 'ff_vz_url/proxy.php?callback=?', 
 			{ path: $field.val() }, 
-			function (data) {
+			function (data) {console.log(data);
 		    // Make sure the url we are checking is still there
 		    if (data.original != $field.val()) return;
 		    
