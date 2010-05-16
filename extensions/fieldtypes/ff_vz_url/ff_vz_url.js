@@ -84,7 +84,7 @@ var vzUrl = {
 		    if (data.original != $field.val()) return;
 		    
 				// Show or hide the error message, as needed
-				if ((data.original == data.final) && (data.http_code >= 200) && (data.http_code < 300)) {
+				if ((data.original == data.final) && (data.http_code >= 200) && (data.http_code < 400)) {
 				  // The url is valid
 					$field
       		  .removeClass('empty invalid checking')
