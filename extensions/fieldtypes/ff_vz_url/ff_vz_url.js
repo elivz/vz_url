@@ -72,7 +72,6 @@ var vzUrl = {
 		        .html(vzUrl.errorText)
 		      .parent()
 		        .fadeIn(800);
-		        alert('regex');
 		    return false;
 		}
 		
@@ -94,11 +93,11 @@ var vzUrl = {
 				} else if (data.original != data.final) {
 				  // The url is a redirect
 					$field
-      		  .removeClass('empty valid checking')
-      		  .addClass('invalid')
+      		  .removeClass('empty invalid checking')
+      		  .addClass('valid')
 					  .next('.vz_url_msg')
 				      .children('p')
-				        .html('The url '+data.original+' forwards to '+data.final+'.<br/><a href="#">Update to the new url</a>')
+				        .html('The url '+data.original+' redirects to: '+data.final+'.<br/><a href="#">Update to the new url</a>')
 				          .children('a').click(function() { 
 				            $field
 				              .val(data.final)

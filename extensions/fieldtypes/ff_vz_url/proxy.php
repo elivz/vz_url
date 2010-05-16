@@ -65,7 +65,7 @@ curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($session, CURLOPT_VERBOSE, false);
 curl_setopt($session, CURLOPT_TIMEOUT, 15);
 curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($session, CURLOPT_MAXREDIRS, 5);
+curl_setopt($session, CURLOPT_MAXREDIRS, 8);
 
 // Request the file
 $content = curl_exec($session);
