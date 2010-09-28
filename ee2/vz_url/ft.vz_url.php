@@ -34,40 +34,15 @@ class Vz_url_ft extends EE_Fieldtype {
 	 */
 	function install()
 	{
-		return array(
-			'vz_url_error_text'	=> 'That url seems to be invalid.'
-		);
 	}
 	
-	// --------------------------------------------------------------------
-	
-	/**
-	 * Display Global Settings
-	 *
-	 * @access	public
-	 * @return	form contents
-	 *
-	 */
-	function display_global_settings()
+	private function _ft_url()
 	{
-		$val = array_merge($this->settings, $_POST);
-		$form = form_label('vz_url_error_text', 'vz_url_error_text').NBS.form_input('vz_url_error_text', $val['vz_url_error_text']).NBS.NBS.NBS.' ';
+		$cp_url = $this->EE->config->item('cp_url');
+		$cp_url = str_ireplace('index.php','',$cp_url);
+		if (substr($cp_url, -1) != '/') $cp_url .= '/';
 		
-		return $form;
-	}
-	
-	// --------------------------------------------------------------------
-	
-	/**
-	 * Save Global Settings
-	 *
-	 * @access	public
-	 * @return	global settings
-	 *
-	 */
-	function save_global_settings()
-	{
-		return array_merge($this->settings, $_POST);
+		return $cp_url . 'expressionengine/third_party/vz_url/';
 	}
 	
 	// --------------------------------------------------------------------
@@ -82,12 +57,15 @@ class Vz_url_ft extends EE_Fieldtype {
 	 */
 	function display_field($data, $cell = FALSE)
 	{
+    $this->EE->lang->loadfile('vz_url');
+    
 		$this->EE->cp->load_package_css('vz_url');
 		$this->EE->cp->load_package_js('vz_url');
 		$this->EE->cp->add_to_foot(
 			'<script type="text/javascript">/*<![CDATA[ */'.NL.
-			'vzUrl.errorText="'.$this->settings['vz_url_error_text'].'";' . NL .
-			'vzUrl.proxyUrl="' . BASE . 'expressionengine/third_party/vz_url/proxy.php";' . NL .
+			'vzUrl.errorText="'.lang('vz_url_error_text').'";' . NL .
+			'vzUrl.redirectText="'.lang('vz_url_redirect_text').'";' . NL .
+			'vzUrl.proxyUrl="' . $this->_ft_url() . 'proxy.php";' . NL .
 			'// ]]></script>'
 		);
 		

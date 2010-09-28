@@ -1,57 +1,36 @@
 /*
- * Styles for VZ Url fieldtype
- * by Eli Van Zoeren - http://elivz.com
+ *  Styles for VZ Url fieldtype
+ *  by Eli Van Zoeren - http://elivz.com
  */
 
-.vz_url_field {
-  width: 99%;
-  }
-
 .vz_url_field.empty {
-  color: #888;
-  }
+	color: #aaa;
+}
 
 .vz_url_field.checking {
-  background: #fff url(../images/spinner.gif) no-repeat right center;
-  }
+	background: #fff url(../themes/cp_themes/default/images/indicator.gif) no-repeat 99% 50%;
+}
 
 .vz_url_field.invalid {
-  background: #fff url(../themes/cp_themes/default/images/alert.png) no-repeat right center;
-  }
+	background: #fff url(../themes/cp_themes/default/images/alert.png) no-repeat 99% 50%;
+}
 
 .vz_url_field.valid {
-  background: #fff url(../themes/cp_themes/default/images/success.png) no-repeat right center;
-  }
+	background: #fff url(../themes/cp_themes/default/images/success.png) no-repeat 99% 50%;
+}
 
 .vz_url_wrapper {
-  position: relative;
-  }
+	position: relative;
+}
   
 .vz_url_msg {
-  position: absolute;
-  right: 20px;
-  bottom: 18px;
-  padding: 10px 16px;
-  background: #fff;
-  border: 1px solid #999;
-  opacity: 0.8;
-  -webkit-border-radius: 7px;
-  -webkit-border-bottom-right-radius: 0;
-  -moz-border-radius: 7px;
-  -moz-border-radius-bottomright: 0;
-  border-radius: 7px;
-  border-bottom-right-radius: 0;
-  -webkit-box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
-  -moz-box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
-  box-shadow: 1px 2px 8px rgba(0,0,0,0.5);
-  }
-
-.vz_url_msg p {
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  color: #444;
-  }
+	position: absolute;
+	right: 30px;
+	top: 0;
+	background: transparent;
+	color: #966;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 24px;
+	font-weight: bold;
+}

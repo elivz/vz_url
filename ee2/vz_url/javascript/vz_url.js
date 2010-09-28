@@ -15,7 +15,7 @@ var vzUrl = {
       
       $field
         .wrap('<div class="vz_url_wrapper" />')
-        .after('<div class="vz_url_msg"><p></p></div>');
+        .after('<div class="vz_url_msg"></div>');
       $field.next('.vz_url_msg')
         .hide()
         .click(function() {
@@ -68,10 +68,8 @@ var vzUrl = {
   		  .removeClass('empty valid checking')
   		  .addClass('invalid')
 			  .next('.vz_url_msg')
-		      .children('p')
-		        .html(vzUrl.errorText)
-		      .parent()
-		        .fadeIn(800);
+		    	.html(vzUrl.errorText)
+		    	.fadeIn(800);
 		    return false;
 		}
 		
@@ -79,7 +77,7 @@ var vzUrl = {
 		jQuery.getJSON( 
 			vzUrl.proxyUrl + '?callback=?', 
 			{ path: $field.val() }, 
-			function (data) {console.log(data);
+			function (data) {
 		    // Make sure the url we are checking is still there
 		    if (data.original != $field.val()) return;
 		    
@@ -96,28 +94,24 @@ var vzUrl = {
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
 					  .next('.vz_url_msg')
-				      .children('p')
-				        .html('The url '+data.original+' redirects to: '+data.final+'.<br/><a href="#">Update to the new url</a>')
-				          .children('a').click(function() { 
-				            $field
-				              .val(data.final)
-				              .next('.vz_url_msg').fadeOut(200);
-				            vzUrl.ajax_call($field);
-				            return false;
-				          })
-				        .parent()
-				      .parent()
-				        .fadeIn(800);
+			        .html('The url '+data.original+' redirects to: '+data.final+'.<br/><a href="#">Update to the new url</a>')
+			          .children('a').click(function() { 
+			            $field
+			              .val(data.final)
+			              .next('.vz_url_msg').fadeOut(200);
+			            vzUrl.ajax_call($field);
+			            return false;
+			          })
+			        .parent()
+			        .fadeIn(800);
 				} else {
 				  // Invalid
 					$field
       		  .removeClass('empty valid checking')
       		  .addClass('invalid')
 					  .next('.vz_url_msg')
-				      .children('p')
-				        .html(vzUrl.errorText)
-				      .parent()
-				        .fadeIn(800);
+			        .html(vzUrl.errorText)
+			        .fadeIn(800);
 				}
 			}
 		);
