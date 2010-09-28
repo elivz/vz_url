@@ -23,7 +23,7 @@
 	position: relative;
 }
   
-.vz_url_msg {
+.publish_field .vz_url_msg {
 	position: absolute;
 	right: 30px;
 	top: 0;

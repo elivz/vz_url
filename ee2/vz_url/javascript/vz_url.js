@@ -15,7 +15,7 @@ var vzUrl = {
       
       $field
         .wrap('<div class="vz_url_wrapper" />')
-        .after('<div class="vz_url_msg"></div>');
+        .after('<label class="vz_url_msg" for="' + $field.attr('id') + '"></label>');
       $field.next('.vz_url_msg')
         .hide()
         .click(function() {
@@ -90,20 +90,23 @@ var vzUrl = {
 					  .next('.vz_url_msg').fadeOut(200);
 				} else if (data.original != data.final) {
 				  // The url is a redirect
+				  var msg = vzUrl.redirectText
+				  	.replace(/{{old_url}}/g, data.original)
+				  	.replace(/{{new_url}}/g,data.final)
+				  	.replace(/{{update="(.+?)"}}/g, '<a href="#" class="update_url">$1</a>');
 					$field
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
 					  .next('.vz_url_msg')
-			        .html('The url '+data.original+' redirects to: '+data.final+'.<br/><a href="#">Update to the new url</a>')
-			          .children('a').click(function() { 
+			        .html(msg)
+			        .fadeIn(800)
+			          .children('.update_url').click(function() { 
 			            $field
 			              .val(data.final)
 			              .next('.vz_url_msg').fadeOut(200);
 			            vzUrl.ajax_call($field);
 			            return false;
-			          })
-			        .parent()
-			        .fadeIn(800);
+			          });
 				} else {
 				  // Invalid
 					$field
