@@ -125,9 +125,5 @@ jQuery(document).ready(function() {
   vzUrl.init();
   
   // Re-initialize every time a row is added
-  if (jQuery.isFunction(jQuery.fn.ffMatrix)) {
-  	jQuery.fn.ffMatrix.onDisplayCell.ff_vz_url = function(td) {
-      vzUrl.init();
-  	};
-  }
+  Matrix.bind('vz_url', 'display', vzUrl.init);
 })

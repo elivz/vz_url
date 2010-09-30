@@ -147,7 +147,7 @@ class Vz_url_ft extends EE_Fieldtype {
 	function display_field($data, $cell = FALSE)
 	{
     $this->_include_jscss();
-		
+    
 		// Fill in http:// if the field is empty
 		$val = ($data) ? $data : 'http://';
 		
@@ -183,7 +183,7 @@ class Vz_url_ft extends EE_Fieldtype {
 	function save_cell($data)
 	{
 		// Remove http:// if it's the only thing in the cell
-		return ($cell_data == 'http://') ? '' : $cell_data;
+		return ($data == 'http://') ? '' : $data;
 	}
 
 }
