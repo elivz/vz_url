@@ -19,7 +19,7 @@ var vzUrl = {
       $field.next('.vz_url_msg')
         .hide()
         .click(function() {
-          jQuery(this).fadeOut(500);
+          jQuery(this).slideUp(500);
         });
       
       // Seup event handlers
@@ -40,14 +40,14 @@ var vzUrl = {
   	  .addClass('checking');
   	  
     // Hide the message box
-    $field.next('.vz_url_msg').fadeOut(200);
+    $field.next('.vz_url_msg').slideUp(200);
     
     // Don't bother checking the default value of http://
   	if ($field.val() == 'http://' || $field.val() == '') {
   		$field
   		  .removeClass('valid invalid checking')
   		  .addClass('empty')
-  		  .next('.vz_url_msg').fadeOut(200);
+  		  .next('.vz_url_msg').slideUp(200);
   		return;
   	} else {
   		$field.removeClass('empty');
@@ -69,7 +69,7 @@ var vzUrl = {
   		  .addClass('invalid')
 			  .next('.vz_url_msg')
 		    	.html(vzUrl.errorText)
-		    	.fadeIn(800);
+		    	.slideDown(800);
 		    return false;
 		}
 		
@@ -87,7 +87,7 @@ var vzUrl = {
 					$field
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
-					  .next('.vz_url_msg').fadeOut(200);
+					  .next('.vz_url_msg').slidUp(200);
 				} else if (data.original != data.final) {
 				  // The url is a redirect
 				  var msg = vzUrl.redirectText
@@ -99,11 +99,11 @@ var vzUrl = {
       		  .addClass('valid')
 					  .next('.vz_url_msg')
 			        .html(msg)
-			        .fadeIn(800)
+			        .slideDown(800)
 			          .children('.update_url').click(function() { 
 			            $field
 			              .val(data.final)
-			              .next('.vz_url_msg').fadeOut(200);
+			              .next('.vz_url_msg').slideUp(200);
 			            vzUrl.ajax_call($field);
 			            return false;
 			          });
@@ -114,7 +114,7 @@ var vzUrl = {
       		  .addClass('invalid')
 					  .next('.vz_url_msg')
 			        .html(vzUrl.errorText)
-			        .fadeIn(800);
+			        .slideDown(800);
 				}
 			}
 		);
