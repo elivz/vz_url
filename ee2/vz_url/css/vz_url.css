@@ -25,19 +25,20 @@
   
 .vz_url_msg {
 	position: absolute;
-	right: 0px;
+	right: 1%;
 	bottom: 23px;
 	padding: 4px 8px;
 	background: rgba(255,255,255,0.8);
 	color: #966 !important;
 	border: 1px solid #B6C0C2;
+	border-bottom: none;
 	font-size: 13px !important;
 	line-height: 16px !important;
 	font-weight: bold !important;
 	-webkit-border-top-left-radius: 3px;
 	-webkit-border-top-right-radius: 3px;
-	-webkit-border-radius-topleft: 3px;
-	-webkit-border-radius-topright: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	-webkit-box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
@@ -61,5 +62,6 @@
 	-moz-border-radius: 0;
 	}
 .matrix .vz_url_msg {
-	bottom: 21px;
+	bottom: 23px;
+	right: 0;
 }
