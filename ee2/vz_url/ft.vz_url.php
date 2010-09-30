@@ -6,6 +6,7 @@
  * @author    Eli Van Zoeren <eli@elivz.com>
  * @copyright Copyright (c) 2010 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
+ *
  */
  
 class Vz_url_ft extends EE_Fieldtype {
@@ -17,19 +18,23 @@ class Vz_url_ft extends EE_Fieldtype {
 	
 	/**
 	 * Fieldtype Constructor
+	 *
 	 */
 	function Vz_url_ft()
 	{
 		parent::EE_Fieldtype();
+
+		if (!isset($this->EE->session->cache['vz_url']))
+		{
+			$this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'ft_url' => FALSE);
+		}
+		$this->cache =& $this->EE->session->cache['vz_url'];
 	}
 	
 	// --------------------------------------------------------------------
 	
 	/**
 	 * Install Fieldtype
-	 *
-	 * @access	public
-	 * @return	default global settings
 	 *
 	 */
 	function install()
@@ -42,22 +47,53 @@ class Vz_url_ft extends EE_Fieldtype {
 		);
 	}
 	
+	/**
+	 * Get the url of the VZ Url files
+	 *
+	 */
 	private function _ft_url()
 	{
-		$cp_url = $this->EE->config->item('cp_url');
-		$cp_url = str_ireplace('index.php','',$cp_url);
-		if (substr($cp_url, -1) != '/') $cp_url .= '/';
+		if (!$this->cache['ft_url'])
+		{
+			// Construct the url
+			$cp_url = $this->EE->config->item('cp_url');
+			$cp_url = str_ireplace('index.php','',$cp_url);
+			if (substr($cp_url, -1) != '/') $cp_url .= '/';
+			
+			// And cache it
+			$this->cache['ft_url'] = $cp_url . 'expressionengine/third_party/vz_url/';
+		}
 		
-		return $cp_url . 'expressionengine/third_party/vz_url/';
+		return $this->cache['ft_url'];
+	}
+	
+	/**
+	 * Include the JS and CSS files,
+	 * but only the first time
+	 *
+	 */
+	private function _include_jscss()
+	{
+		if (!$this->cache['jscss'])
+		{
+			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_ft_url().'css/vz_url.css" />');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_ft_url().'javascript/vz_url.js"></script>');
+			$this->EE->cp->add_to_foot(
+				'<script type="text/javascript">/*<![CDATA[ */' . NL .
+				'vzUrl.errorText="' . addslashes($this->settings['vz_url_error_text']) . '";' . NL .
+				'vzUrl.redirectText="' . addslashes($this->settings['vz_url_redirect_text']) . '";' . NL .
+				'vzUrl.proxyUrl="' . $this->_ft_url() . 'proxy.php";' . NL .
+				'// ]]></script>'
+			);
+			
+			$this->cache['jscss'] = TRUE;
+		}
 	}
 	
 	// --------------------------------------------------------------------
 	
 	/**
 	 * Display Global Settings
-	 *
-	 * @access	public
-	 * @return	form contents
 	 *
 	 */
 	function display_global_settings()
@@ -70,14 +106,14 @@ class Vz_url_ft extends EE_Fieldtype {
 		// load the language file
 		$this->EE->lang->loadfile('vz_url');
 
-		// use the default template known as
-		// $cp_pad_table_template in the views
+		// Table template
 		$this->EE->table->set_template(array(
 			'table_open'    => '<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">',
 			'row_start'     => '<tr class="even">',
 			'row_alt_start' => '<tr class="odd">'
 		));
-
+		
+		// Draw the settings table
 		$this->EE->table->set_heading(array('data' => lang('preference'), 'style' => 'width: 50%'), lang('setting'));
 		
 		$this->EE->table->add_row(
@@ -93,13 +129,8 @@ class Vz_url_ft extends EE_Fieldtype {
 		return $this->EE->table->generate();
 	}
 	
-	// --------------------------------------------------------------------
-	
 	/**
 	 * Save Global Settings
-	 *
-	 * @access	public
-	 * @return	global settings
 	 *
 	 */
 	function save_global_settings()
@@ -112,62 +143,47 @@ class Vz_url_ft extends EE_Fieldtype {
 	/**
 	 * Display Field on Publish
 	 *
-	 * @access	public
-	 * @param	existing data
-	 * @return	field html
-	 *
 	 */
 	function display_field($data, $cell = FALSE)
 	{
-    
-		$this->EE->cp->load_package_css('vz_url');
-		$this->EE->cp->load_package_js('vz_url');
-		$this->EE->cp->add_to_foot(
-			'<script type="text/javascript">/*<![CDATA[ */' . NL .
-			'vzUrl.errorText="' . addslashes($this->settings['vz_url_error_text']) . '";' . NL .
-			'vzUrl.redirectText="' . addslashes($this->settings['vz_url_redirect_text']) . '";' . NL .
-			'vzUrl.proxyUrl="' . $this->_ft_url() . 'proxy.php";' . NL .
-			'// ]]></script>'
-		);
+    $this->_include_jscss();
 		
 		// Fill in http:// if the field is empty
 		$val = ($data) ? $data : 'http://';
 		
-		return form_input($this->field_name, $val, 'class="vz_url_field"');
-	}
-
-	/**
-	 * Display Cell
-	 */
-	function display_cell($data)
-	{
-		$this->_include_theme_js('scripts/matrix2.js');
-
-		return $this->display_field($data, TRUE);
+		// Is it a Matrix cell?
+		$name = $cell ? $this->cell_name : $this->field_name;
+		
+		return form_input($name, $val, 'class="vz_url_field"');
 	}
 
 	/**
 	 * Save Field
-	 * 
-	 * @param  string  $data		The field's post data
+	 *
 	 */
 	function save($data)
 	{
 		// Remove http:// if it's the only thing in the field
-		return ($data ==  'http://') ? '' : $data;
+		return ($data == 'http://') ? '' : $data;
 	}
 
+	/**
+	 * Display Cell
+	 *
+	 */
+	function display_cell($data)
+	{
+		return $this->display_field($data, TRUE);
+	}
 
 	/**
 	 * Save Cell
-	 * 
-	 * @param  string  $cell_data		The field's post data
-	 * @param  array  $fcell_settings	The field settings
+	 *
 	 */
-	function save_cell($cell_data, $cell_settings)
+	function save_cell($data)
 	{
 		// Remove http:// if it's the only thing in the cell
-		return ($cell_data ==  'http://') ? '' : $cell_data;
+		return ($cell_data == 'http://') ? '' : $cell_data;
 	}
 
 }

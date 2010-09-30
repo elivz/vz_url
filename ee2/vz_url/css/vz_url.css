@@ -8,15 +8,15 @@
 }
 
 .vz_url_field.checking {
-	background: #fff url(../themes/cp_themes/default/images/indicator.gif) no-repeat 99% 50%;
+	background: #fff url(spinner.gif) no-repeat 99% 50%;
 }
 
 .vz_url_field.invalid {
-	background: #fff url(../themes/cp_themes/default/images/alert.png) no-repeat 99% 50%;
+	background: #fff url(invalid.png) no-repeat 99% 50%;
 }
 
 .vz_url_field.valid {
-	background: #fff url(../themes/cp_themes/default/images/success.png) no-repeat 99% 50%;
+	background: #fff url(valid.png) no-repeat 99% 50%;
 }
 
 .vz_url_wrapper {
@@ -26,11 +26,11 @@
 .publish_field .vz_url_msg {
 	position: absolute;
 	right: 30px;
-	top: 0;
+	bottom: 0;
 	background: transparent;
 	color: #966;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 12px;
-	line-height: 24px;
+	line-height: 24px !important;
 	font-weight: bold;
 }
