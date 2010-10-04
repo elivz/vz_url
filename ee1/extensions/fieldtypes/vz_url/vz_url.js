@@ -1,36 +1,40 @@
 /*
  * Ajax link validator for VZ Url fieldtype
  * by Eli Van Zoeren - http://elivz.com
+ *
+ * Depends on: jQuery
+ *
  */
 
-// jQuery plugin to check the url and display the result
 var vzUrl = {
-  'init' : function() {
-    jQuery('.vz_url_field').each(function() {
-      // Cache the field
+
+  'init' : function(fields) {
+    jQuery(fields).each(function() {
       var $field = jQuery(this);
       
-      // Make sure it isn't already set up
-      if ($field.next('.vz_url_msg').length > 0) return;
+      // Add a positioned wrapper for placing the message
+      $field.wrap('<div style="position:relative" />');
       
-      $field
-        .wrap('<div class="vz_url_wrapper" />')
-        .after('<div class="vz_url_msg"><p></p></div>');
-      $field.next('.vz_url_msg')
+      // Create a holder for the error message
+      jQuery('<label class="vz_url_msg" for="' + $field.attr('id') + '"></label>')
         .hide()
+      	.insertAfter($field)
         .click(function() {
-          jQuery(this).fadeOut(500);
+        	// Hide on click
+          jQuery(this).slideUp(500);
         });
       
       // Seup event handlers
-      $field.keyup(function(){ vzUrl.check_field(this,true) })
+      $field.keyup(function() {
+      	vzUrl.check_field(this, true);
+      });
       
       // Check it
       vzUrl.check_field($field);
     });
   },
   
-  'check_field' : function(field,delay) {
+  'check_field' : function(field, delay) {
     // Clear the timeout
     if (vzUrl.$timer && delay) clearTimeout(vzUrl.$timer);
     
@@ -40,14 +44,15 @@ var vzUrl = {
   	  .addClass('checking');
   	  
     // Hide the message box
-    $field.next('.vz_url_msg').fadeOut(200);
+    $field.next('.vz_url_msg').slideUp(200);
     
     // Don't bother checking the default value of http://
   	if ($field.val() == 'http://' || $field.val() == '') {
   		$field
   		  .removeClass('valid invalid checking')
   		  .addClass('empty')
-  		  .next('.vz_url_msg').fadeOut(200);
+  		  .next('.vz_url_msg')
+  		  	.slideUp(200);
   		return;
   	} else {
   		$field.removeClass('empty');
@@ -68,18 +73,16 @@ var vzUrl = {
   		  .removeClass('empty valid checking')
   		  .addClass('invalid')
 			  .next('.vz_url_msg')
-		      .children('p')
-		        .html(vzUrl.errorText)
-		      .parent()
-		        .fadeIn(800);
+		    	.html(vzUrl.errorText)
+		    	.slideDown(800);
 		    return false;
 		}
 		
 		// Ajax call to proxy.php to check the url
 		jQuery.getJSON( 
-			FT_URL + 'ff_vz_url/proxy.php?callback=?', 
+			FT_URL + 'vz_url/proxy.php?callback=?', 
 			{ path: $field.val() }, 
-			function (data) {console.log(data);
+			function (data) {
 		    // Make sure the url we are checking is still there
 		    if (data.original != $field.val()) return;
 		    
@@ -89,35 +92,37 @@ var vzUrl = {
 					$field
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
-					  .next('.vz_url_msg').fadeOut(200);
+					  .next('.vz_url_msg')
+					  	.slideUp(200);
 				} else if (data.original != data.final) {
 				  // The url is a redirect
+				  var msg = vzUrl.redirectText
+				  	.replace(/{{old_url}}/g, data.original)
+				  	.replace(/{{new_url}}/g,data.final)
+				  	.replace(/{{update="(.+?)"}}/g, '<a href="#" class="update_url">$1</a>');
 					$field
       		  .removeClass('empty invalid checking')
       		  .addClass('valid')
 					  .next('.vz_url_msg')
-				      .children('p')
-				        .html('The url '+data.original+' redirects to: '+data.final+'.<br/><a href="#">Update to the new url</a>')
-				          .children('a').click(function() { 
-				            $field
-				              .val(data.final)
-				              .next('.vz_url_msg').fadeOut(200);
-				            vzUrl.ajax_call($field);
-				            return false;
-				          })
-				        .parent()
-				      .parent()
-				        .fadeIn(800);
+			        .html(msg)
+			        .slideDown(800)
+		          .children('.update_url')
+			          .click(function() { 
+			            $field
+			              .val(data.final)
+			              .next('.vz_url_msg')
+			              	.slideUp(200);
+			            vzUrl.ajax_call($field);
+			            return false;
+			          });
 				} else {
 				  // Invalid
 					$field
       		  .removeClass('empty valid checking')
       		  .addClass('invalid')
 					  .next('.vz_url_msg')
-				      .children('p')
-				        .html(vzUrl.errorText)
-				      .parent()
-				        .fadeIn(800);
+			        .html(vzUrl.errorText)
+			        .slideDown(800);
 				}
 			}
 		);
@@ -125,12 +130,17 @@ var vzUrl = {
 };
 
 jQuery(document).ready(function() {
-  vzUrl.init();
+	// Initialize the fields that are there on page-load
+  vzUrl.init('.vz_url_field');
   
   // Re-initialize every time a row is added
-  if (jQuery.isFunction(jQuery.fn.ffMatrix)) {
-  	jQuery.fn.ffMatrix.onDisplayCell.ff_vz_url = function(td) {
-      vzUrl.init();
-  	};
+  if (typeof(Matrix) != 'undefined') {
+	  Matrix.bind(
+	  	'vz_url',
+	  	'display',
+	  	function(cell) {
+	  		vzUrl.init(cell.dom.$inputs);
+	  	}
+	  );
   }
-})
+});

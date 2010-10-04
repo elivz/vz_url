@@ -1,0 +1,81 @@
+/*
+ * Styles for VZ Url fieldtype
+ * by Eli Van Zoeren - http://elivz.com
+ */
+
+.vz_url_field {
+  width: 99%;
+  }
+
+.vz_url_field.empty {
+  color: #888;
+  }
+
+.vz_url_field.checking {
+	background: #fff url(spinner.gif) no-repeat 99% 50%;
+}
+
+.vz_url_field.invalid {
+	background: #fff url(invalid.png) no-repeat 99% 50%;
+}
+
+.vz_url_field.valid {
+	background: #fff url(valid.png) no-repeat 99% 50%;
+}
+ 
+.vz_url_field {
+	padding: 4px;
+	outline: 0;
+	width: 99%;
+	border: 1px solid #B6C0C2;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	}
+.vz_url_field:focus {
+	border: 2px solid #B2BEC0;
+	padding: 3px;
+	}
+  
+.vz_url_msg {
+	position: absolute;
+	right: 1%;
+	bottom: 25px;
+	padding: 4px 8px;
+	background: rgba(255,255,255,0.8);
+	color: #966 !important;
+	border: 1px solid #B6C0C2;
+	border-bottom: none;
+	font-size: 13px !important;
+	line-height: 16px !important;
+	font-weight: bold !important;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	-webkit-box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
+	-moz-box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
+	box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
+  }
+
+/* Special stying for Matrix cells */
+.matrix .vz_url_field {
+	border: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	width: 100%;
+	min-width: 60px;
+	resize: none;
+	outline: none;
+	font-family: 'Lucida Grande', sans-serif;
+	font-size: 11px;
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	}
+.matrix .vz_url_msg {
+	bottom: 22px;
+	right: 0;
+}

@@ -25,7 +25,7 @@ var vzUrl = {
         });
       
       // Seup event handlers
-      $field.click(function() {
+      $field.keyup(function() {
       	vzUrl.check_field(this, true);
       });
       
@@ -134,11 +134,13 @@ jQuery(document).ready(function() {
   vzUrl.init('.vz_url_field');
   
   // Re-initialize every time a row is added
-  Matrix.bind(
-  	'vz_url',
-  	'display',
-  	function(cell) {
-  		vzUrl.init(cell.dom.$inputs);
-  	}
-  );
+  if (typeof(Matrix) != 'undefined') {
+	  Matrix.bind(
+	  	'vz_url',
+	  	'display',
+	  	function(cell) {
+	  		vzUrl.init(cell.dom.$inputs);
+	  	}
+	  );
+  }
 });
