@@ -3,6 +3,10 @@
  *  by Eli Van Zoeren - http://elivz.com
  */
 
+.vz_url_field {
+  width: 99%;
+ }
+
 .vz_url_field.empty {
 	color: #aaa;
 }
@@ -11,22 +15,33 @@
 	background: #fff url(spinner.gif) no-repeat 99% 50%;
 }
 
-.vz_url_field.invalid {
+.vz_url_field.invalid, .vz_url_field.redirect {
 	background: #fff url(invalid.png) no-repeat 99% 50%;
 }
 
 .vz_url_field.valid {
 	background: #fff url(valid.png) no-repeat 99% 50%;
 }
-
-.vz_url_wrapper {
-	position: relative;
+ 
+.ff-ft .vz_url_field {
+	height: 14px;
+	padding: 4px;
+	outline: 0;
+	width: 99%;
+	border: 1px solid #B6C0C2;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.ff-ft .vz_url_field:focus {
+	border: 2px solid #B2BEC0;
+	padding: 3px;
 }
   
 .vz_url_msg {
 	position: absolute;
 	right: 1%;
-	bottom: 23px;
+	bottom: 24px;
 	padding: 4px 8px;
 	width: auto !important;
 	background: rgba(255,255,255,0.8);
@@ -61,7 +76,7 @@
 	border-radius: 0;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
-	}
+}
 .matrix .vz_url_msg {
 	bottom: 23px;
 	right: 0;

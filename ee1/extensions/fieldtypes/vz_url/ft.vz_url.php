@@ -74,6 +74,49 @@ class Vz_url extends Fieldframe_Fieldtype {
 		return $r;
 	}
 	
+	
+	/**
+	 * Get the URL of the VZ URL files
+	 *
+	 */
+	private function _theme_url()
+	{
+		if (! isset($this->_theme_url))
+		{
+			global $PREFS;
+			
+			// Construct the url
+			$theme_url = $PREFS->ini('theme_folder_url', 1);
+			if (substr($theme_url, -1) != '/') $theme_url .= '/';
+			
+			// And cache it
+			$this->_theme_url = $theme_url . 'third_party/vz_url/';
+		}
+		
+		return $this->_theme_url;
+	}
+	
+	/**
+	 * Include the JS and CSS files,
+	 * but only the first time
+	 *
+	 */
+	private function _include_jscss()
+	{
+		if (!$this->_has_jscss)
+		{
+			$this->insert('head', '<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
+			$this->insert('body', '<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
+			$this->insert_js(
+				'vzUrl.errorText="' . addslashes($this->site_settings['vz_url_error_text']) . '";' . NL .
+				'vzUrl.redirectText="' . addslashes($this->site_settings['vz_url_redirect_text']) . '";' . NL .
+				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";'
+			);
+			
+			$this->_has_jscss = TRUE;
+		}
+	}
+	
     
 	/**
 	 * Display Field
@@ -85,12 +128,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_field($field_name, $field_data, $field_settings)
 	{
-		$this->include_css('styles/vz_url.css');
-		$this->include_js('vz_url.js');
-		$this->insert_js(
-			"vzUrl.errorText = '".$this->site_settings['vz_url_error_text']."';" . NL .
-			"vzUrl.redirectText = '".$this->site_settings['vz_url_redirect_text']."';"
-		);
+		$this->_include_jscss();
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
@@ -98,7 +136,6 @@ class Vz_url extends Fieldframe_Fieldtype {
 		$val = ($field_data) ? $field_data : 'http://';
 		
 		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => ''));
-		
 	}
 	
     
@@ -112,12 +149,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_cell($cell_name, $cell_data, $cell_settings)
 	{
-		$this->include_css('styles/vz_url.css');
-		$this->include_js('vz_url.js');
-		$this->insert_js(
-			"vzUrl.errorText = '".$this->site_settings['vz_url_error_text']."';" . NL .
-			"vzUrl.redirectText = '".$this->site_settings['vz_url_redirect_text']."';"
-		);
+		$this->_include_jscss();
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
