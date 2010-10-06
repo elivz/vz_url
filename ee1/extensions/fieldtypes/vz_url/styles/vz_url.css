@@ -41,6 +41,7 @@
 	position: absolute;
 	right: 1%;
 	bottom: 25px;
+	width: auto !important;
 	padding: 4px 8px;
 	background: rgba(255,255,255,0.8);
 	color: #966 !important;

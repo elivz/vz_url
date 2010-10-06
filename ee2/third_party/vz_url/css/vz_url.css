@@ -28,6 +28,7 @@
 	right: 1%;
 	bottom: 23px;
 	padding: 4px 8px;
+	width: auto !important;
 	background: rgba(255,255,255,0.8);
 	color: #966 !important;
 	border: 1px solid #B6C0C2;
