@@ -1,5 +1,5 @@
 /*
- * Ajax link validator for VZ Url fieldtype
+ * Ajax link validator for VZ URL fieldtype
  * by Eli Van Zoeren - http://elivz.com
  *
  * Depends on: jQuery
@@ -9,7 +9,7 @@
 var vzUrl = {
 	
 	/*
-	 * Set up the VZ Url fields with the styling and events they need to function
+	 * Set up the VZ URL fields with the styling and events they need to function
 	 */
   'init' : function(fields) {
     jQuery(fields).each(function() {
@@ -66,7 +66,7 @@ var vzUrl = {
   },
   
   /*
-   * Actually send a request the the target url to see if it exists
+   * Actually send a request the the target URL to see if it exists
    */
   'ajax_call' : function($field) {
 	  // Make sure it's even a valid url
@@ -80,15 +80,15 @@ var vzUrl = {
 			FT_URL + 'vz_url/proxy.php?callback=?', 
 			{ path: $field.val() }, 
 			function (data) {
-		    // Make sure the url we are checking is still there
+		    // Make sure the URL we are checking is still there
 		    if (data.original != $field.val()) return;
 		    
 				// Show or hide the error message, as needed
 				if ((data.original == data.final) && (data.http_code >= 200) && (data.http_code < 400)) {
-				  // The url is valid
+				  // The URL is valid
 					vzUrl.set_status($field, 'valid');
 				} else if (data.original != data.final) {
-				  // The url is a redirect
+				  // The URL is a redirect
 				  vzUrl.set_status($field, 'redirect', data);
 				} else {
 					vzUrl.set_status($field, 'invalid');

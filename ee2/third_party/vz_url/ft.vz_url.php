@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * VZ Url Class
+ * VZ URL Class
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
  * @copyright Copyright (c) 2010 Eli Van Zoeren
@@ -12,7 +12,7 @@
 class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
-		'name'			=> 'VZ Url',
+		'name'			=> 'VZ URL',
 		'version'		=> '2.0.0'
 	);
 	
@@ -48,7 +48,7 @@ class Vz_url_ft extends EE_Fieldtype {
 	}
 	
 	/**
-	 * Get the url of the VZ Url files
+	 * Get the URL of the VZ URL files
 	 *
 	 */
 	private function _ft_url()

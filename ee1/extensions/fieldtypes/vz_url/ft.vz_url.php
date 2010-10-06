@@ -4,7 +4,7 @@ if ( ! defined('EXT')) exit('Invalid file request');
 
 
 /**
- * VZ Url Class
+ * VZ URL Class
  *
  * @package   FieldFrame
  * @author    Eli Van Zoeren <eli@elivz.com>
@@ -19,9 +19,9 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 * @var array
 	 */
 	var $info = array(
-		'name'             => 'VZ Url',
+		'name'             => 'VZ URL',
 		'version'          => '2.0.0',
-		'desc'             => 'Textbox with ajax url validation',
+		'desc'             => 'Textbox with ajax URL validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/versions.xml'
 	);
@@ -32,7 +32,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	);
   
 	var $default_site_settings = array(
-		'vz_url_error_text' => 'That url appears to be invalid.',
+		'vz_url_error_text' => 'That URL appears to be invalid.',
 		'vz_url_redirect_text' => '{{old_url}} redirects to {{new_url}}, {{update="update it"}}.'
 	);
 
