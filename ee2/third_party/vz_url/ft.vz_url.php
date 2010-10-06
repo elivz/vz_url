@@ -26,7 +26,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 		if (!isset($this->EE->session->cache['vz_url']))
 		{
-			$this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'ft_url' => FALSE);
+			$this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'theme_url' => FALSE);
 		}
 		$this->cache =& $this->EE->session->cache['vz_url'];
 	}
@@ -51,20 +51,19 @@ class Vz_url_ft extends EE_Fieldtype {
 	 * Get the URL of the VZ URL files
 	 *
 	 */
-	private function _ft_url()
+	private function _theme_url()
 	{
-		if (!$this->cache['ft_url'])
+		if (!$this->cache['theme_url'])
 		{
 			// Construct the url
-			$cp_url = $this->EE->config->item('cp_url');
-			$cp_url = str_ireplace('index.php','',$cp_url);
-			if (substr($cp_url, -1) != '/') $cp_url .= '/';
+			$theme_url = $this->EE->config->item('theme_folder_url');
+			if (substr($theme_url, -1) != '/') $theme_url .= '/';
 			
 			// And cache it
-			$this->cache['ft_url'] = $cp_url . 'expressionengine/third_party/vz_url/';
+			$this->cache['theme_url'] = $theme_url . 'third_party/vz_url/';
 		}
 		
-		return $this->cache['ft_url'];
+		return $this->cache['theme_url'];
 	}
 	
 	/**
@@ -76,14 +75,12 @@ class Vz_url_ft extends EE_Fieldtype {
 	{
 		if (!$this->cache['jscss'])
 		{
-			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_ft_url().'css/vz_url.css" />');
-			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_ft_url().'javascript/vz_url.js"></script>');
-			$this->EE->cp->add_to_foot(
-				'<script type="text/javascript">/*<![CDATA[ */' . NL .
+			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
+			$this->EE->javascript->output(
 				'vzUrl.errorText="' . addslashes($this->settings['vz_url_error_text']) . '";' . NL .
 				'vzUrl.redirectText="' . addslashes($this->settings['vz_url_redirect_text']) . '";' . NL .
-				'vzUrl.proxyUrl="' . $this->_ft_url() . 'proxy.php";' . NL .
-				'// ]]></script>'
+				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";'
 			);
 			
 			$this->cache['jscss'] = TRUE;
