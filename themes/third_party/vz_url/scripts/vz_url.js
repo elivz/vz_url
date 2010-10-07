@@ -78,7 +78,7 @@ var vzUrl = {
 		// Ajax call to proxy.php to check the url
 		jQuery.getJSON( 
 			vzUrl.proxyUrl + '?callback=?', 
-			{ path: $field.val() }, 
+			{ url: $field.val() }, 
 			function (data) {
 		    // Make sure the URL we are checking is still there
 		    if (data.original != $field.val()) return;

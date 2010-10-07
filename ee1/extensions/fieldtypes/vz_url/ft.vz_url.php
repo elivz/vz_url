@@ -103,7 +103,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	private function _include_jscss()
 	{
-		if (!$this->_has_jscss)
+		if (!isset($this->_has_jscss))
 		{
 			$this->insert('head', '<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
 			$this->insert('body', '<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
