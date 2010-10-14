@@ -4,7 +4,7 @@ if ( ! defined('EXT')) exit('Invalid file request');
 
 
 /**
- * VZ Url Class
+ * VZ URL Class
  *
  * @package   FieldFrame
  * @author    Eli Van Zoeren <eli@elivz.com>
@@ -12,26 +12,45 @@ if ( ! defined('EXT')) exit('Invalid file request');
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  */
  
-class Ff_vz_url extends Fieldframe_Fieldtype {
+class Vz_url extends Fieldframe_Fieldtype {
 
 	/**
 	 * Fieldtype Info
 	 * @var array
 	 */
 	var $info = array(
-		'name'             => 'VZ Url',
-		'version'          => '1.1.7',
-		'desc'             => 'Textbox with ajax url validation',
+		'name'             => 'VZ URL',
+		'version'          => '2.0.0',
+		'desc'             => 'Textbox with ajax URL validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/versions.xml'
 	);
 	
 	var $requires = array(
-		'ff'        => '1.3.0',
+		'ff'        => '1.4.0',
 		'cp_jquery' => '1.1.1',
 	);
-    
-	var $default_site_settings = array('vz_url_error_text' => "That url seems to be invalid.");
+  
+	var $default_site_settings = array(
+		'vz_url_error_text' => 'That URL appears to be invalid.',
+		'vz_url_redirect_text' => '{{old_url}} redirects to {{new_url}}, {{update="update it"}}.'
+	);
+
+
+	/**
+	 * Get the default settings text
+	 */
+	private function _get_default_settings()
+	{
+		global $LANG;
+		
+		$settings = array(
+			'vz_url_error_text' => $LANG->line('vz_url_error_text'),
+			'vz_url_redirect_text' => $LANG->line('vz_url_redirect_text')
+		);
+		
+		return $settings;
+	}
 
 
 	/**
@@ -44,11 +63,58 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		
 		$r = $SD->block($LANG->line('vz_url_settings_title'));
 		$r .= $SD->row(array(
-				$SD->label($LANG->line('vz_url_error_text_label'), ''),
-				$SD->text('vz_url_error_text', $this->site_settings['vz_url_error_text'])
-			));
+			$SD->label($LANG->line('vz_url_error_text_label'), ''),
+			$SD->text('vz_url_error_text', $this->site_settings['vz_url_error_text'])
+		));
+		$r .= $SD->row(array(
+			$SD->label($LANG->line('vz_url_redirect_text_label'), '') . $LANG->line('vz_url_redirect_hint'),
+			$SD->text('vz_url_redirect_text', $this->site_settings['vz_url_redirect_text'])
+		));
 		$r .= $SD->block_c();
 		return $r;
+	}
+	
+	
+	/**
+	 * Get the URL of the VZ URL files
+	 *
+	 */
+	private function _theme_url()
+	{
+		if (! isset($this->_theme_url))
+		{
+			global $PREFS;
+			
+			// Construct the url
+			$theme_url = $PREFS->ini('theme_folder_url', 1);
+			if (substr($theme_url, -1) != '/') $theme_url .= '/';
+			
+			// And cache it
+			$this->_theme_url = $theme_url . 'third_party/vz_url/';
+		}
+		
+		return $this->_theme_url;
+	}
+	
+	/**
+	 * Include the JS and CSS files,
+	 * but only the first time
+	 *
+	 */
+	private function _include_jscss()
+	{
+		if (!isset($this->_has_jscss))
+		{
+			$this->insert('head', '<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
+			$this->insert('body', '<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
+			$this->insert_js(
+				'vzUrl.errorText="' . addslashes($this->site_settings['vz_url_error_text']) . '";' . NL .
+				'vzUrl.redirectText="' . addslashes($this->site_settings['vz_url_redirect_text']) . '";' . NL .
+				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";'
+			);
+			
+			$this->_has_jscss = TRUE;
+		}
 	}
 	
     
@@ -62,9 +128,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_field($field_name, $field_data, $field_settings)
 	{
-		$this->include_css('styles/ff_vz_url.css');
-		$this->include_js('ff_vz_url.js');
-		$this->insert_js('vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
+		$this->_include_jscss();
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
@@ -72,7 +136,6 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 		$val = ($field_data) ? $field_data : 'http://';
 		
 		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => ''));
-		
 	}
 	
     
@@ -86,9 +149,7 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 	 */
 	function display_cell($cell_name, $cell_data, $cell_settings)
 	{
-		$this->include_css('styles/ff_vz_url.css');
-		$this->include_js('ff_vz_url.js');
-		$this->insert_js('vzUrl.errorText = "'.$this->site_settings['vz_url_error_text'].'"');
+		$this->_include_jscss();
 
 		$SD = new Fieldframe_SettingsDisplay();
 		
@@ -127,5 +188,5 @@ class Ff_vz_url extends Fieldframe_Fieldtype {
 }
 
 
-/* End of file ft.ff_vz_url.php */
-/* Location: ./system/fieldtypes/ff_vz_instruct/ft.ff_vz_url.php */
+/* End of file ft.vz_url.php */
+/* Location: ./system/fieldtypes/vz_url/ft.vz_url.php */

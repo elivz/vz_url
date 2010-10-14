@@ -53,9 +53,33 @@ if (!function_exists('json_encode'))
   }
 }
 
+// Recursively follow redirects
+// Adapted from the PHP docs
+function curl_redirect_exec($session)
+{
+	$data = curl_exec($session);
+	$info = curl_getinfo($session);
+	
+	if ($info['http_code'] == 301 || $info['http_code'] == 302)
+	{
+		list($header) = explode("\r\n\r\n", $data, 2);
+		$matches = array();
+		preg_match('/(Location:|URI:)(.*?)\n/', $header, $matches);
+		$url = trim(array_pop($matches));
+		$url_parsed = parse_url($url);
+		if (isset($url_parsed))
+		{
+			curl_setopt($session, CURLOPT_URL, $url);
+			return curl_redirect_exec($session);
+		}
+	}
+	
+	return $info;
+}
+
 
 // Start the actual function
-$url = urldecode($_GET['path']);
+$url = urldecode($_GET['url']);
 
 // Create the CURL session and set options
 $session = curl_init(urldecode(trim($url)));
@@ -64,12 +88,21 @@ curl_setopt($session, CURLOPT_HEADER, true);
 curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($session, CURLOPT_VERBOSE, false);
 curl_setopt($session, CURLOPT_TIMEOUT, 15);
-curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($session, CURLOPT_MAXREDIRS, 8);
 
-// Request the file
-$content = curl_exec($session);
-$info = curl_getinfo($session);
+if ( !ini_get('safe_mode') && !ini_get('open_basedir') )
+{
+	// open_basedir is off, request the location normally
+	curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
+	curl_exec($session);
+	$info = curl_getinfo($session);
+}
+else
+{
+	// When open_basedir is set, we need to use a recursive function
+	// to follow the redirects
+	$info = curl_redirect_exec($session);
+}
 
 curl_close($session);
 
@@ -87,5 +120,3 @@ else
 {
   echo json_encode($return);
 }
-
-?>
