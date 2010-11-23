@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.0.0'
+		'version'		=> '2.0.1'
 	);
 	
 	/**
@@ -182,6 +182,23 @@ class Vz_url_ft extends EE_Fieldtype {
 		// Remove http:// if it's the only thing in the cell
 		return ($data == 'http://') ? '' : $data;
 	}
+	
+	/**
+	 * Use redirect="" parameter to immediately redirect the page 
+	 * Thanks to Brian Litzinger for the idea and code
+	 */
+    function replace_tag($data, $params = '', $tagdata = '')
+    {
+        if (isset($params['redirect']) && $params['redirect'] == 'yes' && $data != '')
+        {
+            header("Location: {$data}");
+            exit;
+        }
+        else
+        {
+            return $data;
+        }
+    } 
 
 }
 

@@ -20,7 +20,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '2.0.0',
+		'version'          => '2.0.1',
 		'desc'             => 'Textbox with ajax URL validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/versions.xml'
@@ -184,6 +184,23 @@ class Vz_url extends Fieldframe_Fieldtype {
 		// Remove http:// if it's the only thing in the cell
 		return ($cell_data ==  'http://') ? '' : $cell_data;
 	}
+	
+	/**
+	 * Use redirect="" parameter to immediately redirect the page 
+	 * Thanks to Brian Litzinger for the idea and code
+	 */
+    function display_tag($params = '', $tagdata = '', $data)
+    {
+        if (isset($params['redirect']) && $params['redirect'] == 'yes' && $data != '')
+        {
+            header("Location: {$data}");
+            exit;
+        }
+        else
+        {
+            return $data;
+        }
+    } 
 
 }
 
