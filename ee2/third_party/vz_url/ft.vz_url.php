@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.0.1'
+		'version'		=> '2.0.2'
 	);
 	
 	/**
@@ -143,7 +143,7 @@ class Vz_url_ft extends EE_Fieldtype {
 	 */
 	function display_field($data, $cell = FALSE)
 	{
-    $this->_include_jscss();
+        $this->_include_jscss();
     
 		// Fill in http:// if the field is empty
 		$val = ($data) ? $data : 'http://';
