@@ -8,7 +8,7 @@ if ( ! defined('EXT')) exit('Invalid file request');
  *
  * @package   FieldFrame
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2009 Eli Van Zoeren
+ * @copyright Copyright (c) 2011 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  */
  
@@ -20,7 +20,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '2.0.2',
+		'version'          => '2.0.3',
 		'desc'             => 'Textbox with ajax URL validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/versions.xml'
@@ -110,7 +110,8 @@ class Vz_url extends Fieldframe_Fieldtype {
 			$this->insert_js(
 				'vzUrl.errorText="' . addslashes($this->site_settings['vz_url_error_text']) . '";' . NL .
 				'vzUrl.redirectText="' . addslashes($this->site_settings['vz_url_redirect_text']) . '";' . NL .
-				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";'
+				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' . NL .
+				'vzUrl.init();'
 			);
 			
 			$this->_has_jscss = TRUE;

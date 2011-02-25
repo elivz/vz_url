@@ -7,11 +7,26 @@
  */
 
 var vzUrl = {
+  'init' : function() {
+      // Initialize the fields that are there on page-load
+      vzUrl.setup('.vz_url_field');
+      
+      // Re-initialize every time a row is added
+      if (typeof(Matrix) != 'undefined') {
+    	  Matrix.bind(
+    	  	'vz_url',
+    	  	'display',
+    	  	function(cell) {
+    	  		vzUrl.setup(cell.dom.$inputs);
+    	  	}
+    	  );
+      }
+    },
 	
 	/*
 	 * Set up the VZ URL fields with the styling and events they need to function
 	 */
-  'init' : function(fields) {
+  'setup' : function(fields) {
     jQuery(fields).each(function() {
 		  var $field = jQuery(this);
 		  
@@ -136,19 +151,3 @@ var vzUrl = {
   }
   
 };
-
-jQuery(document).ready(function() {
-	// Initialize the fields that are there on page-load
-  vzUrl.init('.vz_url_field');
-  
-  // Re-initialize every time a row is added
-  if (typeof(Matrix) != 'undefined') {
-	  Matrix.bind(
-	  	'vz_url',
-	  	'display',
-	  	function(cell) {
-	  		vzUrl.init(cell.dom.$inputs);
-	  	}
-	  );
-  }
-});

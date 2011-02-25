@@ -4,7 +4,7 @@
  * VZ URL Class
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2010 Eli Van Zoeren
+ * @copyright Copyright (c) 2011 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  *
  */
@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.0.2'
+		'version'		=> '2.0.3'
 	);
 	
 	/**
@@ -80,7 +80,8 @@ class Vz_url_ft extends EE_Fieldtype {
 			$this->EE->javascript->output(
 				'vzUrl.errorText="' . addslashes($this->settings['vz_url_error_text']) . '";' . NL .
 				'vzUrl.redirectText="' . addslashes($this->settings['vz_url_redirect_text']) . '";' . NL .
-				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";'
+				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' . NL .
+				'vzUrl.init();'
 			);
 			
 			$this->cache['jscss'] = TRUE;
