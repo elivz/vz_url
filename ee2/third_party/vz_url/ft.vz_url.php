@@ -39,7 +39,7 @@ class Vz_url_ft extends EE_Fieldtype {
 	 */
 	function install()
 	{
-    $this->EE->lang->loadfile('vz_url');
+        $this->EE->lang->loadfile('vz_url');
     
 		return array(
 			'vz_url_error_text'	=> lang('vz_url_error_text'),
