@@ -80,11 +80,22 @@ function curl_redirect_exec($session)
 }
 
 
-// Start the actual function
-$url = urldecode($_GET['url']);
+/*----------------------------------------------------------------*
+ * Start the actual url check
+ *----------------------------------------------------------------*/
+
+$url = urldecode(trim($_GET['url']));
+$prefix = '';
+
+// If the url is relative to the root, 
+// convert to an absolute url
+if (substr($url, 0, 1) == '/')
+{
+    $prefix = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'] : "http://".$_SERVER['SERVER_NAME'];
+}
 
 // Create the CURL session and set options
-$session = curl_init(urldecode(trim($url)));
+$session = curl_init($prefix.$url);
 
 curl_setopt($session, CURLOPT_HEADER, true);
 curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
@@ -92,7 +103,7 @@ curl_setopt($session, CURLOPT_VERBOSE, false);
 curl_setopt($session, CURLOPT_TIMEOUT, 15);
 curl_setopt($session, CURLOPT_MAXREDIRS, 8);
 
-if ( !ini_get('safe_mode') && !ini_get('open_basedir') )
+if (!ini_get('safe_mode') && !ini_get('open_basedir'))
 {
 	// open_basedir is off, request the location normally
 	curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
@@ -101,16 +112,16 @@ if ( !ini_get('safe_mode') && !ini_get('open_basedir') )
 }
 else
 {
-	// When open_basedir is set, we need to use a recursive function
-	// to follow the redirects
+	// When open_basedir is set, we need to use a 
+	// recursive function to follow the redirects
 	$info = curl_redirect_exec($session);
 }
 
 curl_close($session);
 
 $return = array(
-    'original' => $url,
-    'final' => $info['url'],
+    'original'  => $url,
+    'final'     => str_replace($prefix, '', $info['url']),
     'http_code' => $info['http_code']
 );
 
