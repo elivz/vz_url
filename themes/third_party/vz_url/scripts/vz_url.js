@@ -84,8 +84,16 @@ var vzUrl = {
      * Actually send a request the the target URL to see if it exists
      */
     'ajax_call' : function($field) {
+        url = $field.val();
+        
         // Make sure it's even a valid url
-        if (!$field.val().match(/^((https?|ftp):\/\/[\w\-_]+(\.[\w\-_]+)+)?([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$/gi)) {
+        if (!url.match(/^((https?|ftp):\/\/[\w\-_]+(\.[\w\-_]+)+)?([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$/gi)) {
+        	vzUrl.set_status($field, 'invalid');
+        	return false;
+        }
+        
+        // If it needs to be a local url, see that it is
+        if ($field.hasClass('local') && url.substr(0, 1) != '/' && url.indexOf(document.domain)) {
         	vzUrl.set_status($field, 'invalid');
         	return false;
         }
@@ -93,10 +101,10 @@ var vzUrl = {
         // Ajax call to proxy.php to check the url
         jQuery.getJSON( 
         	vzUrl.proxyUrl + '?callback=?', 
-        	{ url: $field.val() }, 
+        	{ url: url }, 
         	function (data) {
                 // Make sure the URL we are checking is still there
-                if (data.original != $field.val()) return;
+                if (data.original != url) return;
                 
                 // Show or hide the error message, as needed
                 if ((data.original == data.final) && (data.http_code >= 200) && (data.http_code < 400)) {

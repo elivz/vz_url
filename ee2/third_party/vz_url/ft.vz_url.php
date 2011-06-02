@@ -13,12 +13,11 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.0.3'
+		'version'		=> '2.1.0'
 	);
 	
 	/**
 	 * Fieldtype Constructor
-	 *
 	 */
 	function Vz_url_ft()
 	{
@@ -35,7 +34,6 @@ class Vz_url_ft extends EE_Fieldtype {
 	
 	/**
 	 * Install Fieldtype
-	 *
 	 */
 	function install()
 	{
@@ -49,7 +47,6 @@ class Vz_url_ft extends EE_Fieldtype {
 	
 	/**
 	 * Get the URL of the VZ URL files
-	 *
 	 */
 	private function _theme_url()
 	{
@@ -69,7 +66,6 @@ class Vz_url_ft extends EE_Fieldtype {
 	/**
 	 * Include the JS and CSS files,
 	 * but only the first time
-	 *
 	 */
 	private function _include_jscss()
 	{
@@ -92,7 +88,6 @@ class Vz_url_ft extends EE_Fieldtype {
 	
 	/**
 	 * Display Global Settings
-	 *
 	 */
 	function display_global_settings()
 	{	
@@ -129,7 +124,6 @@ class Vz_url_ft extends EE_Fieldtype {
 	
 	/**
 	 * Save Global Settings
-	 *
 	 */
 	function save_global_settings()
 	{
@@ -137,57 +131,113 @@ class Vz_url_ft extends EE_Fieldtype {
 	}
 	
 	// --------------------------------------------------------------------
+    
+    /**
+     * Display Field Settings
+     */
+    function display_settings($settings)
+    {
+		$this->EE->load->library('table');
+		$this->EE->lang->loadfile('vz_url');
+		
+        $limit_local = isset($settings['vz_url_limit_local']) ? ($settings['vz_url_limit_local'] == 'y') : false;
+		
+		$settings_ui = array(
+			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
+			form_radio('vz_url_limit_local', 'y', $limit_local, 'id="vz_url_limit_local_yes"') . ' ' .
+			form_label(lang('yes'), 'vz_url_limit_local_yes') .
+			'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+			form_radio('vz_url_limit_local', 'n', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
+			form_label(lang('no'), 'vz_url_limit_local_no')
+		);
+		
+        $this->EE->table->add_row($settings_ui);
+    }
+    
+	/**
+	 * Display Cell Settings
+	 */
+    function display_cell_settings($settings)
+    {
+		$this->EE->load->library('table');
+		$this->EE->lang->loadfile('vz_url');
+		
+        $limit_local = isset($settings['vz_url_limit_local']) ? ($settings['vz_url_limit_local'] == 'y') : false;
+		
+		$settings_ui = array(
+			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
+			form_checkbox('vz_url_limit_local', 'y', $limit_local)
+		);
+		
+        return array($settings_ui);
+    }
+	
+    /**
+     * Save Field Settings
+     */
+    function save_settings()
+    {
+        return array('vz_url_limit_local' => $this->EE->input->post('vz_url_limit_local'));
+    }
+	
+	// --------------------------------------------------------------------
 	
 	/**
 	 * Display Field on Publish
-	 *
 	 */
 	function display_field($data, $cell = FALSE)
 	{
         $this->_include_jscss();
+        
+        // Fill in http:// if the field is empty
+        if (!$data && ($this->settings['vz_url_limit_local'] == 'y'))
+        {
+            $data = $this->EE->config->item('site_url');
+        }
+        elseif (!$data)
+        {
+            $data = 'http://';
+        }
+        
+        // Is it a Matrix cell?
+        $name = $cell ? $this->cell_name : $this->field_name;
+        
+        // Is it limited to local urls?
+        $limit_local = $this->settings['vz_url_limit_local'] == 'y' ? ' local' : '';
+        
+        return form_input($name, $data, 'class="vz_url_field'.$limit_local.'"');
+	}
+
+    /**
+     * Save Field
+     */
+    function save($data)
+    {
+        // Remove http:// if it's the only thing in the field
+        return ($data == 'http://' || $data == '/') ? '' : $data;
+    }
     
-		// Fill in http:// if the field is empty
-		$val = ($data) ? $data : 'http://';
-		
-		// Is it a Matrix cell?
-		$name = $cell ? $this->cell_name : $this->field_name;
-		
-		return form_input($name, $val, 'class="vz_url_field"');
-	}
-
-	/**
-	 * Save Field
-	 *
-	 */
-	function save($data)
-	{
-		// Remove http:// if it's the only thing in the field
-		return ($data == 'http://') ? '' : $data;
-	}
-
-	/**
-	 * Display Cell
-	 *
-	 */
-	function display_cell($data)
-	{
-		return $this->display_field($data, TRUE);
-	}
-
-	/**
-	 * Save Cell
-	 *
-	 */
-	function save_cell($data)
-	{
-		// Remove http:// if it's the only thing in the cell
-		return ($data == 'http://') ? '' : $data;
-	}
-	
-	/**
-	 * Use redirect="" parameter to immediately redirect the page 
-	 * Thanks to Brian Litzinger for the idea and code
-	 */
+    /**
+     * Display Cell
+     */
+    function display_cell($data)
+    {
+        return $this->display_field($data, TRUE);
+    }
+    
+    /**
+     * Save Cell
+     */
+    function save_cell($data)
+    {
+    	// Remove http:// if it's the only thing in the cell
+    	return ($data == 'http://') ? '' : $data;
+    }
+    
+    /**
+     * Use redirect="" parameter to immediately redirect the page 
+     * Thanks to Brian Litzinger for the idea and code
+     */
     function replace_tag($data, $params = '', $tagdata = '')
     {
         if (isset($params['redirect']) && $params['redirect'] == 'yes' && $data != '')
