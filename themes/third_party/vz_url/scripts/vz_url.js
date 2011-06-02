@@ -93,8 +93,8 @@ var vzUrl = {
         }
         
         // If it needs to be a local url, see that it is
-        if ($field.hasClass('local') && url.substr(0, 1) != '/' && url.indexOf(document.domain)) {
-        	vzUrl.set_status($field, 'invalid');
+        if ($field.hasClass('local') && url.substr(0, 1) != '/' && url.indexOf(document.domain) == -1) {
+        	vzUrl.set_status($field, 'nonlocal');
         	return false;
         }
         
@@ -127,7 +127,7 @@ var vzUrl = {
         $msg = $field.next('.vz_url_msg');
         
         $field
-            .removeClass('empty checking invalid valid redirect')
+            .removeClass('empty checking invalid valid redirect nonlocal')
             .addClass(status);
         
         switch (status) {
@@ -136,8 +136,13 @@ var vzUrl = {
             	break;
             case 'invalid' :
             	$msg
-            	.html(vzUrl.errorText)
-            	.slideDown(800);
+                	.html(vzUrl.errorText)
+                	.slideDown(800);
+                break;
+            case 'nonlocal' :
+            	$msg
+                	.html(vzUrl.nonlocalText)
+                	.slideDown(800);
                 break;
             case 'redirect' :
                 var msgText = vzUrl.redirectText

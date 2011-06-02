@@ -15,7 +15,7 @@
 	background: #fff url(spinner.gif) no-repeat 99% 50%;
 }
 
-.vz_url_field.invalid, .vz_url_field.redirect {
+.vz_url_field.invalid, .vz_url_field.redirect, .vz_url_field.nonlocal {
 	background: #fff url(invalid.png) no-repeat 99% 50%;
 }
 
@@ -78,6 +78,6 @@
 	-moz-border-radius: 0;
 }
 .matrix .vz_url_msg {
-	bottom: 21px;
+	bottom: 22px;
 	right: 0;
 }

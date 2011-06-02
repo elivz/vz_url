@@ -40,8 +40,9 @@ class Vz_url_ft extends EE_Fieldtype {
         $this->EE->lang->loadfile('vz_url');
     
 		return array(
-			'vz_url_error_text'	=> lang('vz_url_error_text'),
-			'vz_url_redirect_text'	=> lang('vz_url_redirect_text')
+			'vz_url_error_text'    => lang('vz_url_error_text'),
+			'vz_url_redirect_text' => lang('vz_url_redirect_text'),
+			'vz_url_nonlocal_text' => lang('vz_url_nonlocal_text')
 		);
 	}
 	
@@ -71,63 +72,20 @@ class Vz_url_ft extends EE_Fieldtype {
 	{
 		if (!$this->cache['jscss'])
 		{
+            $this->EE->lang->loadfile('vz_url');
+            
 			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
 			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
 			$this->EE->javascript->output(
-				'vzUrl.errorText="' . addslashes($this->settings['vz_url_error_text']) . '";' . NL .
-				'vzUrl.redirectText="' . addslashes($this->settings['vz_url_redirect_text']) . '";' . NL .
-				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' . NL .
+				'vzUrl.errorText="' . addslashes(lang('vz_url_error_text')) . '";' .
+				'vzUrl.redirectText="' . addslashes(lang('vz_url_redirect_text')) . '";' .
+				'vzUrl.nonlocalText="' . addslashes(lang('vz_url_nonlocal_text')) . '";' .
+				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' .
 				'vzUrl.init();'
 			);
 			
 			$this->cache['jscss'] = TRUE;
 		}
-	}
-	
-	// --------------------------------------------------------------------
-	
-	/**
-	 * Display Global Settings
-	 */
-	function display_global_settings()
-	{	
-		$val = array_merge($this->settings, $_POST);
-		
-		// load the table lib
-		$this->EE->load->library('table');
-
-		// load the language file
-		$this->EE->lang->loadfile('vz_url');
-
-		// Table template
-		$this->EE->table->set_template(array(
-			'table_open'    => '<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">',
-			'row_start'     => '<tr class="even">',
-			'row_alt_start' => '<tr class="odd">'
-		));
-		
-		// Draw the settings table
-		$this->EE->table->set_heading(array('data' => lang('preference'), 'style' => 'width: 50%'), lang('setting'));
-		
-		$this->EE->table->add_row(
-			lang('vz_url_error_text_label', 'vz_url_error_text'),
-			form_input('vz_url_error_text', $val['vz_url_error_text'], 'id="vz_url_error_text"')
-		);
-		
-		$this->EE->table->add_row(
-			lang('vz_url_redirect_text_label', 'vz_url_redirect_text').' <div class="subtext">'.lang('vz_url_redirect_hint').'</div>',
-			form_input('vz_url_redirect_text', $val['vz_url_redirect_text'], 'id="vz_url_redirect_text"')
-		);
-
-		return $this->EE->table->generate();
-	}
-	
-	/**
-	 * Save Global Settings
-	 */
-	function save_global_settings()
-	{
-		return array_merge($this->settings, $_POST);
 	}
 	
 	// --------------------------------------------------------------------
