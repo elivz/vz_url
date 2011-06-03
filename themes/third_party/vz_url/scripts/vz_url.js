@@ -3,7 +3,6 @@
  * by Eli Van Zoeren - http://elivz.com
  *
  * Depends on: jQuery
- *
  */
 
 var vzUrl = {
@@ -36,7 +35,7 @@ var vzUrl = {
             // Create a holder for the error message
             jQuery('<label class="vz_url_msg" for="' + $field.attr('id') + '"></label>')
                 .hide()
-                	.insertAfter($field)
+                .insertAfter($field)
                 .click(function() {
                 	// Hide on click
                     jQuery(this).slideUp(500);

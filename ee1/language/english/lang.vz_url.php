@@ -4,10 +4,13 @@ $L = array(
 
 // Field Settings
 
-'vz_url_settings_title'         => 'VZ URL settings',
-'vz_url_error_text_label'       => 'Invalid URL message',
-'vz_url_redirect_text_label'    => 'Redirected URL message',
-'vz_url_redirect_hint'          => 'Available tags: {{old_url}}, {{new_url}}, and {{update="<i>text of the link</i>"}}',
+'vz_url_error_text'             => 'That URL appears to be invalid.',
+'vz_url_redirect_text'          => '{{old_url}} redirects to {{new_url}}, {{update="update it"}}.',
+'vz_url_nonlocal_text'          => 'Needs to be a URL on this website.',
+
+'vz_url_limit_local_label'      => 'Limit to local URLs',
+'yes'                           => 'Yes',
+'no'                            => 'No',
 
 ''=>''
 );

@@ -20,7 +20,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '2.0.3',
+		'version'          => '2.1.0',
 		'desc'             => 'Textbox with ajax URL validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/versions.xml'
@@ -30,58 +30,13 @@ class Vz_url extends Fieldframe_Fieldtype {
 		'ff'        => '1.4.0',
 		'cp_jquery' => '1.1.1',
 	);
-  
-	var $default_site_settings = array(
-		'vz_url_error_text' => 'That URL appears to be invalid.',
-		'vz_url_redirect_text' => '{{old_url}} redirects to {{new_url}}, {{update="update it"}}.'
-	);
-
-
-	/**
-	 * Get the default settings text
-	 */
-	private function _get_default_settings()
-	{
-		global $LANG;
-		
-		$settings = array(
-			'vz_url_error_text' => $LANG->line('vz_url_error_text'),
-			'vz_url_redirect_text' => $LANG->line('vz_url_redirect_text')
-		);
-		
-		return $settings;
-	}
-
-
-	/**
-	 * Display Site Settings
-	 */
-	function display_site_settings()
-	{
-		global $LANG;
-		$SD = new Fieldframe_SettingsDisplay();
-		
-		$r = $SD->block($LANG->line('vz_url_settings_title'));
-		$r .= $SD->row(array(
-			$SD->label($LANG->line('vz_url_error_text_label'), ''),
-			$SD->text('vz_url_error_text', $this->site_settings['vz_url_error_text'])
-		));
-		$r .= $SD->row(array(
-			$SD->label($LANG->line('vz_url_redirect_text_label'), '') . $LANG->line('vz_url_redirect_hint'),
-			$SD->text('vz_url_redirect_text', $this->site_settings['vz_url_redirect_text'])
-		));
-		$r .= $SD->block_c();
-		return $r;
-	}
-	
 	
 	/**
 	 * Get the URL of the VZ URL files
-	 *
 	 */
 	private function _theme_url()
 	{
-		if (! isset($this->_theme_url))
+		if (!isset($this->_theme_url))
 		{
 			global $PREFS;
 			
@@ -99,18 +54,21 @@ class Vz_url extends Fieldframe_Fieldtype {
 	/**
 	 * Include the JS and CSS files,
 	 * but only the first time
-	 *
 	 */
 	private function _include_jscss()
 	{
 		if (!isset($this->_has_jscss))
 		{
+            global $LANG;
+            $LANG->fetch_language_file('vz_url');
+            
 			$this->insert('head', '<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
 			$this->insert('body', '<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
 			$this->insert_js(
-				'vzUrl.errorText="' . addslashes($this->site_settings['vz_url_error_text']) . '";' . NL .
-				'vzUrl.redirectText="' . addslashes($this->site_settings['vz_url_redirect_text']) . '";' . NL .
-				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' . NL .
+				'vzUrl.errorText="'.addslashes($LANG->line('vz_url_error_text')).'";'.
+				'vzUrl.redirectText="'.addslashes($LANG->line('vz_url_redirect_text')).'";' .
+				'vzUrl.nonlocalText="'.addslashes($LANG->line('vz_url_nonlocal_text')).'";' .
+				'vzUrl.proxyUrl="'.$this->_theme_url().'proxy.php";' .
 				'vzUrl.init();'
 			);
 			
@@ -118,72 +76,100 @@ class Vz_url extends Fieldframe_Fieldtype {
 		}
 	}
 	
+	// --------------------------------------------------------------------
+    
+    /**
+     * Create the settings UI
+     */
+    function _display_settings($settings)
+    {
+        global $LANG;
+        $SD = new Fieldframe_SettingsDisplay();
+		
+        if (!isset($settings['vz_url_limit_local'])) $settings['vz_url_limit_local'] = 'n';
+		
+		$settings = array(
+            $SD->label('vz_url_limit_local_label'),
+            $SD->radio_group(
+                'vz_url_limit_local',
+                $settings['vz_url_limit_local'],
+                array(
+                    'y' => $LANG->line('yes'),
+                    'n' => $LANG->line('no')
+                )
+            )
+        );
+        
+        return array($settings);
+    }
+    
+    /**
+     * Display Field Settings
+     */
+    function display_field_settings($settings)
+    {
+        return array('rows' => $this->_display_settings($settings));
+    }
+    
+	/**
+	 * Display Cell Settings
+	 */
+    function display_cell_settings($settings)
+    {
+		return $this->_display_settings($settings);
+    }
+	
+	// --------------------------------------------------------------------
     
 	/**
 	 * Display Field
-	 * 
-	 * @param  string  $field_name      The field's name
-	 * @param  mixed   $field_data      The field's current value
-	 * @param  array   $field_settings  The field's settings
-	 * @return string  The field's HTML
 	 */
-	function display_field($field_name, $field_data, $field_settings)
+	function display_field($field_name, $data, $settings)
 	{
-		$this->_include_jscss();
-
+        global $PREFS;
 		$SD = new Fieldframe_SettingsDisplay();
 		
-		// Fill in http:// if the field is empty
-		$val = ($field_data) ? $field_data : 'http://';
+		$this->_include_jscss();
 		
-		return $SD->text($field_name, $val, array('style' => 'vz_url_field', 'width' => ''));
+		// Fill in http:// if the field is empty
+        if (!$data && ($settings['vz_url_limit_local'] == 'y'))
+        {
+            $data = $PREFS->ini('site_url');
+        }
+        elseif (!$data)
+        {
+            $data = 'http://';
+        }
+        
+        // Is it limited to local urls?
+        $limit_local = $settings['vz_url_limit_local'] == 'y' ? ' local' : '';
+		
+		return $SD->text($field_name, $data, array('style' => 'vz_url_field'.$limit_local.'', 'width' => ''));
 	}
 	
-    
 	/**
-	 * Display Cell
-	 * 
-	 * @param  string  $cell_name      The cell's name
-	 * @param  mixed   $cell_data      The cell's current value
-	 * @param  array   $cell_settings  The cell's settings
-	 * @return string  The field's HTML
+	 * Display Matrix Cell
 	 */
-	function display_cell($cell_name, $cell_data, $cell_settings)
+	function display_cell($cell_name, $data, $settings)
 	{
-		$this->_include_jscss();
-
-		$SD = new Fieldframe_SettingsDisplay();
-		
-		// Fill in http:// if the field is empty
-		$val = ($cell_data) ? $cell_data : 'http://';
-		
-		return $SD->text($cell_name, $val, array('style' => 'vz_url_field', 'width' => ''));
+        return $this->display_field($cell_name, $data, $settings);
 	}
-
 
 	/**
 	 * Save Field
-	 * 
-	 * @param  string  $field_data		The field's post data
-	 * @param  array  $field_settings	The field settings
 	 */
-	function save_field($field_data, $field_settings)
+	function save_field($data, $settings)
 	{
 		// Remove http:// if it's the only thing in the field
-		return ($field_data ==  'http://') ? '' : $field_data;
+        return ($data == 'http://' || $data == '/') ? '' : $data;
 	}
-
 
 	/**
 	 * Save Cell
-	 * 
-	 * @param  string  $cell_data		The field's post data
-	 * @param  array  $fcell_settings	The field settings
 	 */
-	function save_cell($cell_data, $cell_settings)
+	function save_cell($data, $settings)
 	{
-		// Remove http:// if it's the only thing in the cell
-		return ($cell_data ==  'http://') ? '' : $cell_data;
+		return $this->save_field($data, $settings);
 	}
 	
 	/**
@@ -201,10 +187,9 @@ class Vz_url extends Fieldframe_Fieldtype {
         {
             return $data;
         }
-    } 
+    }
 
 }
-
 
 /* End of file ft.vz_url.php */
 /* Location: ./system/fieldtypes/vz_url/ft.vz_url.php */

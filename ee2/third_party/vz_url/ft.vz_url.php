@@ -33,20 +33,6 @@ class Vz_url_ft extends EE_Fieldtype {
 	// --------------------------------------------------------------------
 	
 	/**
-	 * Install Fieldtype
-	 */
-	function install()
-	{
-        $this->EE->lang->loadfile('vz_url');
-    
-		return array(
-			'vz_url_error_text'    => lang('vz_url_error_text'),
-			'vz_url_redirect_text' => lang('vz_url_redirect_text'),
-			'vz_url_nonlocal_text' => lang('vz_url_nonlocal_text')
-		);
-	}
-	
-	/**
 	 * Get the URL of the VZ URL files
 	 */
 	private function _theme_url()
@@ -98,7 +84,7 @@ class Vz_url_ft extends EE_Fieldtype {
 		$this->EE->load->library('table');
 		$this->EE->lang->loadfile('vz_url');
 		
-        $limit_local = isset($settings['vz_url_limit_local']) ? ($settings['vz_url_limit_local'] == 'y') : false;
+        $limit_local = isset($settings['vz_url_limit_local'] && $settings['vz_url_limit_local'] == 'y');
 		
 		$settings_ui = array(
 			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
@@ -120,7 +106,7 @@ class Vz_url_ft extends EE_Fieldtype {
 		$this->EE->load->library('table');
 		$this->EE->lang->loadfile('vz_url');
 		
-        $limit_local = isset($settings['vz_url_limit_local']) ? ($settings['vz_url_limit_local'] == 'y') : false;
+        $limit_local = isset($settings['vz_url_limit_local'] && $settings['vz_url_limit_local'] == 'y');
 		
 		$settings_ui = array(
 			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
@@ -165,6 +151,14 @@ class Vz_url_ft extends EE_Fieldtype {
         
         return form_input($name, $data, 'class="vz_url_field'.$limit_local.'"');
 	}
+    
+    /**
+     * Display Cell
+     */
+    function display_cell($data)
+    {
+        return $this->display_field($data, TRUE);
+    }
 
     /**
      * Save Field
@@ -176,20 +170,11 @@ class Vz_url_ft extends EE_Fieldtype {
     }
     
     /**
-     * Display Cell
-     */
-    function display_cell($data)
-    {
-        return $this->display_field($data, TRUE);
-    }
-    
-    /**
      * Save Cell
      */
     function save_cell($data)
     {
-    	// Remove http:// if it's the only thing in the cell
-    	return ($data == 'http://') ? '' : $data;
+    	return $this->save($data);
     }
     
     /**
