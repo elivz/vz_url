@@ -84,7 +84,7 @@ class Vz_url_ft extends EE_Fieldtype {
 		$this->EE->load->library('table');
 		$this->EE->lang->loadfile('vz_url');
 		
-        $limit_local = isset($settings['vz_url_limit_local'] && $settings['vz_url_limit_local'] == 'y');
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 		
 		$settings_ui = array(
 			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
@@ -106,7 +106,7 @@ class Vz_url_ft extends EE_Fieldtype {
 		$this->EE->load->library('table');
 		$this->EE->lang->loadfile('vz_url');
 		
-        $limit_local = isset($settings['vz_url_limit_local'] && $settings['vz_url_limit_local'] == 'y');
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 		
 		$settings_ui = array(
 			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
