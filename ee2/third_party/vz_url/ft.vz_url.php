@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.1.0'
+		'version'		=> '2.1.1'
 	);
 	
 	/**
@@ -133,8 +133,10 @@ class Vz_url_ft extends EE_Fieldtype {
 	{
         $this->_include_jscss();
         
+        $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
+        
         // Fill in http:// if the field is empty
-        if (!$data && ($this->settings['vz_url_limit_local'] == 'y'))
+        if (!$data && $limit_local)
         {
             $data = $this->EE->config->item('site_url');
         }
@@ -146,10 +148,7 @@ class Vz_url_ft extends EE_Fieldtype {
         // Is it a Matrix cell?
         $name = $cell ? $this->cell_name : $this->field_name;
         
-        // Is it limited to local urls?
-        $limit_local = $this->settings['vz_url_limit_local'] == 'y' ? ' local' : '';
-        
-        return form_input($name, $data, 'class="vz_url_field'.$limit_local.'"');
+        return form_input($name, $data, 'class="vz_url_field'.($limit_local ? ' local' : '').'"');
 	}
     
     /**

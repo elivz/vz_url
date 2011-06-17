@@ -20,7 +20,7 @@ class Vz_url extends Fieldframe_Fieldtype {
 	 */
 	var $info = array(
 		'name'             => 'VZ URL',
-		'version'          => '2.1.0',
+		'version'          => '2.1.1',
 		'desc'             => 'Textbox with ajax URL validation',
 		'docs_url'         => 'http://elivz.com/blog/single/vz_url_extension/',
 		'versions_xml_url' => 'http://elivz.com/files/versions.xml'
@@ -130,9 +130,11 @@ class Vz_url extends Fieldframe_Fieldtype {
 		$SD = new Fieldframe_SettingsDisplay();
 		
 		$this->_include_jscss();
+        
+        $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
 		
 		// Fill in http:// if the field is empty
-        if (!$data && ($settings['vz_url_limit_local'] == 'y'))
+        if (!$data && $limit_local)
         {
             $data = $PREFS->ini('site_url');
         }
@@ -140,11 +142,8 @@ class Vz_url extends Fieldframe_Fieldtype {
         {
             $data = 'http://';
         }
-        
-        // Is it limited to local urls?
-        $limit_local = $settings['vz_url_limit_local'] == 'y' ? ' local' : '';
 		
-		return $SD->text($field_name, $data, array('style' => 'vz_url_field'.$limit_local.'', 'width' => ''));
+		return $SD->text($field_name, $data, array('style' => 'vz_url_field'.($limit_local ? ' local' : '').'', 'width' => ''));
 	}
 	
 	/**
