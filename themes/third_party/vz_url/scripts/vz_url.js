@@ -55,7 +55,7 @@ var vzUrl = {
      * Event handler for changes to the field
      */
     'check_field' : function(field, delay) {
-        $field = $(field);
+        $field = jQuery(field);
         
         // Clear the timeout
         if (vzUrl.$timer && delay) clearTimeout(vzUrl.$timer);
