@@ -83,7 +83,7 @@ var vzUrl = {
      * Actually send a request the the target URL to see if it exists
      */
     'ajax_call' : function($field) {
-        url = $field.val();
+        var url = $field.val();
         
         // Make sure it's even a valid url
         if (!url.match(/^((https?|ftp):\/\/[\w\-_]+(\.[\w\-_]+)+)?([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$/gi)) {

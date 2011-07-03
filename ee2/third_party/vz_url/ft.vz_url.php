@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.1.1'
+		'version'		=> '2.1.2'
 	);
 	
 	/**
