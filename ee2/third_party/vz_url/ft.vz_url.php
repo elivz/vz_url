@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
 	public $info = array(
 		'name'			=> 'VZ URL',
-		'version'		=> '2.1.2'
+		'version'		=> '2.1.3'
 	);
 	
 	/**
@@ -129,9 +129,11 @@ class Vz_url_ft extends EE_Fieldtype {
 	/**
 	 * Display Field on Publish
 	 */
-	function display_field($data, $cell = FALSE)
+	function display_field($data, $name=FALSE)
 	{
         $this->_include_jscss();
+        
+        if (empty($name)) $name = $this->field_name;
         
         $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
         
@@ -145,9 +147,6 @@ class Vz_url_ft extends EE_Fieldtype {
             $data = 'http://';
         }
         
-        // Is it a Matrix cell?
-        $name = $cell ? $this->cell_name : $this->field_name;
-        
         return form_input($name, $data, 'class="vz_url_field'.($limit_local ? ' local' : '').'"');
 	}
     
@@ -156,7 +155,15 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function display_cell($data)
     {
-        return $this->display_field($data, TRUE);
+        return $this->display_field($data, $this->cell_name);
+    }
+    
+    /**
+     * Display Low Variable
+     */
+    function display_var_field($data)
+    {
+        return $this->display_field($data);
     }
 
     /**
@@ -177,7 +184,15 @@ class Vz_url_ft extends EE_Fieldtype {
     }
     
     /**
-     * Use redirect="" parameter to immediately redirect the page 
+     * Save Low Variable
+     */
+    function save_var_field($data)
+    {
+    	return $this->save($data);
+    }
+    
+    /**
+     * Use redirect="yes" parameter to immediately redirect the page 
      * Thanks to Brian Litzinger for the idea and code
      */
     function replace_tag($data, $params = '', $tagdata = '')
