@@ -11,111 +11,119 @@
  
 class Vz_url_ft extends EE_Fieldtype {
 
-	public $info = array(
-		'name'			=> 'VZ URL',
-		'version'		=> '2.1.3'
-	);
-	
-	/**
-	 * Fieldtype Constructor
-	 */
-	function Vz_url_ft()
-	{
-		parent::EE_Fieldtype();
+    public $info = array(
+        'name'          => 'VZ URL',
+        'version'       => '2.1.4'
+    );
+    
+    /**
+     * Fieldtype Constructor
+     */
+    function Vz_url_ft()
+    {
+        parent::EE_Fieldtype();
 
-		if (!isset($this->EE->session->cache['vz_url']))
-		{
-			$this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'theme_url' => FALSE);
-		}
-		$this->cache =& $this->EE->session->cache['vz_url'];
-	}
-	
-	// --------------------------------------------------------------------
-	
-	/**
-	 * Get the URL of the VZ URL files
-	 */
-	private function _theme_url()
-	{
-		if (!$this->cache['theme_url'])
-		{
-			// Construct the url
-			$theme_url = $this->EE->config->item('theme_folder_url');
-			if (substr($theme_url, -1) != '/') $theme_url .= '/';
-			
-			// And cache it
-			$this->cache['theme_url'] = $theme_url . 'third_party/vz_url/';
-		}
-		
-		return $this->cache['theme_url'];
-	}
-	
-	/**
-	 * Include the JS and CSS files,
-	 * but only the first time
-	 */
-	private function _include_jscss()
-	{
-		if (!$this->cache['jscss'])
-		{
+        if (!isset($this->EE->session->cache['vz_url']))
+        {
+            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'theme_url' => FALSE);
+        }
+        $this->cache =& $this->EE->session->cache['vz_url'];
+    }
+    
+    // --------------------------------------------------------------------
+    
+    /**
+     * Get the URL of the VZ URL files
+     */
+    private function _theme_url()
+    {
+        if (!$this->cache['theme_url'])
+        {
+            // Construct the url
+            $theme_url = $this->EE->config->item('theme_folder_url');
+            if (substr($theme_url, -1) != '/') $theme_url .= '/';
+            
+            // And cache it
+            $this->cache['theme_url'] = $theme_url . 'third_party/vz_url/';
+        }
+        
+        return $this->cache['theme_url'];
+    }
+    
+    /**
+     * Include the JS and CSS files,
+     * but only the first time
+     */
+    private function _include_jscss()
+    {
+        if (!$this->cache['jscss'])
+        {
             $this->EE->lang->loadfile('vz_url');
             
-			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
-			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
-			$this->EE->javascript->output(
-				'vzUrl.errorText="' . addslashes(lang('vz_url_error_text')) . '";' .
-				'vzUrl.redirectText="' . addslashes(lang('vz_url_redirect_text')) . '";' .
-				'vzUrl.nonlocalText="' . addslashes(lang('vz_url_nonlocal_text')) . '";' .
-				'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' .
-				'vzUrl.init();'
-			);
-			
-			$this->cache['jscss'] = TRUE;
-		}
-	}
-	
-	// --------------------------------------------------------------------
+            $this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
+            $this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
+            $this->EE->javascript->output(
+                'vzUrl.errorText="' . addslashes(lang('vz_url_error_text')) . '";' .
+                'vzUrl.redirectText="' . addslashes(lang('vz_url_redirect_text')) . '";' .
+                'vzUrl.nonlocalText="' . addslashes(lang('vz_url_nonlocal_text')) . '";' .
+                'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' .
+                'vzUrl.init();'
+            );
+            
+            $this->cache['jscss'] = TRUE;
+        }
+    }
+    
+    // --------------------------------------------------------------------
     
     /**
      * Display Field Settings
      */
     function display_settings($settings)
     {
-		$this->EE->load->library('table');
-		$this->EE->lang->loadfile('vz_url');
-		
+        $this->EE->load->library('table');
+        $this->EE->lang->loadfile('vz_url');
+        
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
-		
-		$settings_ui = array(
-			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
-			form_radio('vz_url_limit_local', 'y', $limit_local, 'id="vz_url_limit_local_yes"') . ' ' .
-			form_label(lang('yes'), 'vz_url_limit_local_yes') .
-			'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
-			form_radio('vz_url_limit_local', 'n', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
-			form_label(lang('no'), 'vz_url_limit_local_no')
-		);
-		
+        
+        $settings_ui = array(
+            lang('vz_url_limit_local_label', 'vz_url_limit_local'),
+            form_radio('vz_url_limit_local', 'y', $limit_local, 'id="vz_url_limit_local_yes"') . ' ' .
+            form_label(lang('yes'), 'vz_url_limit_local_yes') .
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+            form_radio('vz_url_limit_local', 'n', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
+            form_label(lang('no'), 'vz_url_limit_local_no')
+        );
+        
         $this->EE->table->add_row($settings_ui);
     }
     
-	/**
-	 * Display Cell Settings
-	 */
+    /**
+     * Display Cell Settings
+     */
     function display_cell_settings($settings)
     {
-		$this->EE->load->library('table');
-		$this->EE->lang->loadfile('vz_url');
-		
+        $this->EE->load->library('table');
+        $this->EE->lang->loadfile('vz_url');
+        
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
-		
-		$settings_ui = array(
-			lang('vz_url_limit_local_label', 'vz_url_limit_local'),
-			form_checkbox('vz_url_limit_local', 'y', $limit_local)
-		);
-		
+        
+        $settings_ui = array(
+            lang('vz_url_limit_local_label', 'vz_url_limit_local'),
+            form_checkbox('vz_url_limit_local', 'y', $limit_local)
+        );
+        
         return array($settings_ui);
     }
-	
+
+    /**
+     * Display Low Variable Settings
+     */
+    function display_var_settings($settings)
+    {
+        return $this->display_cell_settings($settings);
+    }
+    
     /**
      * Save Field Settings
      */
@@ -123,14 +131,22 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return array('vz_url_limit_local' => $this->EE->input->post('vz_url_limit_local'));
     }
-	
-	// --------------------------------------------------------------------
-	
-	/**
-	 * Display Field on Publish
-	 */
-	function display_field($data, $name=FALSE)
-	{
+    
+    /**
+     * Save Low Variables Settings
+     */
+    function save_var_settings()
+    {
+        return $this->save_settings();
+    }
+    
+    // --------------------------------------------------------------------
+    
+    /**
+     * Display Field on Publish
+     */
+    function display_field($data, $name=FALSE)
+    {
         $this->_include_jscss();
         
         if (empty($name)) $name = $this->field_name;
@@ -148,7 +164,7 @@ class Vz_url_ft extends EE_Fieldtype {
         }
         
         return form_input($name, $data, 'class="vz_url_field'.($limit_local ? ' local' : '').'"');
-	}
+    }
     
     /**
      * Display Cell
@@ -180,7 +196,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function save_cell($data)
     {
-    	return $this->save($data);
+        return $this->save($data);
     }
     
     /**
@@ -188,7 +204,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function save_var_field($data)
     {
-    	return $this->save($data);
+        return $this->save($data);
     }
     
     /**
