@@ -1,19 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * VZ URL Class
+ * VZ URL Fieldtype
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2011 Eli Van Zoeren
+ * @copyright Copyright (c) 2010-2012 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
- *
  */
  
 class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
-        'name'          => 'VZ URL',
-        'version'       => '2.2'
+        'name'    => 'VZ URL',
+        'version' => '2.2.0'
     );
     
     /**
@@ -33,24 +32,6 @@ class Vz_url_ft extends EE_Fieldtype {
     // --------------------------------------------------------------------
     
     /**
-     * Get the URL of the VZ URL files
-     */
-    private function _theme_url()
-    {
-        if (!$this->cache['theme_url'])
-        {
-            // Construct the url
-            $theme_url = $this->EE->config->item('theme_folder_url');
-            if (substr($theme_url, -1) != '/') $theme_url .= '/';
-            
-            // And cache it
-            $this->cache['theme_url'] = $theme_url . 'third_party/vz_url/';
-        }
-        
-        return $this->cache['theme_url'];
-    }
-    
-    /**
      * Include the JS and CSS files,
      * but only the first time
      */
@@ -59,16 +40,20 @@ class Vz_url_ft extends EE_Fieldtype {
         if (!$this->cache['jscss'])
         {
             $this->EE->lang->loadfile('vz_url');
-            
-            $this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="' . $this->_theme_url() . 'styles/vz_url.css" />');
-            $this->EE->cp->add_to_foot('<script type="text/javascript" src="' . $this->_theme_url() . 'scripts/vz_url.js"></script>');
+
+            $styles = '<style type="text/css">' . file_get_contents(PATH_THIRD . '/vz_url/assets/styles.min.css') . '</style>';
+            $styles = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $styles);
+            $this->EE->cp->add_to_head($styles);
+
+            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts.min.js');
+            $scripts = str_replace('CP_URL', BASE, $scripts);
             $this->EE->javascript->output(
+                $scripts .
                 'window.vzUrl_settings = {' .
                 'errorText:"' . addslashes(lang('vz_url_error_text')) . '",' .
                 'redirectText:"' . addslashes(lang('vz_url_redirect_text')) . '",' .
                 'redirectUpdate:"' . addslashes(lang('vz_url_redirect_update')) . '",' .
                 'nonlocalText:"' . addslashes(lang('vz_url_nonlocal_text')) . '",' .
-                'proxyUrl:"' . $this->_theme_url() . 'proxy.php"' .
                 '};'
             );
             

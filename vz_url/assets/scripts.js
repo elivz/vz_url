@@ -61,19 +61,22 @@ var vzUrl = {
             return false;
         }
         
-        // Ajax call to proxy.php to check the url
+        // Ajax call to proxy to check the url
         $.getJSON(
-            vzUrl_settings.proxyUrl + '?callback=?',
-            { url: url },
+            EE.BASE + '&callback=?',
+            {
+                caller: 'vz_url',
+                url: url
+            },
             function (data) {
                 // Make sure the URL we are checking is still there
                 if (data.original != url) return;
                 
                 // Show or hide the error message, as needed
-                if ((data.original == data.final) && (data.http_code >= 200) && (data.http_code < 400)) {
+                if ((data.original == data.final_url) && (data.http_code >= 200) && (data.http_code < 400)) {
                     // The URL is valid
                     vzUrl.set_status($field, 'valid');
-                } else if (data.original != data.final) {
+                } else if (data.original != data.final_url) {
                     // The URL is a redirect
                     vzUrl.set_status($field, 'redirect', data);
                 } else {
@@ -102,14 +105,14 @@ var vzUrl = {
                 $msg.html('<span>' + vzUrl_settings.nonlocalText + '</span>');
                 break;
             case 'redirect' :
-                $msg.html('<span>' + vzUrl_settings.redirectText + ' '+ response.final + '</span>');
+                $msg.html('<span>' + vzUrl_settings.redirectText + ' ' + response.final_url + '</span>');
                 $('<a/>', {
                     text: vzUrl_settings.redirectUpdate,
                     href: '#',
-                    'data-final': response.final,
+                    'data-final_url': response.final_url,
                     click: function(e) {
                         // Replace the field value with the redirect target
-                        $field.val($(this).attr('data-final'));
+                        $field.val( $(this).attr('data-final_url') );
                         vzUrl.ajax_call($field);
                         return false;
                     }
