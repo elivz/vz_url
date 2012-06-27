@@ -103,6 +103,9 @@ curl_setopt($session, CURLOPT_VERBOSE, false);
 curl_setopt($session, CURLOPT_TIMEOUT, 15);
 curl_setopt($session, CURLOPT_MAXREDIRS, 8);
 
+// Spoof a real browser, or Facebook freaks out
+curl_setopt($session, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1');
+
 if (!ini_get('safe_mode') && !ini_get('open_basedir'))
 {
 	// open_basedir is off, request the location normally
