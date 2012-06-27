@@ -3,63 +3,107 @@
  *  by Eli Van Zoeren - http://elivz.com
  */
 
-.vz_url_field {
-  width: 99%;
- }
+.vz_url_wrapper {
+    position: relative;
+}
 
 .vz_url_field.empty {
-	color: #aaa;
+    color: #aaa;
 }
 
 .vz_url_field.checking {
-	background: #fff url(spinner.gif) no-repeat 99% 50%;
+    background: #fff url(spinner.gif) no-repeat 99% 50%;
 }
 
-.vz_url_field.invalid, .vz_url_field.redirect, .vz_url_field.nonlocal {
-	background: #fff url(invalid.png) no-repeat 99% 50%;
-}
-
-.vz_url_field.valid {
-	background: #fff url(valid.png) no-repeat 99% 50%;
-}
- 
-.ff-ft .vz_url_field {
-	height: 14px;
-	padding: 4px;
-	outline: 0;
-	width: 99%;
-	border: 1px solid #B6C0C2;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-}
-.ff-ft .vz_url_field:focus {
-	border: 2px solid #B2BEC0;
-	padding: 3px;
+.vz_url_field.invalid,
+.vz_url_field.invalid:focus,
+.vz_url_field.redirect,
+.vz_url_field.redirect:focus,
+.vz_url_field.nonlocal,
+.vz_url_field.nonlocal:focus {
+    color: #c11;
+    border-color: #a66;
 }
   
 .vz_url_msg {
-	position: absolute;
-	right: 1%;
-	bottom: 24px;
-	padding: 4px 8px;
-	width: auto !important;
-	background: rgba(255,255,255,0.8);
-	color: #966 !important;
-	border: 1px solid #B6C0C2;
-	border-bottom: none;
-	font-size: 13px !important;
-	line-height: 16px !important;
-	font-weight: bold !important;
-	-webkit-border-top-left-radius: 3px;
-	-webkit-border-top-right-radius: 3px;
-	-moz-border-radius-topleft: 3px;
-	-moz-border-radius-topright: 3px;
-	border-top-left-radius: 3px;
-	border-top-right-radius: 3px;
-	-webkit-box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
-	-moz-box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
-	box-shadow: inset 0 -2px 2px rgba(0,0,0,0.1);
+    opacity: 0;
+    position: absolute;
+    visibility: hidden;
+    z-index: 100;
+    left: 5px;
+    top: 2.1em;
+    max-width: 90%;
+    padding: 0;
+    color: #E1E8ED !important;
+    font-size: 11px;
+    background: #3E4C54;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.vz_url_msg span {
+    display: inline-block;
+    padding: 4px 6px;
+    border-right: 1px solid #39454d;
+}
+
+.vz_url_msg a:link, .vz_url_msg a:visited {
+    display: inline-block;
+    padding: 4px 6px;
+    border-left: 1px solid #44535c;
+    font-weight: bold;
+    text-decoration: none;
+	color: #fff;
+    -webkit-border-radius: 0 3px 3px 0;
+    -moz-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
+}
+.vz_url_msg a:focus,
+.vz_url_msg a:hover {
+    color: #fffff5;
+    background: #425159;
+    text-shadow: 1px 1px 0 #262e33;
+}
+
+/* Little arrow pointing at the field */
+.vz_url_msg:before {
+    content: "";
+    position: absolute;
+    opacity: 0;
+    left: 10px;
+    top: -5px;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top: 0;
+    border-bottom: 5px solid #3E4C54;
+}
+
+/* Display the tooltip when the field doesn't pass validation */
+/* Again, declared twice for IE */
+.vz_url_field.invalid + .vz_url_msg,
+.vz_url_field.redirect + .vz_url_msg,
+.vz_url_field.nonlocal + .vz_url_msg {
+    top: 2.4em;
+}
+
+.vz_url_field.invalid:focus + .vz_url_msg,
+.vz_url_field.redirect:focus + .vz_url_msg,
+.vz_url_field.nonlocal:focus + .vz_url_msg,
+.vz_url_field.invalid:focus + .vz_url_msg:before,
+.vz_url_field.redirect:focus + .vz_url_msg:before,
+.vz_url_field.nonlocal:focus + .vz_url_msg:before {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Special stying for Matrix cells */
@@ -80,4 +124,21 @@
 .matrix .vz_url_msg {
 	bottom: 22px;
 	right: 0;
+}
+
+/* Styles for EE 1.x */
+ 
+.ff-ft .vz_url_field {
+	height: 14px;
+	padding: 4px;
+	outline: 0;
+	width: 99%;
+	border: 1px solid #B6C0C2;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.ff-ft .vz_url_field:focus {
+	border: 2px solid #B2BEC0;
+	padding: 3px;
 }

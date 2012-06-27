@@ -4,104 +4,68 @@
  *
  * Depends on: jQuery
  */
+jQuery(function($) {
 
 var vzUrl = {
-    'init' : function() {
-        // Initialize the fields that are there on page-load
-        vzUrl.setup('.vz_url_field');
-        
-        // Re-initialize every time a row is added
-        if (typeof(Matrix) != 'undefined') {
-            Matrix.bind(
-                'vz_url',
-                'display',
-                function(cell) {
-                    vzUrl.setup(cell.dom.$inputs);
-                }
-            );
-        }
-    },
+    regex : new RegExp(/\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/i),
 	
 	/*
-	 * Set up the VZ URL fields with the styling and events they need to function
-	 */
-    'setup' : function(fields) {
-        jQuery(fields).each(function() {
-            var $field = jQuery(this);
-            
-            // Add a positioned wrapper for placing the message
-            $field.wrap('<div style="position:relative" />');
-            
-            // Create a holder for the error message
-            jQuery('<label class="vz_url_msg" for="' + $field.attr('id') + '"></label>')
-                .hide()
-                .insertAfter($field)
-                .click(function() {
-                	// Hide on click
-                    jQuery(this).slideUp(500);
-                });
-            
-            // Seup event handlers
-            $field.keyup(function() {
-            	vzUrl.check_field(this, true);
-            });
-            
-            // Check the initial value
-            vzUrl.check_field($field);
-        });
+     * Set up the VZ URL fields with the styling and events they need to function
+     */
+    init : function(fields) {
+        $('.vz_url_field').each(vzUrl.check_field);
+        $('.vz_url_field').live('keyup', vzUrl.check_field);
     },
   
     /*
      * Event handler for changes to the field
      */
-    'check_field' : function(field, delay) {
-        $field = jQuery(field);
+    check_field : function(e) {
+        $field = $(this);
         
         // Clear the timeout
-        if (vzUrl.$timer && delay) clearTimeout(vzUrl.$timer);
+        if (vzUrl.timer) clearTimeout(vzUrl.timer);
         
         // Show the "spinner"
         vzUrl.set_status($field, 'checking');
         
         // Don't bother checking the default value of http://
-        if ($field.val() == 'http://' || $field.val() == '') {
+        if ($field.val() === 'http://' || $field.val() === '') {
             vzUrl.set_status($field, 'empty');
             return;
         } else {
             $field.removeClass('empty');
         }
         
-        if (delay) {
-            // Use a timeout to prevent an ajax call on every keystroke
-            vzUrl.$timer = setTimeout(function(){ vzUrl.ajax_call($field) }, 350);
-        } else {
-            vzUrl.ajax_call($field)
-        }
+        // Use a timeout to prevent an ajax call on every keystroke
+        vzUrl.timer = setTimeout(function() {
+            vzUrl.ajax_call($field);
+        }, 350);
     },
   
     /*
      * Actually send a request the the target URL to see if it exists
      */
-    'ajax_call' : function($field) {
+    ajax_call : function($field) {
         var url = $field.val();
         
         // Make sure it's even a valid url
-        if (!url.match(/^((https?|ftp):\/\/[\w\-_]+(\.[\w\-_]+)+)?([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?$/gi)) {
-        	vzUrl.set_status($field, 'invalid');
-        	return false;
+        if (!vzUrl.regex.test(url)) {
+            vzUrl.set_status($field, 'invalid');
+            return false;
         }
         
         // If it needs to be a local url, see that it is
         if ($field.hasClass('local') && url.substr(0, 1) != '/' && url.indexOf(document.domain) == -1) {
-        	vzUrl.set_status($field, 'nonlocal');
-        	return false;
+            vzUrl.set_status($field, 'nonlocal');
+            return false;
         }
         
         // Ajax call to proxy.php to check the url
-        jQuery.getJSON( 
-        	vzUrl.proxyUrl + '?callback=?', 
-        	{ url: url }, 
-        	function (data) {
+        $.getJSON(
+            vzUrl_settings.proxyUrl + '?callback=?',
+            { url: url },
+            function (data) {
                 // Make sure the URL we are checking is still there
                 if (data.original != url) return;
                 
@@ -115,52 +79,55 @@ var vzUrl = {
                 } else {
                     vzUrl.set_status($field, 'invalid');
                 }
-        	}
+            }
         );
     },
   
     /*
      * Set the styling and error message as needed
      */
-    'set_status' : function($field, status, response) {
-        $msg = $field.next('.vz_url_msg');
+    set_status : function($field, status, response) {
+        var $msg = $field.next().empty();
         
-        $field
-            .removeClass('empty checking invalid valid redirect nonlocal')
-            .addClass(status);
+        // Reset class
+        $field.removeClass('empty checking invalid valid nonlocal redirect').addClass(status);
         
         switch (status) {
             case 'empty' : case 'checking' : case 'valid' :
-            	$msg.slideUp(200);
-            	break;
+                break;
             case 'invalid' :
-            	$msg
-                	.html(vzUrl.errorText)
-                	.slideDown(800);
+                $msg.html('<span>' + vzUrl_settings.errorText + '</span>');
                 break;
             case 'nonlocal' :
-            	$msg
-                	.html(vzUrl.nonlocalText)
-                	.slideDown(800);
+                $msg.html('<span>' + vzUrl_settings.nonlocalText + '</span>');
                 break;
             case 'redirect' :
-                var msgText = vzUrl.redirectText
-                	.replace(/{{old_url}}/g, response.original)
-                	.replace(/{{new_url}}/g, response.final)
-                	.replace(/{{update="(.+?)"}}/g, '<a href="#" class="update_url">$1</a>');
-                
-                $msg
-                	.html(msgText)
-                	.slideDown(800)
-                	.children('.update_url')
-                        .click(function() {
-                    	  	// Replace the field value with the redirect target
-                    	    $field.val(response.final);
-                    	    vzUrl.ajax_call($field);
-                    	    return false;
-                		});
+                $msg.html('<span>' + vzUrl_settings.redirectText + ' '+ response.final + '</span>');
+                $('<a/>', {
+                    text: vzUrl_settings.redirectUpdate,
+                    href: '#',
+                    'data-final': response.final,
+                    click: function(e) {
+                        // Replace the field value with the redirect target
+                        $field.val($(this).attr('data-final'));
+                        vzUrl.ajax_call($field);
+                        return false;
+                    }
+                }).appendTo($msg);
                 break;
-        }	
-    }
+        }
+    },
+
+    /*
+     * Test for native browser support of url validation
+     */
+    not_natively_supported : (function() {
+        var input_element = document.createElement('input');
+        return !('pattern' in input_element);
+    })()
   
 };
+
+vzUrl.init();
+
+});

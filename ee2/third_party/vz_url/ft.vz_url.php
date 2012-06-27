@@ -13,7 +13,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'          => 'VZ URL',
-        'version'       => '2.1.4'
+        'version'       => '2.2'
     );
     
     /**
@@ -60,14 +60,16 @@ class Vz_url_ft extends EE_Fieldtype {
         {
             $this->EE->lang->loadfile('vz_url');
             
-            $this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'.$this->_theme_url().'styles/vz_url.css" />');
-            $this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$this->_theme_url().'scripts/vz_url.js"></script>');
+            $this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="' . $this->_theme_url() . 'styles/vz_url.css" />');
+            $this->EE->cp->add_to_foot('<script type="text/javascript" src="' . $this->_theme_url() . 'scripts/vz_url.js"></script>');
             $this->EE->javascript->output(
-                'vzUrl.errorText="' . addslashes(lang('vz_url_error_text')) . '";' .
-                'vzUrl.redirectText="' . addslashes(lang('vz_url_redirect_text')) . '";' .
-                'vzUrl.nonlocalText="' . addslashes(lang('vz_url_nonlocal_text')) . '";' .
-                'vzUrl.proxyUrl="' . $this->_theme_url() . 'proxy.php";' .
-                'vzUrl.init();'
+                'window.vzUrl_settings = {' .
+                'errorText:"' . addslashes(lang('vz_url_error_text')) . '",' .
+                'redirectText:"' . addslashes(lang('vz_url_redirect_text')) . '",' .
+                'redirectUpdate:"' . addslashes(lang('vz_url_redirect_update')) . '",' .
+                'nonlocalText:"' . addslashes(lang('vz_url_nonlocal_text')) . '",' .
+                'proxyUrl:"' . $this->_theme_url() . 'proxy.php"' .
+                '};'
             );
             
             $this->cache['jscss'] = TRUE;
@@ -154,16 +156,21 @@ class Vz_url_ft extends EE_Fieldtype {
         $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
         
         // Fill in http:// if the field is empty
-        if (!$data && $limit_local)
+        if (!$data)
         {
-            $data = $this->EE->config->item('site_url');
-        }
-        elseif (!$data)
-        {
-            $data = 'http://';
+            $data = $limit_local ? $this->EE->config->item('site_url') : 'http://';
         }
         
-        return form_input($name, $data, 'class="vz_url_field'.($limit_local ? ' local' : '').'"');
+        $out = '<div class="vz_url_wrapper">';
+        $out .= form_input(array(
+            'name' => $name,
+            'value' => $data,
+            'class' => 'vz_url_field' . ($limit_local ? ' local' : ''),
+            'id' => $name
+        ));
+        $out .= '<div class="vz_url_msg"></div></div>';
+
+        return $out;
     }
     
     /**
