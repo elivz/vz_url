@@ -5,9 +5,9 @@ A fieldtype for ExpressionEngine 2. Also compatible with Pixel & Tonic Matrix an
 
 VZ URL displays a textbox where the user can enter a URL. When the user leaves the field, it will ping the URL they entered and display an error message if it doesn't find a valid webpage there.
 
-Please note that VZ URL will not prevent the user from saving their weblog entry if if cannot validate the URL--it just warns them. This is intentional, perhaps they are linking to a page they have not yet created, or the site they are linking to is currently down but they know the URL is correct. I may add this functionality as an option later on.
+Please note that VZ URL will not prevent the user from saving their weblog entry if if cannot validate the URL - it just warns them. This is intentional, perhaps they are linking to a page they have not yet created, or the site they are linking to is currently down but they know the URL is correct.
 
-For information about VZ URL please visit [my blog](http://elivz.com/blog/single/vz_url_extension/).
+For information about VZ URL please visit [my blog](http://elivz.com/blog/single/vz_url_extension/) or [Devot:ee](http://devot-ee.com/add-ons/vz-url-extension).
 
 Template Tags
 -------------
@@ -31,7 +31,7 @@ Used as a tag pair, you have access to the entered URL, as well as the component
 
 ### `{field_name:link [text="Link Text"]}`
 
-Outputs an HTML anchor tag linking to the entered URL. You can use the `text` parameter to specify the link text, otherwise it will default to the URL itself. The following parameters can also be used to set attributes on the `<a>` tag: `accesskey`, `class`, `id`, `rel`, `tabindex`, `target`, `title`.
+Outputs an HTML anchor tag linking to the entered URL. You can use the `text` parameter to specify the link text, otherwise it will default to the URL itself. The following parameters can also be used to set attributes on the `a` tag: `accesskey`, `class`, `id`, `rel`, `tabindex`, `target`, `title`.
 
 ### `{field_name:redirect}`
 

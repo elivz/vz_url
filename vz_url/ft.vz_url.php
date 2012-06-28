@@ -17,7 +17,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     var $has_array_data = TRUE;
 
-    var $debug = TRUE;
+    var $debug = FALSE;
 
     /**
      * Fieldtype Constructor
