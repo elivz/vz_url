@@ -8,7 +8,7 @@ jQuery(function($) {
 
 var vzUrl = {
     regex : new RegExp(/\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/i),
-	
+
 	/*
      * Set up the VZ URL fields with the styling and events they need to function
      */
@@ -99,24 +99,28 @@ var vzUrl = {
             case 'empty' : case 'checking' : case 'valid' :
                 break;
             case 'invalid' :
-                $msg.html('<span>' + vzUrl_settings.errorText + '</span>');
+                $msg.html(vzUrl_settings.errorText);
                 break;
             case 'nonlocal' :
-                $msg.html('<span>' + vzUrl_settings.nonlocalText + '</span>');
+                $msg.html(vzUrl_settings.nonlocalText);
                 break;
             case 'redirect' :
-                $msg.html('<span>' + vzUrl_settings.redirectText + ' ' + response.final_url + '</span>');
-                $('<a/>', {
-                    text: vzUrl_settings.redirectUpdate,
-                    href: '#',
-                    'data-final_url': response.final_url,
-                    click: function(e) {
-                        // Replace the field value with the redirect target
-                        $field.val( $(this).attr('data-final_url') );
-                        vzUrl.ajax_call($field);
-                        return false;
-                    }
-                }).appendTo($msg);
+                if ($field.hasClass('show_redirect')) {
+                    $msg.html(vzUrl_settings.redirectText + ' ' + response.final_url);
+                    $('<a/>', {
+                        text: vzUrl_settings.redirectUpdate,
+                        href: '#',
+                        'data-final_url': response.final_url,
+                        click: function(e) {
+                            // Replace the field value with the redirect target
+                            $field.val( $(this).attr('data-final_url') );
+                            vzUrl.ajax_call($field);
+                            return false;
+                        }
+                    }).appendTo($msg);
+                } else {
+                    $field.removeClass('redirect').addClass('valid');
+                }
                 break;
         }
     },

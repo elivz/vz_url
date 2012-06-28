@@ -71,6 +71,7 @@ class Vz_url_ft extends EE_Fieldtype {
         $this->EE->load->library('table');
         $this->EE->lang->loadfile('vz_url');
         
+        // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
         $settings_ui = array(
             lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
@@ -82,6 +83,7 @@ class Vz_url_ft extends EE_Fieldtype {
         );
         $this->EE->table->add_row($settings_ui);
         
+        // Limit to local URLs
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
         $settings_ui = array(
             lang('vz_url_limit_local_label', 'vz_url_limit_local'),
@@ -99,16 +101,17 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function display_cell_settings($settings)
     {
-        $this->EE->load->library('table');
         $this->EE->lang->loadfile('vz_url');
         $settings_ui = array();
         
+        // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
         $settings_ui[] = array(
             lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
             form_checkbox('vz_url_show_redirects', 'y', $show_redirects)
         );
 
+        // Limit to local URLs
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
         $settings_ui[] = array(
             lang('vz_url_limit_local_label', 'vz_url_limit_local'),
@@ -133,7 +136,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return array(
             'vz_url_show_redirects' => $this->EE->input->post('vz_url_show_redirects'),
-            'vz_url_limit_local' => $this->EE->input->post('vz_url_limit_local')
+            'vz_url_limit_local'    => $this->EE->input->post('vz_url_limit_local')
         );
     }
     
@@ -192,6 +195,8 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->display_field($data);
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Save Field
@@ -217,6 +222,8 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->save($data);
     }
+    
+    // --------------------------------------------------------------------
     
     /**
      * Use redirect="yes" parameter to immediately redirect the page 

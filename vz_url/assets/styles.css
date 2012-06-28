@@ -29,14 +29,14 @@
     opacity: 0;
     position: absolute;
     visibility: hidden;
-    overflow: hidden;
     z-index: 100;
     left: 5px;
-    top: 2.1em;
+    top: 2em;
     max-width: 100%;
-    padding: 0;
+    padding: 5px 6px;
     color: #E1E8ED !important;
     font-size: 11px;
+    white-space: nowrap;
     background-color: #415058;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -50,16 +50,12 @@
     transition: all 0.2s ease-in-out;
 }
 
-.vz_url_msg span {
-    display: inline-block;
-    padding: 5px 6px;
-    border-right: 1px solid #37424a;
-}
-
 .vz_url_msg a:link,
 .vz_url_msg a:visited {
+    position: relative;
     display: inline-block;
     padding: 5px 6px 5px 5px;
+    margin: -5px -6px -5px 7px;
     border-left: 1px solid #485861;
     font-weight: bold;
     text-decoration: none;
@@ -79,6 +75,15 @@
     background-image: linear-gradient(top, #4a5a64, #38454c);
     text-shadow: 1px 1px 0 #262e33;
 }
+.vz_url_msg a::before {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 0;
+    height: 100%;
+    width: 0;
+    border-left: 1px solid #37424a;
+}
 
 /* Little arrow pointing at the field */
 .vz_url_msg:before {
@@ -91,7 +96,7 @@
     height: 0;
     border: 5px solid transparent;
     border-top: 0;
-    border-bottom: 5px solid #3E4C54;
+    border-bottom: 5px solid #415058;
 }
 
 /* Display the tooltip when the field doesn't pass validation */
@@ -99,7 +104,7 @@
 .vz_url_field.invalid + .vz_url_msg,
 .vz_url_field.redirect + .vz_url_msg,
 .vz_url_field.nonlocal + .vz_url_msg {
-    top: 2.4em;
+    top: 2.5em;
 }
 
 .vz_url_field.invalid:focus + .vz_url_msg,
