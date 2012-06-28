@@ -7,7 +7,7 @@
 jQuery(function($) {
 
 var vzUrl = {
-    regex : new RegExp(/\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/i),
+    regex : new RegExp("^((https?|ftp)://[\\w\\-_]+(\\.[\\w\\-_]+)+|/)([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?$", "gi"),
 
 	/*
      * Set up the VZ URL fields with the styling and events they need to function
@@ -56,15 +56,15 @@ var vzUrl = {
         var url = $field.val();
         
         // Make sure it's even a valid url
-        if (!vzUrl.regex.test(url)) {
+        if (!url.match(vzUrl.regex)) {
             vzUrl.set_status($field, 'invalid');
-            return false;
+            return;
         }
         
         // If it needs to be a local url, see that it is
         if ($field.hasClass('local') && url.substr(0, 1) != '/' && url.indexOf(document.domain) == -1) {
             vzUrl.set_status($field, 'nonlocal');
-            return false;
+            return;
         }
         
         // Ajax call to proxy to check the url
@@ -102,7 +102,10 @@ var vzUrl = {
         $field.removeClass('empty checking invalid valid nonlocal redirect').addClass(status);
         
         switch (status) {
-            case 'empty' : case 'checking' : case 'valid' :
+            case 'empty' : case 'checking' :
+                break;
+            case 'valid' :
+                // TODO: Add "visit site" link
                 break;
             case 'invalid' :
                 $msg.html(vzUrl_settings.errorText);
