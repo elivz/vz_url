@@ -17,7 +17,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     var $has_array_data = TRUE;
 
-    var $debug = FALSE;
+    var $debug = TRUE;
 
     /**
      * Fieldtype Constructor
@@ -58,6 +58,7 @@ class Vz_url_ft extends EE_Fieldtype {
                 'redirectText:"' . addslashes(lang('vz_url_redirect_text')) . '",' .
                 'redirectUpdate:"' . addslashes(lang('vz_url_redirect_update')) . '",' .
                 'nonlocalText:"' . addslashes(lang('vz_url_nonlocal_text')) . '",' .
+                'openText:"' . addslashes(lang('vz_url_open_text')) . '"' .
                 '};'
             );
 
