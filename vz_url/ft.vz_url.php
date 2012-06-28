@@ -243,6 +243,7 @@ class Vz_url_ft extends EE_Fieldtype {
             $parts = array_merge(
                 array(
                     'url'      => $data,
+                    'the_url'  => $data,
                     'scheme'   => '',
                     'host'     => '',
                     'port'     => '',
