@@ -16,6 +16,8 @@ class Vz_url_ft extends EE_Fieldtype {
     );
     
     var $has_array_data = TRUE;
+
+    var $debug = FALSE;
     
     /**
      * Fieldtype Constructor
@@ -43,11 +45,11 @@ class Vz_url_ft extends EE_Fieldtype {
         {
             $this->EE->lang->loadfile('vz_url');
 
-            $styles = '<style type="text/css">' . file_get_contents(PATH_THIRD . '/vz_url/assets/styles.min.css') . '</style>';
-            $styles = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $styles);
-            $this->EE->cp->add_to_head($styles);
+            $css = file_get_contents(PATH_THIRD . '/vz_url/assets/styles' . ($this->debug ? '' : '.min') . '.css');
+            $css = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $css);
+            $this->EE->cp->add_to_head('<style type="text/css">' . $css . '</style>');
 
-            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts.min.js');
+            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts' . ($this->debug ? '' : '.min') . '.js');
             $scripts = str_replace('CP_URL', BASE, $scripts);
             $this->EE->javascript->output(
                 $scripts .
