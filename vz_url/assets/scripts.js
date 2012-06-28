@@ -131,8 +131,11 @@ var vzUrl = {
             }
 
             // Add a "Open Page link"
-            if (status === 'valid' || status === 'redirect') {
-                $field.before('<a href="'+$field.val()+'" class="vz_url_visit" target="_blank">' + vzUrl_settings.openText + '</a>')
+            if (
+                (status === 'valid' || status === 'redirect') &&
+                !$field.parent().parent().hasClass('matrix')
+            ) {
+                $field.before('<a href="'+$field.val()+'" class="vz_url_visit" target="_blank">' + vzUrl_settings.openText + '</a>');
             }
 
             $field.addClass(status);

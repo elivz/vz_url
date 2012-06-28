@@ -129,7 +129,7 @@
     line-height: 25px;
     padding: 0 12px;
     font-weight: bold;
-    color: #E1E8ED !important;
+    color: #E1E8ED;
     text-decoration: none !important;
     text-shadow: 0 -1px #415058;
     background-color: #8195a0;
@@ -141,6 +141,11 @@
     -webkit-border-radius: 0 3px 3px 0;
     -moz-border-radius: 0 3px 3px 0;
     border-radius: 0 3px 3px 0;
+}
+.vz_url_visit:focus,
+.vz_url_visit:hover,
+.vz_url_visit:active {
+    color: #fff !important;
 }
 
 /* Special stying for Matrix cells */
