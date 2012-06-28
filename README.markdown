@@ -20,7 +20,7 @@ Used as a single tag, the VZ URL field will simply output the URL that was enter
 
 Used as a tag pair, you have access to the entered URL, as well as the component parts of the URL, as parsed by PHP's [parse_url function](http://php.net/manual/en/function.parse-url.php). The following tags are available inside the VZ URL tag pair:
 
-* `{url}`, `{the_url}` - The complete URL as entered. `{the_url}` is an alias that you can use in case your custom field`s shortname is `url`
+* `{url}`, `{the_url}` - The complete URL as entered. `{the_url}` is an alias that you can use in case your custom field's shortname is `url`
 * `{scheme}`
 * `{port}`
 * `{user}`
@@ -31,7 +31,7 @@ Used as a tag pair, you have access to the entered URL, as well as the component
 
 ### `{field_name:link [text="Link Text"]}`
 
-Outputs an HTML anchor tag linking to the entered URL. You can use the `text` parameter to specify the link text, otherwise it will default to the URL itself. The following parameters can also be used to set attributes on the <a> tag: `accesskey`, `class`, `id`, `rel`, `tabindex`, `target`, `title`.
+Outputs an HTML anchor tag linking to the entered URL. You can use the `text` parameter to specify the link text, otherwise it will default to the URL itself. The following parameters can also be used to set attributes on the `&lt;a&gt;` tag: `accesskey`, `class`, `id`, `rel`, `tabindex`, `target`, `title`.
 
 ### `{field_name:redirect}`
 
