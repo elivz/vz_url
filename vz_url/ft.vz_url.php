@@ -22,11 +22,11 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         parent::EE_Fieldtype();
 
-        if (!isset($this->EE->session->cache['vz_url']))
-        {
-            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE);
-        }
         $this->cache =& $this->EE->session->cache['vz_url'];
+        if (!isset($this->cache['vz_url']))
+        {
+            $this->cache['vz_url'] = array('jscss' => FALSE);
+        }
     }
     
     // --------------------------------------------------------------------
@@ -45,7 +45,7 @@ class Vz_url_ft extends EE_Fieldtype {
             $styles = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $styles);
             $this->EE->cp->add_to_head($styles);
 
-            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts.js');
+            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts.min.js');
             $scripts = str_replace('CP_URL', BASE, $scripts);
             $this->EE->javascript->output(
                 $scripts .

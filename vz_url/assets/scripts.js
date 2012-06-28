@@ -13,8 +13,14 @@ var vzUrl = {
      * Set up the VZ URL fields with the styling and events they need to function
      */
     init : function(fields) {
-        $('.vz_url_field').each(vzUrl.check_field);
-        $('.vz_url_field').live('keyup', vzUrl.check_field);
+        $('.vz_url_field')
+            .each(vzUrl.check_field)
+            .live('keyup', vzUrl.check_field)
+            .live('paste', function(e) {
+                setTimeout(function() {
+                    vzUrl.check_field.call(e.target);
+                }, 0);
+            });
     },
   
     /*
