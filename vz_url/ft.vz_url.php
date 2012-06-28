@@ -24,7 +24,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
         if (!isset($this->EE->session->cache['vz_url']))
         {
-            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'theme_url' => FALSE);
+            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE);
         }
         $this->cache =& $this->EE->session->cache['vz_url'];
     }
@@ -45,7 +45,7 @@ class Vz_url_ft extends EE_Fieldtype {
             $styles = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $styles);
             $this->EE->cp->add_to_head($styles);
 
-            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts.min.js');
+            $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts.js');
             $scripts = str_replace('CP_URL', BASE, $scripts);
             $this->EE->javascript->output(
                 $scripts .
@@ -71,8 +71,18 @@ class Vz_url_ft extends EE_Fieldtype {
         $this->EE->load->library('table');
         $this->EE->lang->loadfile('vz_url');
         
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+        $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
+        $settings_ui = array(
+            lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
+            form_radio('vz_url_show_redirects', 'y', $show_redirects, 'id="vz_url_show_redirects_yes"') . ' ' .
+            form_label(lang('yes'), 'vz_url_show_redirects_yes') .
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+            form_radio('vz_url_show_redirects', 'n', !$show_redirects, 'id="vz_url_show_redirects_no"') . ' ' .
+            form_label(lang('no'), 'vz_url_show_redirects_no')
+        );
+        $this->EE->table->add_row($settings_ui);
         
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
         $settings_ui = array(
             lang('vz_url_limit_local_label', 'vz_url_limit_local'),
             form_radio('vz_url_limit_local', 'y', $limit_local, 'id="vz_url_limit_local_yes"') . ' ' .
@@ -81,7 +91,6 @@ class Vz_url_ft extends EE_Fieldtype {
             form_radio('vz_url_limit_local', 'n', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
             form_label(lang('no'), 'vz_url_limit_local_no')
         );
-        
         $this->EE->table->add_row($settings_ui);
     }
     
@@ -92,15 +101,21 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         $this->EE->load->library('table');
         $this->EE->lang->loadfile('vz_url');
+        $settings_ui = array();
         
+        $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
+        $settings_ui[] = array(
+            lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
+            form_checkbox('vz_url_show_redirects', 'y', $show_redirects)
+        );
+
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
-        
-        $settings_ui = array(
+        $settings_ui[] = array(
             lang('vz_url_limit_local_label', 'vz_url_limit_local'),
             form_checkbox('vz_url_limit_local', 'y', $limit_local)
         );
         
-        return array($settings_ui);
+        return $settings_ui;
     }
 
     /**
@@ -116,7 +131,10 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function save_settings()
     {
-        return array('vz_url_limit_local' => $this->EE->input->post('vz_url_limit_local'));
+        return array(
+            'vz_url_show_redirects' => $this->EE->input->post('vz_url_show_redirects'),
+            'vz_url_limit_local' => $this->EE->input->post('vz_url_limit_local')
+        );
     }
     
     /**
@@ -138,6 +156,7 @@ class Vz_url_ft extends EE_Fieldtype {
         
         if (empty($name)) $name = $this->field_name;
         
+        $show_redirects = !(isset($this->settings['vz_url_show_redirects']) && $this->settings['vz_url_show_redirects'] == 'n');
         $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
         
         // Fill in http:// if the field is empty
@@ -150,7 +169,7 @@ class Vz_url_ft extends EE_Fieldtype {
         $out .= form_input(array(
             'name' => $name,
             'value' => $data,
-            'class' => 'vz_url_field' . ($limit_local ? ' local' : ''),
+            'class' => 'vz_url_field' . ($limit_local ? ' local' : ''). ($show_redirects ? ' show_redirect' : ''),
             'id' => $name
         ));
         $out .= '<div class="vz_url_msg"></div></div>';

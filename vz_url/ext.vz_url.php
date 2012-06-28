@@ -75,25 +75,28 @@ class Vz_url_ext {
      */
     public function proxy($session)
     {
-        // Check for the special query string that means we want the log
+        // Check to see if it's a request from VZ URL
         if (
             AJAX_REQUEST &&
-            $this->EE->input->get('url') && 
+            $this->EE->input->get('url') &&
+            $this->EE->input->get('callback') &&
             $this->EE->input->get('caller') == 'vz_url'
         )
         {
+            $this->EE->load->library('javascript');
+
             $url = urldecode(trim($_GET['url']));
-            $prefix = '';
+            $host = '';
 
             // If the url is relative to the root, 
             // convert to an absolute url
             if (substr($url, 0, 1) == '/')
             {
-                $prefix = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'] : "http://".$_SERVER['SERVER_NAME'];
+                $host = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'] : "http://".$_SERVER['SERVER_NAME'];
             }
 
             // Create the CURL session and set options
-            $session = curl_init($prefix.$url);
+            $session = curl_init($host.$url);
 
             curl_setopt($session, CURLOPT_HEADER, true);
             curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
@@ -101,7 +104,7 @@ class Vz_url_ext {
             curl_setopt($session, CURLOPT_TIMEOUT, 15);
             curl_setopt($session, CURLOPT_MAXREDIRS, 8);
 
-            // Spoof a real browser, or Facebook freaks out
+            // Spoof a real browser, or Facebook redirects to an error page
             curl_setopt($session, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1');
 
             if (!ini_get('safe_mode') && !ini_get('open_basedir'))
@@ -120,20 +123,15 @@ class Vz_url_ext {
 
             curl_close($session);
 
-            $return = array(
+            $return = $this->EE->javascript->generate_json(array(
                 'original'  => $url,
-                'final_url' => str_replace($prefix, '', $info['url']),
+                'final_url' => str_replace($host, '', $info['url']),
                 'http_code' => $info['http_code']
-            );
+            ));
 
-            if ($_GET['callback'])
-            {
-                echo $_GET['callback'] . '(' . json_encode($return) . ');';
-            }
-            else
-            {
-                echo json_encode($return);
-            }
+            echo $_GET['callback'] . '(' . $return . ');';
+
+            // Kill processing before EE can output anything
             die();
         }
     }
