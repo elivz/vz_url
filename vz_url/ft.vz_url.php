@@ -272,6 +272,28 @@ class Vz_url_ft extends EE_Fieldtype {
         }
     }
 
+    /**
+     * Output an HTML <a> tag
+     */
+    function replace_link($data, $params=array(), $tagdata=FALSE)
+    {
+        if ($data == '') return;
+
+        $out = '<a href="' . $data . '"';
+
+        foreach (array('accesskey', 'class', 'id', 'rel', 'tabindex', 'target', 'title') as $attr)
+        {
+            if (isset($params[$attr]))
+            {
+                $out .= ' ' . $attr . '="' . $params[$attr] . '"';
+            }
+        }
+
+        $text = isset($params['text']) ? $params['text'] : $data;
+        $out .= '>' . $text . '</a>';
+
+        return $out;
+    }
 }
 
 /* End of file ft.vz_url.php */
