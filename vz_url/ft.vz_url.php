@@ -7,18 +7,18 @@
  * @copyright Copyright (c) 2010-2012 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  */
- 
+
 class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
         'version' => '2.2.0'
     );
-    
+
     var $has_array_data = TRUE;
 
     var $debug = FALSE;
-    
+
     /**
      * Fieldtype Constructor
      */
@@ -32,9 +32,9 @@ class Vz_url_ft extends EE_Fieldtype {
         }
         $this->cache =& $this->EE->session->cache['vz_url'];
     }
-    
+
     // --------------------------------------------------------------------
-    
+
     /**
      * Include the JS and CSS files,
      * but only the first time
@@ -60,13 +60,13 @@ class Vz_url_ft extends EE_Fieldtype {
                 'nonlocalText:"' . addslashes(lang('vz_url_nonlocal_text')) . '",' .
                 '};'
             );
-            
+
             $this->cache['jscss'] = TRUE;
         }
     }
-    
+
     // --------------------------------------------------------------------
-    
+
     /**
      * Display Field Settings
      */
@@ -74,7 +74,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         $this->EE->load->library('table');
         $this->EE->lang->loadfile('vz_url');
-        
+
         // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
         $settings_ui = array(
@@ -86,7 +86,7 @@ class Vz_url_ft extends EE_Fieldtype {
             form_label(lang('no'), 'vz_url_show_redirects_no')
         );
         $this->EE->table->add_row($settings_ui);
-        
+
         // Limit to local URLs
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
         $settings_ui = array(
@@ -99,7 +99,7 @@ class Vz_url_ft extends EE_Fieldtype {
         );
         $this->EE->table->add_row($settings_ui);
     }
-    
+
     /**
      * Display Cell Settings
      */
@@ -107,7 +107,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         $this->EE->lang->loadfile('vz_url');
         $settings_ui = array();
-        
+
         // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
         $settings_ui[] = array(
@@ -121,7 +121,7 @@ class Vz_url_ft extends EE_Fieldtype {
             lang('vz_url_limit_local_label', 'vz_url_limit_local'),
             form_checkbox('vz_url_limit_local', 'y', $limit_local)
         );
-        
+
         return $settings_ui;
     }
 
@@ -132,7 +132,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->display_cell_settings($settings);
     }
-    
+
     /**
      * Save Field Settings
      */
@@ -143,7 +143,7 @@ class Vz_url_ft extends EE_Fieldtype {
             'vz_url_limit_local'    => $this->EE->input->post('vz_url_limit_local')
         );
     }
-    
+
     /**
      * Save Low Variables Settings
      */
@@ -151,27 +151,27 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->save_settings();
     }
-    
+
     // --------------------------------------------------------------------
-    
+
     /**
      * Display Field on Publish
      */
     function display_field($data, $name=FALSE)
     {
         $this->_include_jscss();
-        
+
         if (empty($name)) $name = $this->field_name;
-        
+
         $show_redirects = !(isset($this->settings['vz_url_show_redirects']) && $this->settings['vz_url_show_redirects'] == 'n');
         $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
-        
+
         // Fill in http:// if the field is empty
         if (!$data)
         {
             $data = $limit_local ? $this->EE->config->item('site_url') : 'http://';
         }
-        
+
         $out = '<div class="vz_url_wrapper">';
         $out .= form_input(array(
             'name' => $name,
@@ -183,7 +183,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
         return $out;
     }
-    
+
     /**
      * Display Cell
      */
@@ -191,7 +191,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->display_field($data, $this->cell_name);
     }
-    
+
     /**
      * Display Low Variable
      */
@@ -199,7 +199,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->display_field($data);
     }
-    
+
     // --------------------------------------------------------------------
 
     /**
@@ -210,7 +210,7 @@ class Vz_url_ft extends EE_Fieldtype {
         // Remove http:// if it's the only thing in the field
         return ($data == 'http://' || $data == '/') ? '' : $data;
     }
-    
+
     /**
      * Save Cell
      */
@@ -218,7 +218,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->save($data);
     }
-    
+
     /**
      * Save Low Variable
      */
@@ -226,14 +226,11 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         return $this->save($data);
     }
-    
+
     // --------------------------------------------------------------------
-    
+
     /**
      * Parse template tag
-     * 
-     * Use redirect="yes" parameter to immediately redirect the page 
-     * Thanks to Brian Litzinger for the idea and code
      *
      * Use as tag pair to make the URL's component parts available
      */
@@ -262,10 +259,9 @@ class Vz_url_ft extends EE_Fieldtype {
         }
         else
         {
-            if ($this->EE->TMPL->fetch_param('redirect') == 'yes')
+            if (isset($params['redirect']) && $params['redirect'] == 'yes')
             {
-                header("Location: {$data}");
-                exit;
+                $this->replace_redirect($data);
             }
             else
             {
@@ -295,6 +291,18 @@ class Vz_url_ft extends EE_Fieldtype {
         $out .= '>' . $text . '</a>';
 
         return $out;
+    }
+
+    /**
+     * Immediately redirect to the URL
+     * Thanks to Brian Litzinger for the idea and code
+     */
+    function replace_redirect($data, $params=array(), $tagdata=FALSE)
+    {
+        if ($data == '') return;
+
+        header("Location: {$data}");
+        exit;
     }
 }
 
