@@ -31,7 +31,7 @@ Used as a tag pair, you have access to the entered URL, as well as the component
 
 ### `{field_name:link [text="Link Text"]}`
 
-Outputs an HTML anchor tag linking to the entered URL. You can use the `text` parameter to specify the link text, otherwise it will default to the URL itself. The following parameters can also be used to set attributes on the `&lt;a&gt;` tag: `accesskey`, `class`, `id`, `rel`, `tabindex`, `target`, `title`.
+Outputs an HTML anchor tag linking to the entered URL. You can use the `text` parameter to specify the link text, otherwise it will default to the URL itself. The following parameters can also be used to set attributes on the `<a>` tag: `accesskey`, `class`, `id`, `rel`, `tabindex`, `target`, `title`.
 
 ### `{field_name:redirect}`
 
