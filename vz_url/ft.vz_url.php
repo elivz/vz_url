@@ -15,6 +15,8 @@ class Vz_url_ft extends EE_Fieldtype {
         'version' => '2.2.0'
     );
     
+    var $has_array_data = TRUE;
+    
     /**
      * Fieldtype Constructor
      */
@@ -22,11 +24,11 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         parent::EE_Fieldtype();
 
-        $this->cache =& $this->EE->session->cache['vz_url'];
-        if (!isset($this->cache['vz_url']))
+        if (!isset($this->EE->session->cache['vz_url']))
         {
-            $this->cache['vz_url'] = array('jscss' => FALSE);
+            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE);
         }
+        $this->cache =& $this->EE->session->cache['vz_url'];
     }
     
     // --------------------------------------------------------------------
@@ -226,21 +228,49 @@ class Vz_url_ft extends EE_Fieldtype {
     // --------------------------------------------------------------------
     
     /**
+     * Parse template tag
+     * 
      * Use redirect="yes" parameter to immediately redirect the page 
      * Thanks to Brian Litzinger for the idea and code
+     *
+     * Use as tag pair to make the URL's component parts available
      */
-    function replace_tag($data, $params = '', $tagdata = '')
+    function replace_tag($data, $params=array(), $tagdata=FALSE)
     {
-        if (isset($params['redirect']) && $params['redirect'] == 'yes' && $data != '')
+        if ($data == '') return;
+
+        if ($tagdata)
         {
-            header("Location: {$data}");
-            exit;
+            $parts = array_merge(
+                array(
+                    'url'      => $data,
+                    'scheme'   => '',
+                    'host'     => '',
+                    'port'     => '',
+                    'user'     => '',
+                    'pass'     => '',
+                    'path'     => '',
+                    'query'    => '',
+                    'fragment' => ''
+                ),
+                parse_url($data)
+            );
+
+            return $this->EE->TMPL->parse_variables_row($tagdata, $parts);
         }
         else
         {
-            return $data;
+            if ($this->EE->TMPL->fetch_param('redirect') == 'yes')
+            {
+                header("Location: {$data}");
+                exit;
+            }
+            else
+            {
+                return $data;
+            }
         }
-    } 
+    }
 
 }
 
