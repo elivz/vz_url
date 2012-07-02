@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.1'
+        'version' => '2.2.2'
     );
 
     var $has_array_data = TRUE;
@@ -304,6 +304,14 @@ class Vz_url_ft extends EE_Fieldtype {
 
         header("Location: {$data}");
         exit;
+    }
+
+    /**
+     * Replace the tag for Low Variables
+     */
+    function display_var_tag($data, $params=array(), $tagdata=FALSE)
+    {
+        return $this->replace_tag($data, $params, $tagdata);
     }
 }
 
