@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.0'
+        'version' => '2.2.1'
     );
 
     var $has_array_data = TRUE;
@@ -50,7 +50,6 @@ class Vz_url_ft extends EE_Fieldtype {
             $this->EE->cp->add_to_head('<style type="text/css">' . $css . '</style>');
 
             $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts' . ($this->debug ? '' : '.min') . '.js');
-            $scripts = str_replace('CP_URL', BASE, $scripts);
             $this->EE->javascript->output(
                 $scripts .
                 'window.vzUrl_settings = {' .

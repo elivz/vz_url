@@ -4,12 +4,11 @@
  *
  * Depends on: jQuery
  */
-jQuery(function($) {
 
 var vzUrl = {
     regex : new RegExp("^((https?|ftp)://[\\w\\-_]+(\\.[\\w\\-_]+)+|/)([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%!&amp;/~\\+#])?$", "gi"),
 
-	/*
+    /*
      * Set up the VZ URL fields with the styling and events they need to function
      */
     init : function(fields) {
@@ -144,5 +143,3 @@ var vzUrl = {
 };
 
 vzUrl.init();
-
-});

@@ -7,6 +7,18 @@
     position: relative;
 }
 
+.vz_url_field {
+    width: 99%;
+    padding: 4px;
+    margin: 0;
+    outline: 0;
+    border: 1px solid #8195A0;
+}
+.vz_url_field:focus {
+    padding: 3px;
+    border-width: 2px;
+}
+
 .vz_url_field.empty {
     color: #aaa;
 }
