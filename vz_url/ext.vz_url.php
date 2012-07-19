@@ -9,13 +9,13 @@
  */
 
 class Vz_url_ext {
-    
+
     public $description    = 'Support file for VZ URL fieldtype';
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.0';
-    
+    public $version        = '2.2.2';
+
     /**
      * Constructor
      */
@@ -23,9 +23,9 @@ class Vz_url_ext {
     {
         $this->EE =& get_instance();
     }
-    
+
     // ----------------------------------------------------------------------
-    
+
     /**
      * Activate Extension
      */
@@ -39,7 +39,7 @@ class Vz_url_ext {
             'version'  => $this->version,
             'enabled'  => 'y'
         );
-        
+
         // Enable the extension
         $this->EE->db->insert('extensions', $data);
     }
@@ -53,7 +53,7 @@ class Vz_url_ext {
         {
             return FALSE;
         }
-    
+
         $this->EE->db->where('class', __CLASS__);
         $this->EE->db->update('extensions', array('version' => $this->version));
     }
@@ -67,9 +67,9 @@ class Vz_url_ext {
         $this->EE->db->where('class', __CLASS__);
         $this->EE->db->delete('extensions');
     }
-    
+
     // ----------------------------------------------------------------------
-    
+
     /**
      * Proxy function for checking URLs
      */
@@ -88,7 +88,7 @@ class Vz_url_ext {
             $url = urldecode(trim($_GET['url']));
             $host = '';
 
-            // If the url is relative to the root, 
+            // If the url is relative to the root,
             // convert to an absolute url
             if (substr($url, 0, 1) == '/')
             {
@@ -116,7 +116,7 @@ class Vz_url_ext {
             }
             else
             {
-                // When open_basedir is set, we need to use a 
+                // When open_basedir is set, we need to use a
                 // recursive function to follow the redirects
                 $info = curl_redirect_exec($session);
             }
