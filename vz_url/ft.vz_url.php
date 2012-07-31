@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.2'
+        'version' => '2.2.3'
     );
 
     var $has_array_data = TRUE;
@@ -189,6 +189,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function display_cell($data)
     {
+        $data = str_replace('&amp;', '&', $data);
         return $this->display_field($data, $this->cell_name);
     }
 
