@@ -8,7 +8,7 @@ $lang = array(
 'vz_url_redirect_text'        => 'Redirects to',
 'vz_url_redirect_update'      => 'Update',
 'vz_url_nonlocal_text'        => 'Needs to be a URL on this website',
-'vz_url_open_text'            => 'Open URL',
+'vz_url_open_text'            => 'Visit URL',
 
 'field_preferences'           => 'Field settings',
 'vz_url_show_redirects_label' => 'Prompt to update redirected URLs',
