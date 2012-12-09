@@ -7,7 +7,7 @@ $lang = array(
 'vz_url_error_text'           => 'That URL appears to be invalid',
 'vz_url_redirect_text'        => 'Redirects to',
 'vz_url_redirect_update'      => 'Update',
-'vz_url_nonlocal_text'        => 'Needs to be a URL on this website',
+'vz_url_nonlocal_text'        => 'Must be a URL on this website',
 'vz_url_open_text'            => 'Visit URL',
 
 'field_preferences'           => 'Field settings',

@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.5'
+        'version' => '2.2.6'
     );
 
     var $has_array_data = TRUE;
@@ -169,11 +169,12 @@ class Vz_url_ft extends EE_Fieldtype {
         // Fill in http:// if the field is empty
         if (!$data)
         {
-            $data = $limit_local ? $this->EE->config->item('site_url') : 'http://';
+            $data = $limit_local ? '/' : 'http://';
         }
 
         $out = '<div class="vz_url_wrapper">';
         $out .= form_input(array(
+            'type' => 'url',
             'name' => $name,
             'value' => $data,
             'class' => 'vz_url_field' . ($limit_local ? ' local' : ''). ($show_redirects ? ' show_redirect' : ''),

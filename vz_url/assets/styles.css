@@ -71,7 +71,7 @@
     border-left: 1px solid #485861;
     font-weight: bold;
     text-decoration: none;
-	color: #fff;
+    color: #fff;
     -webkit-border-radius: 0 3px 3px 0;
     -moz-border-radius: 0 3px 3px 0;
     border-radius: 0 3px 3px 0;
@@ -161,17 +161,17 @@
 
 /* Special stying for Matrix cells */
 td.matrix .vz_url_field {
-	border: none !important;
-	margin: 0 !important;
-	padding: 0 !important;
-	width: 100%;
-	min-width: 60px;
-	resize: none;
-	outline: none;
-	font-family: 'Lucida Grande', sans-serif;
-	font-size: 11px;
-    background: #fff;
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    min-width: 60px;
+    resize: none;
+    outline: none;
+    font-family: 'Lucida Grande', sans-serif;
+    font-size: 11px;
+    background-color: #fff;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
     border-radius: 0;
 }

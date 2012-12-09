@@ -12,24 +12,27 @@ var vzUrl = {
      * Set up the VZ URL fields with the styling and events they need to function
      */
     init : function(fields) {
-        $('.vz_url_field')
-            .each(vzUrl.check_field)
-            .live('keyup', vzUrl.check_field)
-            .live('paste', function(e) {
-                setTimeout(function() {
-                    vzUrl.check_field.call(e.target);
-                }, 0);
+        // Check URLs whenever the field changes
+        $('#publish')
+            .on('keyup paste', '.vz_url_field', function(e) {
+                vzUrl.check_field.call(e.target, true);
             });
+
+        // Check existing URLs when the page loads
+        $('.vz_url_field').each(vzUrl.check_field);
+        Matrix.bind('vz_url', 'display', function(cell) {
+            vzUrl.check_field.call($(this).find('input'));
+        });
     },
 
     /*
      * Event handler for changes to the field
      */
-    check_field : function(e) {
+    check_field : function(delay) {
         $field = $(this);
 
         // Clear the timeout
-        if (vzUrl.timer) clearTimeout(vzUrl.timer);
+        if (delay && vzUrl.timer) clearTimeout(vzUrl.timer);
 
         // Don't bother checking the default value of http://
         if ($field.val() === 'http://' || $field.val() === '') {
@@ -41,15 +44,19 @@ var vzUrl = {
         }
 
         // Use a timeout to prevent an ajax call on every keystroke
-        vzUrl.timer = setTimeout(function() {
-            vzUrl.ajax_call($field);
-        }, 350);
+        if (delay) {
+            vzUrl.timer = setTimeout(function() {
+                vzUrl.validate($field);
+            }, delay);
+        } else {
+            vzUrl.validate($field);
+        }
     },
 
     /*
      * Actually send a request the the target URL to see if it exists
      */
-    ajax_call : function($field) {
+    validate : function($field) {
         var url = $field.val();
 
         // Make sure it's even a valid url
@@ -97,48 +104,46 @@ var vzUrl = {
         $field.removeClass('empty checking invalid valid nonlocal redirect');
         $field.prev().remove();
 
-        setTimeout(function() {
-            var $msg = $field.next().empty();
+        var $msg = $field.next().empty();
 
-            switch (status) {
-                case 'empty' : case 'checking' : case 'valid' :
-                    break;
-                case 'invalid' :
-                    $msg.html(vzUrl_settings.errorText);
-                    break;
-                case 'nonlocal' :
-                    $msg.html(vzUrl_settings.nonlocalText);
-                    break;
-                case 'redirect' :
-                    if ($field.hasClass('show_redirect')) {
-                        $msg.html(vzUrl_settings.redirectText + ' ' + response.final_url);
-                        $('<a/>', {
-                            text: vzUrl_settings.redirectUpdate,
-                            href: '#',
-                            'data-final_url': response.final_url,
-                            click: function(e) {
-                                // Replace the field value with the redirect target
-                                $field.val( $(this).attr('data-final_url') );
-                                vzUrl.ajax_call($field);
-                                return false;
-                            }
-                        }).appendTo($msg);
-                    } else {
-                        $field.removeClass('redirect').addClass('valid');
-                    }
-                    break;
-            }
+        switch (status) {
+            case 'empty' : case 'checking' : case 'valid' :
+                break;
+            case 'invalid' :
+                $msg.html(vzUrl_settings.errorText);
+                break;
+            case 'nonlocal' :
+                $msg.html(vzUrl_settings.nonlocalText);
+                break;
+            case 'redirect' :
+                if ($field.hasClass('show_redirect')) {
+                    $msg.html(vzUrl_settings.redirectText + ' ' + response.final_url);
+                    $('<a/>', {
+                        text: vzUrl_settings.redirectUpdate,
+                        href: '#',
+                        'data-final_url': response.final_url,
+                        click: function(e) {
+                            // Replace the field value with the redirect target
+                            $field.val( $(this).attr('data-final_url') );
+                            vzUrl.validate($field);
+                            return false;
+                        }
+                    }).appendTo($msg);
+                } else {
+                    $field.removeClass('redirect').addClass('valid');
+                }
+                break;
+        }
 
-            // Add a "Open Page link"
-            if (
-                (status === 'valid' || status === 'redirect') &&
-                !$field.parent().parent().hasClass('matrix')
-            ) {
-                $field.before('<a href="'+$field.val()+'" class="vz_url_visit" target="_blank">' + vzUrl_settings.openText + '</a>');
-            }
+        $field.addClass(status);
 
-            $field.addClass(status);
-        }, 200);
+        // Add a "Open Page link"
+        if (
+            (status === 'valid' || status === 'redirect') &&
+            !$field.parent().parent().hasClass('matrix')
+        ) {
+            $field.before('<a href="'+$field.val()+'" class="vz_url_visit" target="_blank">' + vzUrl_settings.openText + '</a>');
+        }
     }
 };
 
