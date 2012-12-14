@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.6'
+        'version' => '2.2.7'
     );
 
     var $has_array_data = TRUE;
@@ -174,7 +174,6 @@ class Vz_url_ft extends EE_Fieldtype {
 
         $out = '<div class="vz_url_wrapper">';
         $out .= form_input(array(
-            'type' => 'url',
             'name' => $name,
             'value' => $data,
             'class' => 'vz_url_field' . ($limit_local ? ' local' : ''). ($show_redirects ? ' show_redirect' : ''),
