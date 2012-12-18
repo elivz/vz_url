@@ -20,9 +20,11 @@ var vzUrl = {
 
         // Check existing URLs when the page loads
         $('.vz_url_field').each(vzUrl.check_field);
-        Matrix.bind('vz_url', 'display', function(cell) {
-            vzUrl.check_field.call($(this).find('input'));
-        });
+        if (typeof Matrix !== 'undefined') {
+            Matrix.bind('vz_url', 'display', function(cell) {
+                vzUrl.check_field.call($(this).find('input'));
+            });
+        }
     },
 
     /*
