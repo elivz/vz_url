@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.8';
+    public $version        = '2.2.9';
 
     /**
      * Constructor
@@ -135,6 +135,30 @@ class Vz_url_ext {
             die();
         }
     }
+}
+
+// Recursively follow redirects
+// Adapted from the PHP docs
+function curl_redirect_exec($session)
+{
+    $data = curl_exec($session);
+    $info = curl_getinfo($session);
+
+    if ($info['http_code'] == 301 || $info['http_code'] == 302)
+    {
+        list($header) = explode("\r\n\r\n", $data, 2);
+        $matches = array();
+        preg_match('/(Location:|URI:)(.*?)\n/', $header, $matches);
+        $url = trim(array_pop($matches));
+        $url_parsed = parse_url($url);
+        if (isset($url_parsed))
+        {
+            curl_setopt($session, CURLOPT_URL, $url);
+            return curl_redirect_exec($session);
+        }
+    }
+
+    return $info;
 }
 
 /* End of file ext.vz_url.php */
