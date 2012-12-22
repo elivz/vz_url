@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.8'
+        'version' => '2.2.9'
     );
 
     var $has_array_data = TRUE;
@@ -28,7 +28,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
         if (!isset($this->EE->session->cache['vz_url']))
         {
-            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE);
+            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'js_matrix' => FALSE);
         }
         $this->cache =& $this->EE->session->cache['vz_url'];
     }
@@ -39,7 +39,7 @@ class Vz_url_ft extends EE_Fieldtype {
      * Include the JS and CSS files,
      * but only the first time
      */
-    private function _include_jscss()
+    private function _include_jscss($matrix=FALSE)
     {
         if (!$this->cache['jscss'])
         {
@@ -51,17 +51,25 @@ class Vz_url_ft extends EE_Fieldtype {
 
             $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts' . ($this->debug ? '' : '.min') . '.js');
             $this->EE->javascript->output(
-                $scripts .
-                'window.vzUrl_settings = {' .
+                'var vzUrl_settings={' .
                 'errorText:"' . addslashes(lang('vz_url_error_text')) . '",' .
                 'redirectText:"' . addslashes(lang('vz_url_redirect_text')) . '",' .
                 'redirectUpdate:"' . addslashes(lang('vz_url_redirect_update')) . '",' .
                 'nonlocalText:"' . addslashes(lang('vz_url_nonlocal_text')) . '",' .
                 'openText:"' . addslashes(lang('vz_url_open_text')) . '"' .
-                '};'
+                '};'.
+                $scripts
             );
 
             $this->cache['jscss'] = TRUE;
+        }
+        if ($matrix && !$this->cache['js_matrix'])
+        {
+            $this->EE->javascript->output(
+                "Matrix.bind('vz_url', 'display', function(cell) {" .
+                    "vzUrl.check_field.call($(this).find('input'));" .
+                "});"
+            );
         }
     }
 
@@ -189,6 +197,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function display_cell($data)
     {
+        $this->_include_jscss(TRUE);
         $data = str_replace('&amp;', '&', $data);
         return $this->display_field($data, $this->cell_name);
     }

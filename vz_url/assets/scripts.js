@@ -12,19 +12,13 @@ var vzUrl = {
      * Set up the VZ URL fields with the styling and events they need to function
      */
     init : function(fields) {
-        // Check URLs whenever the field changes
-        $('#publish')
-            .on('keyup paste', '.vz_url_field', function(e) {
+        $('.vz_url_field')
+            // Check URLs whenever the field changes
+            .on('keyup paste', function(e) {
                 vzUrl.check_field.call(e.target, true);
-            });
-
-        // Check existing URLs when the page loads
-        $('.vz_url_field').each(vzUrl.check_field);
-        if (typeof Matrix !== 'undefined') {
-            Matrix.bind('vz_url', 'display', function(cell) {
-                vzUrl.check_field.call($(this).find('input'));
-            });
-        }
+            })
+            // Check existing URLs when the page loads
+            .each(vzUrl.check_field);
     },
 
     /*
