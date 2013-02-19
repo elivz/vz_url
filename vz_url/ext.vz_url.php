@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.9';
+    public $version        = '2.2.10';
 
     /**
      * Constructor
@@ -103,6 +103,7 @@ class Vz_url_ext {
             curl_setopt($session, CURLOPT_VERBOSE, false);
             curl_setopt($session, CURLOPT_TIMEOUT, 15);
             curl_setopt($session, CURLOPT_MAXREDIRS, 8);
+            curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
 
             // Spoof a real browser, or Facebook redirects to an error page
             curl_setopt($session, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1');
