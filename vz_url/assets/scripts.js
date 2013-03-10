@@ -12,13 +12,14 @@ var vzUrl = {
      * Set up the VZ URL fields with the styling and events they need to function
      */
     init : function(fields) {
-        $('.vz_url_field')
+        $('#publishForm')
             // Check URLs whenever the field changes
-            .on('keyup paste', function(e) {
+            .on('keyup paste', '.vz_url_field', function(e) {
                 vzUrl.check_field.call(e.target, true);
-            })
-            // Check existing URLs when the page loads
-            .each(vzUrl.check_field);
+            });
+
+        // Check existing URLs when the page loads
+        $('.vz_url_field').each(vzUrl.check_field);
     },
 
     /*
