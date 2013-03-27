@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.11';
+    public $version        = '2.2.12';
 
     /**
      * Constructor
@@ -85,7 +85,7 @@ class Vz_url_ext {
         {
             $this->EE->load->library('javascript');
 
-            $url = urldecode(trim($_GET['url']));
+            $url = 'http' . urldecode(trim($_GET['url']));
             $host = '';
 
             // If the url is relative to the root,
@@ -130,10 +130,9 @@ class Vz_url_ext {
                 'http_code' => $info['http_code']
             ));
 
-            echo $_GET['callback'] . '(' . $return . ');';
-
             // Kill processing before EE can output anything
-            die();
+            header('Content-Type: application/javascript');
+            exit($_GET['callback'] . '(' . $return . ');');
         }
     }
 }

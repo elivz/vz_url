@@ -44,7 +44,7 @@ var vzUrl = {
         if (delay) {
             vzUrl.timer = setTimeout(function() {
                 vzUrl.validate($field);
-            }, delay);
+            }, 500);
         } else {
             vzUrl.validate($field);
         }
@@ -69,11 +69,12 @@ var vzUrl = {
         }
 
         // Ajax call to proxy to check the url
+        var safeurl = url.replace('http', ''); // Mod_security doesn't like "http://" in posted data
         $.getJSON(
             EE.BASE + '&callback=?',
             {
                 caller: 'vz_url',
-                url: url
+                url: safeurl
             },
             function (data) {
                 // Make sure the URL we are checking is still there
