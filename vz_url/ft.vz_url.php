@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.12'
+        'version' => '2.2.13'
     );
 
     var $has_array_data = TRUE;
@@ -24,7 +24,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     function Vz_url_ft()
     {
-        parent::EE_Fieldtype();
+        EE_Fieldtype::__construct();
 
         if (!isset($this->EE->session->cache['vz_url']))
         {
