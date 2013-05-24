@@ -45,7 +45,7 @@ Your server will need to have the CURL library installed and enabled for the lin
 Installation & Updates
 ----------------------
 
-Download and unzip the extension. Upload the `vz_url` folder to `/system/expression_engine/third_party`, and enable the VZ URL fieldtype and extension.
+Download and unzip the extension. Upload the `/system/expression_engine/third_party/vz_url` folder to `/system/expression_engine/third_party`, and enable the VZ URL fieldtype and extension.
 
 That's it! Now you can use the VZ URL field type anywhere you were previously using a plain text field. Switching from a text field to a VZ URL field (or vice-versa) will not affect your data.
 
