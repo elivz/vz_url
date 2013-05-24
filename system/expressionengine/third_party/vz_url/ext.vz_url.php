@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.13';
+    public $version        = '2.2.14';
 
     /**
      * Constructor
@@ -85,7 +85,7 @@ class Vz_url_ext {
         {
             $this->EE->load->library('javascript');
 
-            $url = 'http' . urldecode(trim($_GET['url']));
+            $url = trim($_GET['url']);
             $host = '';
 
             // If the url is relative to the root,
@@ -93,10 +93,15 @@ class Vz_url_ext {
             if (substr($url, 0, 1) == '/')
             {
                 $host = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://".$_SERVER['SERVER_NAME'] : "http://".$_SERVER['SERVER_NAME'];
+                $url = $host . $url;
+            }
+            else
+            {
+                $url = 'http' . $url;
             }
 
             // Create the CURL session and set options
-            $session = curl_init($host.$url);
+            $session = curl_init($url);
 
             curl_setopt($session, CURLOPT_HEADER, true);
             curl_setopt($session, CURLOPT_RETURNTRANSFER, true);

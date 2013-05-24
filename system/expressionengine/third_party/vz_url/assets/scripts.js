@@ -54,7 +54,8 @@ var vzUrl = {
      * Actually send a request the the target URL to see if it exists
      */
     validate : function($field) {
-        var url = $field.val();
+        var url = vzUrl.encode_uri($field.val());
+        console.log(url);
 
         // Make sure it's even a valid url
         if (!url.match(vzUrl.regex)) {
@@ -78,7 +79,8 @@ var vzUrl = {
             },
             function (data) {
                 // Make sure the URL we are checking is still there
-                if (data.original != url) return;
+                console.log(data.original, vzUrl.encode_uri($field.val()));
+                if (data.original != vzUrl.encode_uri($field.val())) return;
 
                 // Show or hide the error message, as needed
                 if ((data.original == data.final_url) && (data.http_code >= 200) && (data.http_code < 400)) {
@@ -142,6 +144,10 @@ var vzUrl = {
         ) {
             $field.before('<a href="'+$field.val()+'" class="vz_url_visit" target="_blank">' + vzUrl_settings.openText + '</a>');
         }
+    },
+
+    encode_uri : function(str) {
+        return encodeURI(str).replace(/%25/g, '%').replace(/%5B/g, '[').replace(/%5D/g, ']');
     }
 };
 
