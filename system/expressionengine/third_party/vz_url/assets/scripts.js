@@ -55,7 +55,6 @@ var vzUrl = {
      */
     validate : function($field) {
         var url = vzUrl.encode_uri($field.val());
-        console.log(url);
 
         // Make sure it's even a valid url
         if (!url.match(vzUrl.regex)) {
@@ -79,7 +78,6 @@ var vzUrl = {
             },
             function (data) {
                 // Make sure the URL we are checking is still there
-                console.log(data.original, vzUrl.encode_uri($field.val()));
                 if (data.original != vzUrl.encode_uri($field.val())) return;
 
                 // Show or hide the error message, as needed

@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.14';
+    public $version        = '2.2.15';
 
     /**
      * Constructor
@@ -130,7 +130,7 @@ class Vz_url_ext {
             curl_close($session);
 
             $return = json_encode(array(
-                'original'  => $url,
+                'original'  => str_replace($host, '', $url),
                 'final_url' => str_replace($host, '', $info['url']),
                 'http_code' => $info['http_code']
             ));
