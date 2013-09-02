@@ -12,12 +12,12 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.2.15'
+        'version' => '2.3.0'
     );
 
     var $has_array_data = TRUE;
 
-    var $debug = TRUE;
+    var $debug = FALSE;
 
     /**
      * Fieldtype Constructor
@@ -164,7 +164,7 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Field Settings
      */
-    function save_settings()
+    public function save_settings()
     {
         return array(
             'vz_url_show_redirects' => $this->EE->input->post('vz_url_show_redirects'),
@@ -175,17 +175,19 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Low Variables Settings
      */
-    function save_var_settings()
+    public function save_var_settings()
     {
         return $this->save_settings();
     }
 
+
     // --------------------------------------------------------------------
+
 
     /**
      * Display Field on Publish
      */
-    function display_field($data, $name=FALSE)
+    public function display_field($data, $name=FALSE)
     {
         $this->_include_jscss();
 
@@ -215,7 +217,7 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Display Cell
      */
-    function display_cell($data)
+    public function display_cell($data)
     {
         $this->_include_jscss(TRUE);
         $data = str_replace('&amp;', '&', $data);
@@ -225,17 +227,19 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Display Low Variable
      */
-    function display_var_field($data)
+    public function display_var_field($data)
     {
         return $this->display_field($data);
     }
 
+
     // --------------------------------------------------------------------
+
 
     /**
      * Save Field
      */
-    function save($data)
+    public function save($data)
     {
         // Remove http:// if it's the only thing in the field
         return ($data == 'http://' || $data == '/') ? '' : $data;
@@ -244,7 +248,7 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Cell
      */
-    function save_cell($data)
+    public function save_cell($data)
     {
         return $this->save($data);
     }
@@ -252,19 +256,21 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Low Variable
      */
-    function save_var_field($data)
+    public function save_var_field($data)
     {
         return $this->save($data);
     }
 
+
     // --------------------------------------------------------------------
+
 
     /**
      * Parse template tag
      *
      * Use as tag pair to make the URL's component parts available
      */
-    function replace_tag($data, $params=array(), $tagdata=FALSE)
+    public function replace_tag($data, $params=array(), $tagdata=FALSE)
     {
         if ($data == '') return;
 
@@ -304,7 +310,7 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Output an HTML <a> tag
      */
-    function replace_link($data, $params=array(), $tagdata=FALSE)
+    public function replace_link($data, $params=array(), $tagdata=FALSE)
     {
         if ($data == '') return;
 
@@ -328,7 +334,7 @@ class Vz_url_ft extends EE_Fieldtype {
      * Immediately redirect to the URL
      * Thanks to Brian Litzinger for the idea and code
      */
-    function replace_redirect($data, $params=array(), $tagdata=FALSE)
+    public function replace_redirect($data, $params=array(), $tagdata=FALSE)
     {
         if ($data == '') return;
 
@@ -339,7 +345,7 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Replace the tag for Low Variables
      */
-    function display_var_tag($data, $params=array(), $tagdata=FALSE)
+    public function display_var_tag($data, $params=array(), $tagdata=FALSE)
     {
         return $this->replace_tag($data, $params, $tagdata);
     }

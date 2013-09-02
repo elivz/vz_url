@@ -1,7 +1,7 @@
 VZ URL Fieldtype
 ================
 
-A fieldtype for ExpressionEngine 2. Also compatible with Pixel & Tonic Matrix and Low Variables.
+A fieldtype for ExpressionEngine 2. Also compatible with Grid, Matrix, and Low Variables.
 
 VZ URL displays a textbox where the user can enter a URL. When the user leaves the field, it will ping the URL they entered and display an error message if it doesn't find a valid webpage there.
 
@@ -40,7 +40,7 @@ Immediately redirects a visitor's browser to the specified URL. Any other code i
 Requirements
 ------------
 
-Your server will need to have the CURL library installed and enabled for the link checking to work.
+Your server will to be running at least PHP 5.2 and have the CURL library installed and enabled for the link checking to work.
 
 Installation & Updates
 ----------------------

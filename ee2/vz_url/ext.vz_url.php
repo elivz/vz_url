@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $docs_url       = 'http://elivz.com/blog/single/vz_url_extension/';
     public $name           = 'VZ URL';
     public $settings_exist = 'n';
-    public $version        = '2.2.15';
+    public $version        = '2.3.0';
 
     /**
      * Constructor
@@ -24,7 +24,9 @@ class Vz_url_ext {
         $this->EE =& get_instance();
     }
 
+
     // ----------------------------------------------------------------------
+
 
     /**
      * Activate Extension
