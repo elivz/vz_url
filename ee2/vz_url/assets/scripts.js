@@ -20,6 +20,17 @@ var vzUrl = {
 
         // Check existing URLs when the page loads
         $('.vz_url_field').each(vzUrl.check_field);
+
+        // Extra initializer for Grid fields
+        Grid && Grid.bind('vz_url', 'display', function(cell) {
+            vzUrl.check_field.call(cell.find('input'));
+        });
+
+        // Extra initializer for Matrix fields
+        Matrix && Matrix.bind('vz_url', 'display', function(cell) {
+            vzUrl.check_field.call(this.find('input'));
+        });
+
     },
 
     /*
@@ -136,10 +147,7 @@ var vzUrl = {
         $field.addClass(status);
 
         // Add a "Open Page link"
-        if (
-            (status === 'valid' || status === 'redirect') &&
-            !$field.parent().parent().hasClass('matrix')
-        ) {
+        if (status === 'valid' || status === 'redirect') {
             $field.before('<a href="'+$field.val()+'" class="vz_url_visit" target="_blank">' + vzUrl_settings.openText + '</a>');
         }
     },

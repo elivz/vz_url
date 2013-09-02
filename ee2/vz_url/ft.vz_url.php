@@ -17,34 +17,38 @@ class Vz_url_ft extends EE_Fieldtype {
 
     var $has_array_data = TRUE;
 
-    var $debug = FALSE;
+    var $debug = TRUE;
 
     /**
      * Fieldtype Constructor
      */
-    function Vz_url_ft()
+    public function __construct()
     {
-        EE_Fieldtype::__construct();
+        parent::__construct();
 
-        if (!isset($this->EE->session->cache['vz_url']))
-        {
-            $this->EE->session->cache['vz_url'] = array('jscss' => FALSE, 'js_matrix' => FALSE);
-        }
-        $this->cache =& $this->EE->session->cache['vz_url'];
+        $this->EE->lang->loadfile('vz_url');
     }
 
+    /*
+     * Register acceptable content types
+     */
+    public function accepts_content_type($name)
+    {
+        return ($name == 'channel' || $name == 'grid');
+    }
+
+
     // --------------------------------------------------------------------
+
 
     /**
      * Include the JS and CSS files,
      * but only the first time
      */
-    private function _include_jscss($matrix=FALSE)
+    private function _include_jscss($content_type='field')
     {
-        if (!$this->cache['jscss'])
+        if ( ! $this->EE->session->cache(__CLASS__, 'jscss'))
         {
-            $this->EE->lang->loadfile('vz_url');
-
             $css = file_get_contents(PATH_THIRD . '/vz_url/assets/styles' . ($this->debug ? '' : '.min') . '.css');
             $css = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $css);
             $this->EE->cp->add_to_head('<style type="text/css">' . $css . '</style>');
@@ -61,27 +65,20 @@ class Vz_url_ft extends EE_Fieldtype {
                 $scripts
             );
 
-            $this->cache['jscss'] = TRUE;
-        }
-        if ($matrix && !$this->cache['js_matrix'])
-        {
-            $this->EE->javascript->output(
-                "Matrix.bind('vz_url', 'display', function(cell) {" .
-                    "vzUrl.check_field.call($(this).find('input'));" .
-                "});"
-            );
+            $this->EE->session->set_cache(__CLASS__, 'jscss', TRUE);
         }
     }
 
+
     // --------------------------------------------------------------------
+
 
     /**
      * Display Field Settings
      */
-    function display_settings($settings)
+    public function display_settings($settings)
     {
         $this->EE->load->library('table');
-        $this->EE->lang->loadfile('vz_url');
 
         // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
@@ -109,37 +106,60 @@ class Vz_url_ft extends EE_Fieldtype {
     }
 
     /**
-     * Display Cell Settings
+     * Display Grid Cell Settings
      */
-    function display_cell_settings($settings)
+    public function grid_display_settings($data)
     {
-        $this->EE->lang->loadfile('vz_url');
-        $settings_ui = array();
+        $show_redirects = ! (isset($data['vz_url_show_redirects']) && $data['vz_url_show_redirects'] != 'y');
+        $limit_local = isset($data['vz_url_limit_local']) && $data['vz_url_limit_local'] == 'y';
 
-        // Prompt user to update redirected URLs
-        $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
-        $settings_ui[] = array(
-            lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
-            form_checkbox('vz_url_show_redirects', 'y', $show_redirects)
+        return array(
+            $this->grid_checkbox_row(
+                lang('vz_url_show_redirects_label'),
+                'vz_url_show_redirects',
+                'y',
+                $show_redirects
+            ),
+            $this->grid_checkbox_row(
+                lang('vz_url_limit_local_label'),
+                'vz_url_limit_local',
+                'y',
+                $limit_local
+            )
         );
+    }
 
-        // Limit to local URLs
+    /**
+     * Display Matrix Cell Settings
+     */
+    public function display_cell_settings($data)
+    {
+        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
-        $settings_ui[] = array(
-            lang('vz_url_limit_local_label', 'vz_url_limit_local'),
-            form_checkbox('vz_url_limit_local', 'y', $limit_local)
-        );
 
-        return $settings_ui;
+        return array(
+            array(
+                lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
+                form_checkbox('vz_url_show_redirects', 'y', $show_redirects)
+            ),
+            array(
+                lang('vz_url_limit_local_label', 'vz_url_limit_local'),
+                form_checkbox('vz_url_limit_local', 'y', $limit_local)
+            )
+        );
     }
 
     /**
      * Display Low Variable Settings
      */
-    function display_var_settings($settings)
+    public function display_var_settings($settings)
     {
         return $this->display_cell_settings($settings);
     }
+
+
+    // --------------------------------------------------------------------
+
 
     /**
      * Save Field Settings

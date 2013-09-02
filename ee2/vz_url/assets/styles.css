@@ -159,6 +159,16 @@
     color: #fff !important;
 }
 
+/* Special stying for Grid cells */
+.grid_cell .vz_url_visit:link,
+.grid_cell .vz_url_visit:visited {
+    right: 0;
+    line-height: 29px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
 /* Special stying for Matrix cells */
 td.matrix .vz_url_field {
     border: none !important;
