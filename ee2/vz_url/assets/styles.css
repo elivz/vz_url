@@ -138,7 +138,7 @@
     top: 0;
     height: 100%;
     line-height: 25px;
-    padding: 0 12px;
+    padding: 0 8px;
     font-weight: bold;
     color: #E1E8ED;
     text-decoration: none !important;
@@ -162,15 +162,16 @@
 /* Special stying for Grid cells */
 .grid_cell .vz_url_visit:link,
 .grid_cell .vz_url_visit:visited {
-    right: 0;
-    line-height: 29px;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+    margin: 3px 2px;
+    height: 23px;
+    line-height: 23px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
 /* Special stying for Matrix cells */
-td.matrix .vz_url_field {
+.matrix .vz_url_field {
     border: none !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -184,4 +185,14 @@ td.matrix .vz_url_field {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+}
+
+.matrix .vz_url_visit:link,
+.matrix .vz_url_visit:visited {
+    margin: -4px -7px -4px 0;
+    height: 24px;
+    line-height: 24px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
