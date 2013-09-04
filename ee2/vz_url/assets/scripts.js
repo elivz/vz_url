@@ -22,14 +22,18 @@ var vzUrl = {
         $('.vz_url_field').each(vzUrl.check_field);
 
         // Extra initializer for Grid fields
-        Grid && Grid.bind('vz_url', 'display', function(cell) {
-            vzUrl.check_field.call(cell.find('input'));
-        });
+        if (typeof Grid !== 'undefined') {
+            Grid.bind('vz_url', 'display', function(cell) {
+                vzUrl.check_field.call(cell.find('input'));
+            });
+        }
 
         // Extra initializer for Matrix fields
-        Matrix && Matrix.bind('vz_url', 'display', function(cell) {
-            vzUrl.check_field.call(this.find('input'));
-        });
+        if (typeof Matrix !== 'undefined') {
+            Matrix.bind('vz_url', 'display', function(cell) {
+                vzUrl.check_field.call(this.find('input'));
+            });
+        }
 
     },
 
