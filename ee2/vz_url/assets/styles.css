@@ -134,7 +134,7 @@
 .vz_url_visit:visited {
     position: absolute;
     display: block;
-    right: 1px;
+    right: 0;
     top: 0;
     height: 100%;
     line-height: 25px;
