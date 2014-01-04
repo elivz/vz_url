@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.3.2'
+        'version' => '2.3.3'
     );
 
     var $has_array_data = TRUE;
@@ -199,7 +199,7 @@ class Vz_url_ft extends EE_Fieldtype {
         // Fill in http:// if the field is empty
         if (!$data)
         {
-            $data = $limit_local ? '/' : 'http://';
+            $data = $limit_local ? '' : 'http://';
         }
 
         $out = '<div class="vz_url_wrapper">';
@@ -237,12 +237,28 @@ class Vz_url_ft extends EE_Fieldtype {
 
 
     /**
+     * Validate Field
+     */
+    public function validate($data)
+    {
+        if ($this->settings['field_required'] == 'y')
+        {
+            if ($data == '' || $data == 'http://')
+            {
+                return lang('required');
+            }
+        }
+
+        return TRUE;
+    }
+
+    /**
      * Save Field
      */
     public function save($data)
     {
         // Remove http:// if it's the only thing in the field
-        return ($data == 'http://' || $data == '/') ? '' : $data;
+        return ($data == 'http://' || $data == 'http://') ? '' : $data;
     }
 
     /**
