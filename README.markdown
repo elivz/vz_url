@@ -40,7 +40,7 @@ Immediately redirects a visitor's browser to the specified URL. Any other code i
 Requirements
 ------------
 
-Your server will to be running at least PHP 5.2 and have the CURL library installed and enabled for the link checking to work.
+Your server will need to be running at least PHP 5.2 and have the CURL library installed and enabled for the link checking to work.
 
 Installation & Updates
 ----------------------
