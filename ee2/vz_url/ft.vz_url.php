@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.3.3'
+        'version' => '2.3.4'
     );
 
     var $has_array_data = TRUE;
@@ -134,8 +134,8 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_cell_settings($data)
     {
-        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+        $show_redirects = ! (isset($data['vz_url_show_redirects']) && $data['vz_url_show_redirects'] != 'y');
+        $limit_local = isset($data['vz_url_limit_local']) && $data['vz_url_limit_local'] == 'y';
 
         return array(
             array(
@@ -170,6 +170,17 @@ class Vz_url_ft extends EE_Fieldtype {
             'vz_url_show_redirects' => $this->EE->input->post('vz_url_show_redirects'),
             'vz_url_limit_local'    => $this->EE->input->post('vz_url_limit_local')
         );
+    }
+
+    /**
+     * Save Matrix Cell Settings
+     */
+    function save_cell_settings($data)
+    {
+        return array_merge(array(
+            'vz_url_show_redirects' => '',
+            'vz_url_limit_local'    => ''
+        ), $data);
     }
 
     /**
