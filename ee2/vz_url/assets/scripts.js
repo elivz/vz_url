@@ -86,9 +86,8 @@ var vzUrl = {
         // Ajax call to proxy to check the url
         var safeurl = url.replace('http', ''); // Mod_security doesn't like "http://" in posted data
         $.getJSON(
-            window.location.href.split('?')[0] + '?callback=?',
+            vzUrl_settings.actionUrl + '&callback=?',
             {
-                caller: 'vz_url',
                 url: safeurl
             },
             function (data) {

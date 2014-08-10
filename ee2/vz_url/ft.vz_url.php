@@ -4,7 +4,7 @@
  * VZ URL Fieldtype
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2010-2012 Eli Van Zoeren
+ * @copyright Copyright (c) 2010-2014 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  */
 
@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.3.4'
+        'version' => '2.4.0'
     );
 
     var $has_array_data = TRUE;
@@ -26,7 +26,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         parent::__construct();
 
-        $this->EE->lang->loadfile('vz_url');
+        ee()->lang->loadfile('vz_url');
     }
 
     /*
@@ -47,15 +47,19 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     private function _include_jscss($content_type='field')
     {
-        if ( ! $this->EE->session->cache(__CLASS__, 'jscss'))
+        if ( ! ee()->session->cache(__CLASS__, 'jscss'))
         {
+            // Output stylesheet
             $css = file_get_contents(PATH_THIRD . '/vz_url/assets/styles' . ($this->debug ? '' : '.min') . '.css');
             $css = str_replace('IMAGE_URL', PATH_CP_GBL_IMG, $css);
-            $this->EE->cp->add_to_head('<style type="text/css">' . $css . '</style>');
+            ee()->cp->add_to_head('<style type="text/css">' . $css . '</style>');
 
+            // Output Javascript
             $scripts = file_get_contents(PATH_THIRD . '/vz_url/assets/scripts' . ($this->debug ? '' : '.min') . '.js');
-            $this->EE->javascript->output(
+            $action_url = ee()->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.ee()->cp->fetch_action_id('Vz_url', 'validate_url');
+            ee()->javascript->output(
                 'var vzUrl_settings={' .
+                'actionUrl:"' . $action_url  . '",' .
                 'errorText:"' . addslashes(lang('vz_url_error_text')) . '",' .
                 'redirectText:"' . addslashes(lang('vz_url_redirect_text')) . '",' .
                 'redirectUpdate:"' . addslashes(lang('vz_url_redirect_update')) . '",' .
@@ -65,7 +69,7 @@ class Vz_url_ft extends EE_Fieldtype {
                 $scripts
             );
 
-            $this->EE->session->set_cache(__CLASS__, 'jscss', TRUE);
+            ee()->session->set_cache(__CLASS__, 'jscss', TRUE);
         }
     }
 
@@ -78,7 +82,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_settings($settings)
     {
-        $this->EE->load->library('table');
+        ee()->load->library('table');
 
         // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
@@ -90,7 +94,7 @@ class Vz_url_ft extends EE_Fieldtype {
             form_radio('vz_url_show_redirects', 'n', !$show_redirects, 'id="vz_url_show_redirects_no"') . ' ' .
             form_label(lang('no'), 'vz_url_show_redirects_no')
         );
-        $this->EE->table->add_row($settings_ui);
+        ee()->table->add_row($settings_ui);
 
         // Limit to local URLs
         $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
@@ -102,7 +106,7 @@ class Vz_url_ft extends EE_Fieldtype {
             form_radio('vz_url_limit_local', 'n', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
             form_label(lang('no'), 'vz_url_limit_local_no')
         );
-        $this->EE->table->add_row($settings_ui);
+        ee()->table->add_row($settings_ui);
     }
 
     /**
@@ -167,8 +171,8 @@ class Vz_url_ft extends EE_Fieldtype {
     public function save_settings()
     {
         return array(
-            'vz_url_show_redirects' => $this->EE->input->post('vz_url_show_redirects'),
-            'vz_url_limit_local'    => $this->EE->input->post('vz_url_limit_local')
+            'vz_url_show_redirects' => ee()->input->post('vz_url_show_redirects'),
+            'vz_url_limit_local'    => ee()->input->post('vz_url_limit_local')
         );
     }
 
@@ -319,7 +323,7 @@ class Vz_url_ft extends EE_Fieldtype {
                 parse_url($data)
             );
 
-            return $this->EE->TMPL->parse_variables_row($tagdata, $parts);
+            return ee()->TMPL->parse_variables_row($tagdata, $parts);
         }
         else
         {

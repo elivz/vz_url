@@ -8,14 +8,11 @@
 }
 
 .vz_url_field {
-    width: 99%;
-    padding: 4px;
+    padding-right: 75px !important;
     margin: 0;
-    outline: 0;
-    border: 1px solid #8195A0;
 }
 .vz_url_field:focus {
-    padding: 3px;
+    padding-right: 74px !important;
     border-width: 2px;
 }
 

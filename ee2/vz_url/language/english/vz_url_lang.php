@@ -2,6 +2,9 @@
 
 $lang = array(
 
+'vz_url_module_name'          => 'VZ URL',
+'vz_url_module_description'   => 'Support file for VZ URL fieldtype',
+
 // Field Settings
 
 'vz_url_error_text'           => 'That URL appears to be invalid',
