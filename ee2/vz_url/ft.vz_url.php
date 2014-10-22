@@ -170,11 +170,11 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Field Settings
      */
-    public function save_settings()
+    public function save_settings($settings)
     {
         return array(
-            'vz_url_show_redirects' => ee()->input->post('vz_url_show_redirects'),
-            'vz_url_limit_local'    => ee()->input->post('vz_url_limit_local')
+            'vz_url_show_redirects' => isset($settings['vz_url_show_redirects']) ? 'y' : '',
+            'vz_url_limit_local'    => isset($settings['vz_url_limit_local']) ? 'y' : ''
         );
     }
 
@@ -279,7 +279,7 @@ class Vz_url_ft extends EE_Fieldtype {
     }
 
     /**
-     * Validate Cell
+     * Validate Matrix Cell
      */
     public function validate_cell($data)
     {
@@ -295,7 +295,7 @@ class Vz_url_ft extends EE_Fieldtype {
     }
 
     /**
-     * Save Cell
+     * Save Matrix Cell
      */
     public function save_cell($data)
     {
