@@ -5,6 +5,7 @@
 
 .vz_url_wrapper {
     position: relative;
+    margin-top: 11px;
 }
 
 .vz_url_field {
@@ -39,8 +40,8 @@
     position: absolute;
     visibility: hidden;
     z-index: 100;
-    left: 5px;
-    top: 2em;
+    left: 0;
+    top: 30px;
     max-width: 100%;
     padding: 5px 6px;
     color: #E1E8ED !important;
@@ -57,6 +58,15 @@
     -moz-transition: all 0.2s ease-in-out;
     -ms-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
+}
+
+/* Display the tooltip when the field doesn't pass validation */
+.vz_url_field.invalid:focus + .vz_url_msg,
+.vz_url_field.redirect:focus + .vz_url_msg,
+.vz_url_field.nonlocal:focus + .vz_url_msg {
+    opacity: 1;
+    top: 26px;
+    visibility: visible;
 }
 
 .vz_url_msg a:link,
@@ -84,7 +94,7 @@
     background-image: linear-gradient(top, #4a5a64, #38454c);
     text-shadow: 1px 1px 0 #262e33;
 }
-.vz_url_msg a::before {
+.vz_url_msg a:before {
     content: "";
     position: absolute;
     left: -2px;
@@ -98,7 +108,6 @@
 .vz_url_msg:before {
     content: "";
     position: absolute;
-    opacity: 0;
     left: 10px;
     top: -5px;
     width: 0;
@@ -108,24 +117,6 @@
     border-bottom: 5px solid #415058;
 }
 
-/* Display the tooltip when the field doesn't pass validation */
-/* Again, declared twice for IE */
-.vz_url_field.invalid + .vz_url_msg,
-.vz_url_field.redirect + .vz_url_msg,
-.vz_url_field.nonlocal + .vz_url_msg {
-    top: 2.5em;
-}
-
-.vz_url_field.invalid:focus + .vz_url_msg,
-.vz_url_field.redirect:focus + .vz_url_msg,
-.vz_url_field.nonlocal:focus + .vz_url_msg,
-.vz_url_field.invalid:focus + .vz_url_msg:before,
-.vz_url_field.redirect:focus + .vz_url_msg:before,
-.vz_url_field.nonlocal:focus + .vz_url_msg:before {
-    opacity: 1;
-    visibility: visible;
-}
-
 /* Visit link */
 .vz_url_visit:link,
 .vz_url_visit:visited {
@@ -133,42 +124,57 @@
     display: block;
     right: 0;
     top: 0;
-    height: 100%;
-    line-height: 25px;
+    bottom: 0;
+    line-height: 24px;
     padding: 0 8px;
+    font-size: 11px;
     font-weight: bold;
-    color: #E1E8ED;
+    color: #5f6c74 !important;
     text-decoration: none !important;
-    text-shadow: 0 -1px #415058;
+    text-shadow: 0 1px #fff;
     background-color: #8195a0;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#8195a0), to(#637883));
-    background-image: -webkit-linear-gradient(top, #8195a0, #637883);
-    background-image: -moz-linear-gradient(top, #8195a0, #637883);
-    background-image: -ms-linear-gradient(top, #8195a0, #637883);
-    background-image: linear-gradient(top, #8195a0, #637883);
-    -webkit-border-radius: 0 3px 3px 0;
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
-}
-.vz_url_visit:focus,
-.vz_url_visit:hover,
-.vz_url_visit:active {
-    color: #fff !important;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#edf2f5), to(#e0e5e8));
+    background: -moz-linear-gradient(top, #edf2f5, #e0e5e8);
+    background-image: linear-gradient(top, #edf2f5, #e0e5e8);
+    border: 1px solid #8195a0;
+    border-left-color: #c8cfd8;
+    box-shadow: inset 0 1px 0 #fff;
+    -webkit-border-radius: 2px 3px 3px 2px;
+    -moz-border-radius: 2px 3px 3px 2px;
+    border-radius: 2px 3px 3px 2px;
 }
 
 /* Special stying for Grid cells */
+.grid_cell .vz_url_wrapper {
+    margin-top: 0;
+}
+
+.grid_cell .vz_url_msg {
+    top: 34px;
+}
+
+.grid_cell .vz_url_field.invalid:focus + .vz_url_msg,
+.grid_cell .vz_url_field.redirect:focus + .vz_url_msg,
+.grid_cell .vz_url_field.nonlocal:focus + .vz_url_msg {
+    top: 30px;
+}
+
 .grid_cell .vz_url_visit:link,
 .grid_cell .vz_url_visit:visited {
-    margin: 3px 2px;
-    height: 23px;
-    line-height: 23px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    margin: 0;
+    line-height: 27px;
+    border-color: #c8cfd8;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
 
 /* Special stying for Matrix cells */
-.matrix .vz_url_field {
+td.matrix .vz_url_wrapper {
+    margin-top: 0;
+}
+
+td.matrix input.vz_url_field {
     border: none !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -176,19 +182,29 @@
     min-width: 60px;
     resize: none;
     outline: none;
+    background: none;
     font-family: 'Lucida Grande', sans-serif;
     font-size: 11px;
-    background-color: #fff;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
 }
 
-.matrix .vz_url_visit:link,
-.matrix .vz_url_visit:visited {
-    margin: -4px -7px -4px 0;
-    height: 24px;
-    line-height: 24px;
+td.matrix .vz_url_msg {
+    top: 26px;
+}
+
+td.matrix .vz_url_field.invalid:focus + .vz_url_msg,
+td.matrix .vz_url_field.redirect:focus + .vz_url_msg,
+td.matrix .vz_url_field.nonlocal:focus + .vz_url_msg {
+    top: 22px;
+}
+
+td.matrix .vz_url_visit:link,
+td.matrix .vz_url_visit:visited {
+    margin: -5px -7px -5px 0;
+    height: 23px;
+    border-color: #c8cfd8;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;

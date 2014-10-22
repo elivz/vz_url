@@ -12,12 +12,15 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.4.0'
+        'version' => '2.4.1'
     );
 
     var $has_array_data = TRUE;
-
     var $debug = FALSE;
+
+
+    // --------------------------------------------------------------------
+
 
     /**
      * Fieldtype Constructor
@@ -26,6 +29,7 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         parent::__construct();
 
+        // Load the language file
         ee()->lang->loadfile('vz_url');
     }
 
@@ -42,12 +46,11 @@ class Vz_url_ft extends EE_Fieldtype {
 
 
     /**
-     * Include the JS and CSS files,
-     * but only the first time
+     * Include the JS and CSS files, but only the first time
      */
-    private function _include_jscss($content_type='field')
+    private function _include_js_css($content_type='field')
     {
-        if ( ! ee()->session->cache(__CLASS__, 'jscss'))
+        if ( ! ee()->session->cache(__CLASS__, 'js_css'))
         {
             // Output stylesheet
             $css = file_get_contents(PATH_THIRD . '/vz_url/assets/styles' . ($this->debug ? '' : '.min') . '.css');
@@ -69,7 +72,8 @@ class Vz_url_ft extends EE_Fieldtype {
                 $scripts
             );
 
-            ee()->session->set_cache(__CLASS__, 'jscss', TRUE);
+            // Make sure we only load them once
+            ee()->session->set_cache(__CLASS__, 'js_css', TRUE);
         }
     }
 
@@ -82,8 +86,6 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_settings($settings)
     {
-        ee()->load->library('table');
-
         // Prompt user to update redirected URLs
         $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
         $settings_ui = array(
@@ -112,10 +114,10 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Display Grid Cell Settings
      */
-    public function grid_display_settings($data)
+    public function grid_display_settings($settings)
     {
-        $show_redirects = ! (isset($data['vz_url_show_redirects']) && $data['vz_url_show_redirects'] != 'y');
-        $limit_local = isset($data['vz_url_limit_local']) && $data['vz_url_limit_local'] == 'y';
+        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 
         return array(
             $this->grid_checkbox_row(
@@ -136,10 +138,10 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Display Matrix Cell Settings
      */
-    public function display_cell_settings($data)
+    public function display_cell_settings($settings)
     {
-        $show_redirects = ! (isset($data['vz_url_show_redirects']) && $data['vz_url_show_redirects'] != 'y');
-        $limit_local = isset($data['vz_url_limit_local']) && $data['vz_url_limit_local'] == 'y';
+        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 
         return array(
             array(
@@ -179,12 +181,12 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Matrix Cell Settings
      */
-    function save_cell_settings($data)
+    function save_cell_settings($settings)
     {
         return array_merge(array(
             'vz_url_show_redirects' => '',
             'vz_url_limit_local'    => ''
-        ), $data);
+        ), $settings);
     }
 
     /**
@@ -204,15 +206,15 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_field($data, $name=FALSE)
     {
-        $this->_include_jscss();
+        $this->_include_js_css();
 
-        if (empty($name)) $name = $this->field_name;
+        if ( empty($name) ) $name = $this->field_name;
 
-        $show_redirects = !(isset($this->settings['vz_url_show_redirects']) && $this->settings['vz_url_show_redirects'] == 'n');
+        $show_redirects = ! (isset($this->settings['vz_url_show_redirects']) && $this->settings['vz_url_show_redirects'] == 'n');
         $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
 
         // Fill in http:// if the field is empty
-        if (!$data)
+        if ( ! $data)
         {
             $data = $limit_local ? '' : 'http://';
         }
@@ -234,7 +236,7 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_cell($data)
     {
-        $this->_include_jscss(TRUE);
+        $this->_include_js_css(TRUE);
         $data = str_replace('&amp;', '&', $data);
         return $this->display_field($data, $this->cell_name);
     }
@@ -274,6 +276,22 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         // Remove http:// if it's the only thing in the field
         return ($data == 'http://' || $data == 'http://') ? '' : $data;
+    }
+
+    /**
+     * Validate Cell
+     */
+    public function validate_cell($data)
+    {
+        if ($this->settings['col_required'] == 'y')
+        {
+            if ($data == '' || $data == 'http://')
+            {
+                return lang('required');
+            }
+        }
+
+        return TRUE;
     }
 
     /**

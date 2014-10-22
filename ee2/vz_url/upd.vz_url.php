@@ -10,7 +10,7 @@
 
 class Vz_url_upd {
 
-    public $version = '2.4.0';
+    public $version = '2.4.1';
 
     // ----------------------------------------------------------------
 
@@ -75,4 +75,5 @@ class Vz_url_upd {
     }
 
 }
+
 /* End of file upd.vz_url.php */
