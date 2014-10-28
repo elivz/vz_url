@@ -5,6 +5,8 @@
 
 .vz_url_wrapper {
     position: relative;
+}
+.publish_vz_address vz_url_wrapper {
     margin-top: 11px;
 }
 

@@ -12,7 +12,7 @@ var vzUrl = {
      * Set up the VZ URL fields with the styling and events they need to function
      */
     init : function(fields) {
-        $('#publishForm')
+        $('#mainContent')
             // Check URLs whenever the field changes
             .on('keyup paste', '.vz_url_field', function(e) {
                 vzUrl.check_field.call(e.target, true);

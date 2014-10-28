@@ -12,11 +12,11 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.4.1'
+        'version' => '2.4.2'
     );
 
-    var $has_array_data = TRUE;
-    var $debug = FALSE;
+    public $has_array_data = TRUE;
+    private $debug = FALSE;
 
 
     // --------------------------------------------------------------------
@@ -160,7 +160,19 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_var_settings($settings)
     {
-        return $this->display_cell_settings($settings);
+        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+
+        return array(
+            array(
+                lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
+                form_checkbox('variable_settings[vz_url][vz_url_show_redirects]', 'y', $show_redirects)
+            ),
+            array(
+                lang('vz_url_limit_local_label', 'vz_url_limit_local'),
+                form_checkbox('variable_settings[vz_url][vz_url_limit_local]', 'y', $limit_local)
+            )
+        );
     }
 
 
@@ -192,9 +204,9 @@ class Vz_url_ft extends EE_Fieldtype {
     /**
      * Save Low Variables Settings
      */
-    public function save_var_settings()
+    public function save_var_settings($settings)
     {
-        return $this->save_settings();
+        return $this->save_settings($settings);;
     }
 
 

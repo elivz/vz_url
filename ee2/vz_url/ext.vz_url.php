@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $description    = 'Support file for VZ URL fieldtype';
     public $docs_url       = 'https://github.com/elivz/vz_url';
     public $settings_exist = 'n';
-    public $version        = '2.4.1';
+    public $version        = '2.4.2';
 
 
     // ----------------------------------------------------------------------
