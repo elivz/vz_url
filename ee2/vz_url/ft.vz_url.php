@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.4.2'
+        'version' => '2.4.3'
     );
 
     public $has_array_data = TRUE;
@@ -86,26 +86,27 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_settings($settings)
     {
+        $show_redirects = isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'y';
+        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+
         // Prompt user to update redirected URLs
-        $show_redirects = !(isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'n');
         $settings_ui = array(
             lang('vz_url_show_redirects_label', 'vz_url_show_redirects'),
             form_radio('vz_url_show_redirects', 'y', $show_redirects, 'id="vz_url_show_redirects_yes"') . ' ' .
             form_label(lang('yes'), 'vz_url_show_redirects_yes') .
             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
-            form_radio('vz_url_show_redirects', 'n', !$show_redirects, 'id="vz_url_show_redirects_no"') . ' ' .
+            form_radio('vz_url_show_redirects', '', !$show_redirects, 'id="vz_url_show_redirects_no"') . ' ' .
             form_label(lang('no'), 'vz_url_show_redirects_no')
         );
         ee()->table->add_row($settings_ui);
 
         // Limit to local URLs
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
         $settings_ui = array(
             lang('vz_url_limit_local_label', 'vz_url_limit_local'),
             form_radio('vz_url_limit_local', 'y', $limit_local, 'id="vz_url_limit_local_yes"') . ' ' .
             form_label(lang('yes'), 'vz_url_limit_local_yes') .
             '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
-            form_radio('vz_url_limit_local', 'n', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
+            form_radio('vz_url_limit_local', '', !$limit_local, 'id="vz_url_limit_local_no"') . ' ' .
             form_label(lang('no'), 'vz_url_limit_local_no')
         );
         ee()->table->add_row($settings_ui);
@@ -185,8 +186,8 @@ class Vz_url_ft extends EE_Fieldtype {
     public function save_settings($settings)
     {
         return array(
-            'vz_url_show_redirects' => isset($settings['vz_url_show_redirects']) ? 'y' : '',
-            'vz_url_limit_local'    => isset($settings['vz_url_limit_local']) ? 'y' : ''
+            'vz_url_show_redirects' => empty($settings['vz_url_show_redirects']) ? '' : 'y',
+            'vz_url_limit_local'    => empty($settings['vz_url_limit_local']) ? '' : 'y'
         );
     }
 
