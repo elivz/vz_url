@@ -87,7 +87,7 @@ class Vz_url_ft extends EE_Fieldtype {
     public function display_settings($settings)
     {
         $show_redirects = isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'y';
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+        $limit_local    = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 
         // Prompt user to update redirected URLs
         $settings_ui = array(
@@ -117,8 +117,8 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function grid_display_settings($settings)
     {
-        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+        $show_redirects = isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'y';
+        $limit_local    = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 
         return array(
             $this->grid_checkbox_row(
@@ -141,8 +141,8 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_cell_settings($settings)
     {
-        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+        $show_redirects = isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'y';
+        $limit_local    = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 
         return array(
             array(
@@ -161,8 +161,8 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function display_var_settings($settings)
     {
-        $show_redirects = ! (isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] != 'y');
-        $limit_local = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
+        $show_redirects = isset($settings['vz_url_show_redirects']) && $settings['vz_url_show_redirects'] == 'y';
+        $limit_local    = isset($settings['vz_url_limit_local']) && $settings['vz_url_limit_local'] == 'y';
 
         return array(
             array(
@@ -223,8 +223,8 @@ class Vz_url_ft extends EE_Fieldtype {
 
         if ( empty($name) ) $name = $this->field_name;
 
-        $show_redirects = ! (isset($this->settings['vz_url_show_redirects']) && $this->settings['vz_url_show_redirects'] == 'n');
-        $limit_local = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
+        $show_redirects = isset($this->settings['vz_url_show_redirects']) && $this->settings['vz_url_show_redirects'] == 'y';
+        $limit_local    = isset($this->settings['vz_url_limit_local']) && $this->settings['vz_url_limit_local'] == 'y';
 
         // Fill in http:// if the field is empty
         if ( ! $data)
@@ -271,8 +271,11 @@ class Vz_url_ft extends EE_Fieldtype {
      */
     public function validate($data)
     {
-        if ($this->settings['field_required'] == 'y')
-        {
+        if (
+            (isset($this->settings['field_required']) && $this->settings['field_required'] == 'y')
+            ||
+            (isset($this->settings['col_required']) && $this->settings['col_required'] == 'y' )
+        ) {
             if ($data == '' || $data == 'http://')
             {
                 return lang('required');
@@ -281,6 +284,18 @@ class Vz_url_ft extends EE_Fieldtype {
 
         return TRUE;
     }
+
+    /**
+     * Validate Matrix Cell
+     */
+    public function validate_cell($data)
+    {
+        return $this->validate($data);
+    }
+
+
+    // --------------------------------------------------------------------
+
 
     /**
      * Save Field
@@ -289,22 +304,6 @@ class Vz_url_ft extends EE_Fieldtype {
     {
         // Remove http:// if it's the only thing in the field
         return ($data == 'http://' || $data == 'http://') ? '' : $data;
-    }
-
-    /**
-     * Validate Matrix Cell
-     */
-    public function validate_cell($data)
-    {
-        if ($this->settings['col_required'] == 'y')
-        {
-            if ($data == '' || $data == 'http://')
-            {
-                return lang('required');
-            }
-        }
-
-        return TRUE;
     }
 
     /**
