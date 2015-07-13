@@ -4,7 +4,7 @@
  * VZ URL Module Control Panel
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2010-2014 Eli Van Zoeren
+ * @copyright Copyright (c) 2010-2015 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  */
 

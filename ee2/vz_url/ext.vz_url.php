@@ -4,7 +4,7 @@
  * VZ URL Extension
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2010-2014 Eli Van Zoeren
+ * @copyright Copyright (c) 2010-2015 Eli Van Zoeren
  * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
  */
 
@@ -14,7 +14,7 @@ class Vz_url_ext {
     public $description    = 'Support file for VZ URL fieldtype';
     public $docs_url       = 'https://github.com/elivz/vz_url';
     public $settings_exist = 'n';
-    public $version        = '2.4.3';
+    public $version        = '2.4.4';
 
 
     // ----------------------------------------------------------------------
