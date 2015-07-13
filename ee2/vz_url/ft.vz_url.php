@@ -12,7 +12,7 @@ class Vz_url_ft extends EE_Fieldtype {
 
     public $info = array(
         'name'    => 'VZ URL',
-        'version' => '2.4.3'
+        'version' => '2.4.4'
     );
 
     public $has_array_data = TRUE;
@@ -303,7 +303,7 @@ class Vz_url_ft extends EE_Fieldtype {
     public function save($data)
     {
         // Remove http:// if it's the only thing in the field
-        return ($data == 'http://' || $data == 'http://') ? '' : $data;
+        return ($data == 'http://' || $data == 'https://') ? '' : $data;
     }
 
     /**
