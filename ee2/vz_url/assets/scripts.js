@@ -95,12 +95,14 @@ var vzUrl = {
                 if (data.original != vzUrl.encode_uri($field.val())) return;
 
                 // Show or hide the error message, as needed
-                if ((data.original == data.final_url) && (data.http_code >= 200) && (data.http_code < 400)) {
-                    // The URL is valid
-                    vzUrl.set_status($field, 'valid');
-                } else if (data.original != data.final_url) {
-                    // The URL is a redirect
-                    vzUrl.set_status($field, 'redirect', data);
+                if (data.http_code >= 200 && data.http_code < 400) {
+                    if (data.original == data.final_url) {
+                        // The URL is valid
+                        vzUrl.set_status($field, 'valid');
+                    } else {
+                        // The URL is a redirect
+                        vzUrl.set_status($field, 'redirect', data);
+                    }
                 } else {
                     vzUrl.set_status($field, 'invalid');
                 }
@@ -142,7 +144,7 @@ var vzUrl = {
                         }
                     }).appendTo($msg);
                 } else {
-                    $field.removeClass('redirect').addClass('valid');
+                    status = 'valid';
                 }
                 break;
         }
