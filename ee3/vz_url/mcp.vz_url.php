@@ -5,11 +5,9 @@
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
  * @copyright Copyright (c) 2010-2015 Eli Van Zoeren
- * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
+ * @license   http://opensource.org/licenses/MIT
  */
 
-class Vz_url_mcp {
-
+class Vz_url_mcp
+{
 }
-
-/* End of file mcp.vz_url.php */

@@ -5,12 +5,13 @@
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
  * @copyright Copyright (c) 2010-2015 Eli Van Zoeren
- * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
+ * @license   http://opensource.org/licenses/MIT
  */
 
-class Vz_url_upd {
+class Vz_url_upd
+{
 
-    public $version = '2.4.5';
+    public $version = '3.0.0';
 
     // ----------------------------------------------------------------
 
@@ -37,7 +38,7 @@ class Vz_url_upd {
         );
         ee()->db->insert('actions', $data);
 
-        return TRUE;
+        return true;
     }
 
 
@@ -51,7 +52,7 @@ class Vz_url_upd {
      */
     public function update($current = '')
     {
-        return FALSE;
+        return false;
     }
 
 
@@ -71,9 +72,7 @@ class Vz_url_upd {
         ee()->db->where('class', 'Vz_url')
             ->delete('actions');
 
-        return TRUE;
+        return true;
     }
 
 }
-
-/* End of file upd.vz_url.php */

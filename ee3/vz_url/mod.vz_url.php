@@ -5,10 +5,11 @@
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
  * @copyright Copyright (c) 2010-2015 Eli Van Zoeren
- * @license   http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported
+ * @license   http://opensource.org/licenses/MIT
  */
 
-class Vz_url {
+class Vz_url
+{
 
     /**
      * Proxy function for checking URLs
@@ -16,15 +17,10 @@ class Vz_url {
     public function validate_url()
     {
         // Check to see if it's a request from VZ URL
-        if (
-            AJAX_REQUEST &&
-            ee()->input->get('url') &&
-            ee()->input->get('callback')
-        )
-        {
+        if (AJAX_REQUEST && ee()->input->get('url') && ee()->input->get('callback')) {
             ee()->load->library('javascript');
 
-            $url = trim($_GET['url']);
+            $url = trim(str_replace('ht^tp', 'http', $_GET['url']));
             $host = '';
 
             // If the url is relative to the root,
@@ -33,10 +29,6 @@ class Vz_url {
             {
                 $host = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://".$_SERVER['SERVER_NAME'] : "http://".$_SERVER['SERVER_NAME'];
                 $url = $host . $url;
-            }
-            else
-            {
-                $url = 'http' . $url;
             }
 
             // Create the CURL session and set options
@@ -50,7 +42,7 @@ class Vz_url {
             curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
 
             // Spoof a real browser, or Facebook redirects to an error page
-            curl_setopt($session, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1');
+            curl_setopt($session, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1');
 
             if (!ini_get('safe_mode') && !ini_get('open_basedir'))
             {
@@ -63,7 +55,7 @@ class Vz_url {
             {
                 // When open_basedir is set, we need to use a
                 // recursive function to follow the redirects
-                $info = curl_redirect_exec($session);
+                $info = $this->_curl_redirect_exec($session);
             }
 
             curl_close($session);
@@ -79,30 +71,28 @@ class Vz_url {
             exit($_GET['callback'] . '(' . $return . ');');
         }
     }
-}
 
-// Recursively follow redirects
-// Adapted from the PHP docs
-function curl_redirect_exec($session)
-{
-    $data = curl_exec($session);
-    $info = curl_getinfo($session);
-
-    if ($info['http_code'] == 301 || $info['http_code'] == 302)
+    // Recursively follow redirects
+    // Adapted from the PHP docs
+    private function _curl_redirect_exec($session)
     {
-        list($header) = explode("\r\n\r\n", $data, 2);
-        $matches = array();
-        preg_match('/(Location:|URI:)(.*?)\n/', $header, $matches);
-        $url = trim(array_pop($matches));
-        $url_parsed = parse_url($url);
-        if (isset($url_parsed))
+        $data = curl_exec($session);
+        $info = curl_getinfo($session);
+
+        if ($info['http_code'] == 301 || $info['http_code'] == 302)
         {
-            curl_setopt($session, CURLOPT_URL, $url);
-            return curl_redirect_exec($session);
+            list($header) = explode("\r\n\r\n", $data, 2);
+            $matches = array();
+            preg_match('/(Location:|URI:)(.*?)\n/', $header, $matches);
+            $url = trim(array_pop($matches));
+            $url_parsed = parse_url($url);
+            if (isset($url_parsed))
+            {
+                curl_setopt($session, CURLOPT_URL, $url);
+                return curl_redirect_exec($session);
+            }
         }
+
+        return $info;
     }
-
-    return $info;
 }
-
-/* End of file mod.vz_url.php */
