@@ -1,13 +1,13 @@
 VZ URL Fieldtype
 ================
 
-A fieldtype for ExpressionEngine 2. Also compatible with Grid, Matrix, and Low Variables.
+A fieldtype for ExpressionEngine 3. Also compatible with Grid and Low Variables. An [EE2-compatible version](https://github.com/elivz/vz_url/tree/ee2) is available as well.
 
 VZ URL displays a textbox where the user can enter a URL. When the user leaves the field, it will ping the URL they entered and display an error message if it doesn't find a valid webpage there.
 
 Please note that VZ URL will not prevent the user from saving their weblog entry if if cannot validate the URL - it just warns them. This is intentional, perhaps they are linking to a page they have not yet created, or the site they are linking to is currently down but they know the URL is correct.
 
-For information about VZ URL please visit [my blog](http://elivz.com/blog/single/vz_url_extension/) or [Devot:ee](http://devot-ee.com/add-ons/vz-url-extension).
+For more information about VZ URL please visit [Devot:ee](http://devot-ee.com/add-ons/vz-url-extension).
 
 Template Tags
 -------------
@@ -40,29 +40,16 @@ Immediately redirects a visitor's browser to the specified URL. Any other code i
 Requirements
 ------------
 
-Your server will need to be running at least PHP 5.2 and have the CURL library installed and enabled for the link checking to work.
+Your server will need to be running at least PHP 5.3 and have the CURL library installed and enabled for the link checking to work.
 
 Installation & Updates
 ----------------------
 
-Download and unzip the extension. Upload the `/system/expression_engine/third_party/vz_url` folder to `/system/expression_engine/third_party`, and enable the VZ URL fieldtype and extension.
+Download and unzip the extension. Upload the `/ee3/vz_url` folder to `/system/user/addons`, and enable VZ URL in the control panel.
 
 That's it! Now you can use the VZ URL field type anywhere you were previously using a plain text field. Switching from a text field to a VZ URL field (or vice-versa) will not affect your data.
-
-### Updating from < v2.2
-
-If you are upgrading from VZ URL version 1.1.4 or lower, you need to make two additional changes:
-
-1. Remove the `/themes/third_party/vz_url` folder. It is no longer necessary.
-2. Enable the new VZ URL Extension from the `Add-Ons -> Extensions` menu. Until you do this, URL validation will fail.
-
 
 Support
 -------
 
 Please post any questions you might have on the [Devot:ee forum](http://devot-ee.com/add-ons/support/vz-url-extension/viewforum/863). I maintain this fieldtype in my spare time, but I do try to respond to questions as quickly as possible.
-
-ExpressionEngine 1.x Version
-----------------------------
-
-I am no longer maintaining an EE1 version of this fieldtype, however you can download [version 2.1.4](https://github.com/elivz/vz_url/zipball/v2.1.4), the last version that included 1.x support. FieldFrame is required.
