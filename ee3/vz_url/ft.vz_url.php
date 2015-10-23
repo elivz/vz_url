@@ -36,7 +36,7 @@ class Vz_url_ft extends EE_Fieldtype
      */
     public function accepts_content_type($name)
     {
-        return ($name == 'channel' || $name == 'grid');
+        return in_array($name, array('channel', 'grid', 'low_variables'));
     }
 
 
@@ -120,22 +120,6 @@ class Vz_url_ft extends EE_Fieldtype
         );
     }
 
-    /**
-     * Display Low Variable Settings
-     */
-    public function var_display_settings($settings)
-    {
-        $show_redirects = isset($settings['show_redirects']) && $settings['show_redirects'] == 'y';
-
-        return array(
-            array(
-                lang('vz_url_show_redirects_label'),
-                form_checkbox('variable_settings[vz_url][show_redirects]', 'y', $show_redirects)
-            )
-        );
-    }
-
-
     // --------------------------------------------------------------------
 
 
@@ -149,6 +133,15 @@ class Vz_url_ft extends EE_Fieldtype
         );
     }
 
+    /**
+     * Save var Settings
+     */
+    public function var_save_settings($settings)
+    {
+        return array(
+            'show_redirects' => ee('Request')->post('show_redirects')
+        );
+    }
 
     // --------------------------------------------------------------------
 
@@ -188,7 +181,7 @@ class Vz_url_ft extends EE_Fieldtype
     }
 
     /**
-     * Display Low Variable
+     * Display Low Variable (required for now)
      */
     public function var_display_field($data)
     {
@@ -229,14 +222,6 @@ class Vz_url_ft extends EE_Fieldtype
     {
         // Remove http:// if it's the only thing in the field
         return ($data == 'http://' || $data == 'https://') ? '' : $data;
-    }
-
-    /**
-     * Save Low Variable
-     */
-    public function var_save_field($data)
-    {
-        return $this->save($data);
     }
 
 
@@ -325,6 +310,10 @@ class Vz_url_ft extends EE_Fieldtype
      */
     public function var_replace_tag($data, $params=array(), $tagdata=FALSE)
     {
-        return $this->replace_tag($data, $params, $tagdata);
+        $method = 'replace_' . (isset($params['modifier']) ? $params['modifier'] : 'tag');
+
+        return (method_exists($this, $method))
+            ? $this->$method($data, $params, $tagdata)
+            : FALSE;
     }
 }
