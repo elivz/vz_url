@@ -4,11 +4,11 @@
  * VZ URL Add-On Setup File
  *
  * @author    Eli Van Zoeren <eli@elivz.com>
- * @copyright Copyright (c) 2010-2015 Eli Van Zoeren
+ * @copyright Copyright (c) 2010-2016 Eli Van Zoeren
  * @license   http://opensource.org/licenses/MIT
  */
 
-if ( ! defined('VZ_URL_VERSION')) define('VZ_URL_VERSION', '3.0.0');
+if ( ! defined('VZ_URL_VERSION')) define('VZ_URL_VERSION', '3.0.1');
 
 return array(
     'author'      => 'Eli Van Zoeren',

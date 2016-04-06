@@ -9,8 +9,7 @@ var root = 'ee3/vz_url/';
 var autoprefixerOpts = [
     'last 2 versions',
     '> 1%',
-    'ie >= 8',
-    'android >= 4'
+    'ie >= 8'
 ];
 
 //***********************************************
@@ -48,8 +47,6 @@ var uglify = require('gulp-uglify');
 
 gulp.task('scripts', function() {
     return gulp.src('src/*.js')
-        .pipe(eslint())
-        .pipe(eslint.format())
         .pipe(babel())
         .pipe(uglify())
         .pipe(gulp.dest(root+'javascript'));

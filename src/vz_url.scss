@@ -14,9 +14,10 @@
 
 %icon {
     display: inline-block;
-    font-family: 'Glyphicons Regular';
+    font-family: 'FontAwesome';
     font-size: 12px;
     font-weight: 400;
+    -webkit-font-smoothing: antialiased
 }
 
 .vzurl-wrapper {
@@ -53,10 +54,10 @@
 .vzurl-wrapper {
     &.checking:after {
         @extend %icon;
-        content: "\e366";
+        content: "\f021";
         position: absolute;
         right: 0.75em;
-        top: 0.5em;
+        top: 0.65em;
         color: #aaa;
         animation-name: vz-spin;
         animation-duration: 1.5s;
@@ -94,13 +95,13 @@
     position: absolute;
     right: 1px;
     top: 1px;
-    height: 1.75em;
-    padding: 5px 4px 1px 6px;
+    height: 1.5em;
+    padding: 8px 6px 0px 8px;
     text-decoration: none;
     background-color: transparent;
     border-left: 1px solid #cdcdcd;
 
     &:before {
-        content: "\e390";
+        content: "\f08e";
     }
 }
