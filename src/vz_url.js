@@ -13,7 +13,7 @@
     function VzUrl($field) {
         this.timer = false;
         this.delay = 500;
-        this.regex = new RegExp('^((https?|ftp)://[\\w\\-_]+(\\.[\\w\\-_]+)+|/)([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%!&amp;/~\\+#])?$', 'gi');
+        this.regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
 
         // Store elements we will work with
         this.$field = $field;
@@ -56,7 +56,7 @@
      * Actually send a request the the target URL to see if it exists
      */
     VzUrl.prototype.validate = function validate() {
-        const url = encodeUri(this.$field.val());
+        const url = this.$field.val();
 
         // Show the "spinner"
         this.setStatus('checking');
@@ -78,7 +78,7 @@
         $.getJSON(this.actionUrl + '&callback=?', { url: safeUrl })
             .done((data) => {
                 // Make sure the URL we are checking is still there
-                if (data.original !== encodeUri(this.$field.val())) {
+                if (data.original !== this.$field.val()) {
                     return;
                 }
 

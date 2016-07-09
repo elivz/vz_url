@@ -8,7 +8,7 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-if ( ! defined('VZ_URL_VERSION')) define('VZ_URL_VERSION', '3.0.1');
+if ( ! defined('VZ_URL_VERSION')) define('VZ_URL_VERSION', '3.0.2');
 
 return array(
     'author'      => 'Eli Van Zoeren',
